@@ -1,6 +1,7 @@
 import { AppBar, Button, Grid, Toolbar } from '@mui/material';
 import { HeaderStyles } from './HeaderStyles';
 import { useAuth } from '../Auth';
+import { Theme } from '../Theme';
 
 const Header = () => {
   const style = HeaderStyles;
@@ -19,6 +20,9 @@ const Header = () => {
             }}
           >
             Header
+            <div>
+              <Theme />
+            </div>
             <Button
               variant="contained"
               color="secondary"
