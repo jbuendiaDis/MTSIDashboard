@@ -1,6 +1,5 @@
-import { Box } from '@mui/material';
-import { ReactNode } from 'react';
-import { LanguageSelector } from '../../components/Language';
+import { Box } from "@mui/material";
+import { ReactNode } from "react";
 
 interface Props {
   children: ReactNode;
@@ -9,8 +8,7 @@ interface Props {
 const FullScreenLayout = ({ children }: Props) => {
   return (
     <Box>
-      <LanguageSelector />
-      {children}
+      <>{children}</>
     </Box>
   );
 };
