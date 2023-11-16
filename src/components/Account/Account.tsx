@@ -7,10 +7,9 @@ import {
   Popover,
   Typography,
   MenuItem,
-  alpha,
-  Theme,
 } from '@mui/material';
 import { useAuth } from '../Auth';
+import { AccountStyles } from './AccountStyles';
 
 const MENU_OPTIONS = [
   {
@@ -28,8 +27,9 @@ const MENU_OPTIONS = [
 ];
 
 const Account = () => {
-  const [open, setOpen] = useState(null);
-  const auth = useAuth();
+  const [open, setOpen] = useState<null>(null);
+  const style = AccountStyles({ open });
+  const { user, logout } = useAuth();
 
   const handleOpen = (event: any) => {
     setOpen(event.currentTarget);
@@ -41,30 +41,13 @@ const Account = () => {
 
   return (
     <>
-      <IconButton
-        onClick={handleOpen}
-        sx={{
-          width: 40,
-          height: 40,
-          background: (theme) => alpha(theme.palette.grey[500], 0.08),
-          ...(open
-            ? {
-                background: (theme: Theme) =>
-                  `linear-gradient(135deg, ${theme.palette.primary.light} 0%, ${theme.palette.primary.main} 100%)`,
-              }
-            : null),
-        }}
-      >
+      <IconButton onClick={handleOpen} sx={style.iconButton}>
         <Avatar
           //   src={account.photoURL}
           //   alt={account.displayName}
-          sx={{
-            width: 36,
-            height: 36,
-            border: (theme) => `solid 2px ${theme.palette.background.default}`,
-          }}
+          sx={style.avatar}
         >
-          {/* {account.displayName.charAt(0).toUpperCase()} */}C
+          {user?.name.charAt(0).toUpperCase()}
         </Avatar>
       </IconButton>
 
@@ -85,12 +68,10 @@ const Account = () => {
       >
         <Box sx={{ my: 1.5, px: 2 }}>
           <Typography variant="subtitle2" noWrap>
-            {/* {account.displayName} */}
-            Nombre
+            {`${user?.name} ${user?.lastname}`}
           </Typography>
           <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
-            {/* {account.email} */}
-            email
+            {user?.email}
           </Typography>
         </Box>
 
@@ -107,10 +88,10 @@ const Account = () => {
         <MenuItem
           disableRipple
           disableTouchRipple
-          onClick={() => auth.logout()}
+          onClick={() => logout()}
           sx={{ typography: 'body2', color: 'error.main', py: 1.5 }}
         >
-          Logout
+          Cerrar sesión
         </MenuItem>
       </Popover>
     </>

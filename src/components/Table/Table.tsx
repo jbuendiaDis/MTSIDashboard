@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import {
   Container,
-  Stack,
-  // Button,
+  Grid,
   Table as MuiTable,
   TableBody,
   TableCell,
@@ -23,15 +22,7 @@ import {
 import { MoreVert } from '@mui/icons-material';
 import { Tabletoolbar } from './TableToolbar';
 import { TableNoData } from './TableNoData';
-import { Action, Column, Row, SortData } from '../../models/table';
-
-interface TableProps {
-  title: string;
-  columns: Column[];
-  data: Row[];
-  showCheckboxes: boolean;
-  tableHead: boolean;
-}
+import { Action, Row, SortData, TableProps } from '../../models/table';
 
 const Table = ({
   title,
@@ -39,6 +30,8 @@ const Table = ({
   data,
   showCheckboxes,
   tableHead,
+  customButton,
+  renderCustomButton,
 }: TableProps) => {
   const [sortData, setSortData] = useState<SortData>({
     activeColumn: '',
@@ -145,19 +138,33 @@ const Table = ({
   });
 
   return (
-    <Container>
+    <Container maxWidth="xl">
       {tableHead && (
-        <Stack
-          direction="row"
-          alignItems="center"
-          justifyContent="space-between"
-          mb={5}
+        <Grid
+          container
+          sx={{
+            mb: 8,
+            display: 'flex',
+            alignItems: 'center',
+          }}
         >
-          <Typography variant="h4">{title}</Typography>
-          {/* <Button variant="contained" color="inherit">
-          New User
-        </Button> */}
-        </Stack>
+          <Grid xs={12} sm={8} md={8} item>
+            <Typography variant="h4" sx={{ letterSpacing: '1px' }}>
+              {title}
+            </Typography>
+          </Grid>
+          {customButton && (
+            <Grid
+              xs={12}
+              sm={4}
+              md={4}
+              item
+              sx={{ display: 'flex', justifyContent: 'end' }}
+            >
+              {renderCustomButton}
+            </Grid>
+          )}
+        </Grid>
       )}
       <Card>
         <Tabletoolbar
@@ -184,7 +191,11 @@ const Table = ({
                   </TableCell>
                 )}
                 {columns.map((column) => (
-                  <TableCell key={column.id} align={column.align}>
+                  <TableCell
+                    key={column.id}
+                    align={column.align}
+                    sx={{ fontWeight: 700 }}
+                  >
                     {column.label === 'Acciones' ? (
                       <div>Acciones</div>
                     ) : (
@@ -211,7 +222,7 @@ const Table = ({
                 sortedData
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((row, index) => (
-                    <TableRow key={index}>
+                    <TableRow key={index} hover>
                       {showCheckboxes && (
                         <TableCell>
                           <Checkbox
@@ -275,8 +286,11 @@ const Table = ({
                   key={index}
                   onClick={() => handleActionClick(action)}
                 >
-                  {action.icon}
-                  <ListItemText primary={action.label} />
+                  {action.icon} &nbsp;
+                  <ListItemText
+                    primary={action.label}
+                    sx={{ color: action.label === 'Eliminar' ? 'red' : null }}
+                  />
                 </ListItem>
               ))}
           </List>

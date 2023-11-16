@@ -1,26 +1,29 @@
-export const HeaderStyles = {
-  root: {
-    flexGrow: 1,
-  },
-  imageRoot: {
-    width: { xs: '35%', sm: '15%' },
-    height: '35%',
-  },
-  contentText: {
-    flexDirection: 'column',
-    display: { xs: 'none', sm: 'flex' },
-    ml: 1,
-    width: '100%',
-  },
-  titleText: {
-    textTransform: 'capitalize',
-    fontSize: '16px',
-    fontWeight: 'bold',
-    letterSpacing: '0px',
-  },
-  subtitleText: {
-    fontSize: '12px',
-    letterSpacing: '1px',
-    textTransform: 'capitalize',
-  },
+import { useTheme } from '@mui/system';
+import { HEADER, NAV } from '../../layouts/configLayout';
+import { Theme } from '@mui/material';
+import { bgBlur } from '../Theme/css';
+import { useResponsive } from '../../hooks/useResponsive';
+
+export const HeaderStyles = () => {
+  const theme = useTheme();
+  const lgUp = useResponsive('up', 'lg');
+
+  const appBar = {
+    boxShadow: 'none',
+    height: HEADER.H_MOBILE,
+    zIndex: (theme: Theme) => theme.zIndex.appBar + 1,
+    ...bgBlur({
+      color: theme.palette.background.default,
+    }),
+    transition: (theme: Theme) =>
+      theme.transitions.create(['height'], {
+        duration: theme.transitions.duration.shorter,
+      }),
+    ...(lgUp && {
+      width: `calc(100% - ${NAV.WIDTH + 1}px)`,
+      height: HEADER.H_DESKTOP,
+    }),
+  };
+
+  return { appBar };
 };

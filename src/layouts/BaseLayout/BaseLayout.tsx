@@ -11,7 +11,7 @@ interface Props {
 }
 
 const BaseLayout = ({ children }: Props) => {
-  const [openNav, setOpenNav] = useState(false);
+  const [openNav, setOpenNav] = useState<boolean>(false);
 
   return (
     <>

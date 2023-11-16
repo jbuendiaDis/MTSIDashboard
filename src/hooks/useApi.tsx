@@ -1,12 +1,12 @@
 /* eslint-disable no-throw-literal */
 import { get, isEmpty, isObject } from 'lodash';
-import { Button } from '@mui/material';
+import { Box, Button } from '@mui/material';
 import { useLoader } from '../components/Loader';
 import { useModal } from '../components/Modal';
 import { toQueryString } from '../utils/https';
 import { instance } from '../providers/api';
 import { useTranslation } from '../hooks/useTranslations';
-// import { useAuth } from 'views/Auth';
+import { useAuth } from '../components/Auth';
 
 interface Props {
   endpoint: string;
@@ -18,7 +18,7 @@ function useApi<U = null>({ endpoint, method, customMessagesKey }: Props) {
   const { t } = useTranslation();
   const { handleOpenModal, handleCloseModal } = useModal();
   const { handleShowLoader } = useLoader();
-  // const auth = useAuth();
+  const auth = useAuth();
 
   type HandleFetch = <T = U>(param?: {
     body?: object;
@@ -62,29 +62,42 @@ function useApi<U = null>({ endpoint, method, customMessagesKey }: Props) {
       return response.data;
     } catch (error: any) {
       if (get(error, 'response.status') === 401) {
-        // return auth.logout();
-        console.log('LOGIN');
+        return auth.logout();
       }
 
-      let errorMessage = t(
-        `httpErrors.${customMessagesKey}.${get(error, 'response.status', '')}`
-      );
+      console.log('error', error);
 
-      errorMessage = errorMessage.includes('httpErrors')
-        ? `httpErrors.${get(error, 'response.status', '')}`
-        : errorMessage;
+      const errorMessage = get(error, 'message', '');
+      const statusError = get(error, 'response.status', '');
 
-      errorMessage = errorMessage.includes('httpErrors')
-        ? t('errorPages.unexpectedDescription')
-        : errorMessage;
+      // let errorMessage = t(
+      //   `httpErrors.${customMessagesKey}.${get(error, 'response.status', '')}`
+      // );
+
+      // errorMessage = errorMessage.includes('httpErrors')
+      //   ? `httpErrors.${get(error, 'response.status', '')}`
+      //   : errorMessage;
+
+      // errorMessage = errorMessage.includes('httpErrors')
+      //   ? t('errorPages.unexpectedDescription')
+      //   : errorMessage;
 
       config.showErrorModal &&
         handleOpenModal({
-          title: t('unexpectedError'),
-          body: errorMessage,
+          fullWidth: true,
+          maxWidth: 'xs',
+          title: 'Ha ocurrido un error',
+          body: (
+            <Box component="div">
+              {errorMessage}
+              <Box sx={{ display: 'flex', justifyContent: 'end' }}>
+                <span>status: {statusError}</span>
+              </Box>
+            </Box>
+          ),
           actionButtons: (
             <Button onClick={handleCloseModal} variant="contained">
-              {t('acept')}
+              Aceptar
             </Button>
           ),
         });

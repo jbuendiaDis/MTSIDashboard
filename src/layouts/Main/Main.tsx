@@ -1,35 +1,20 @@
 import { ReactNode } from 'react';
 import { Box } from '@mui/material';
-import { HEADER, NAV } from '../configLayout';
-import { useResponsive } from '../../hooks/useResponsive';
-
-const SPACING = 8;
+import { MainStyles } from './MainStyles';
+import { Container } from '@mui/system';
 
 interface MainProps {
   children: ReactNode;
 }
 
 const Main = ({ children, ...other }: MainProps) => {
-  const lgUp = useResponsive('up', 'lg');
+  const style = MainStyles();
 
   return (
-    <Box
-      component="main"
-      sx={{
-        flexGrow: 1,
-        minHeight: 1,
-        display: 'flex',
-        flexDirection: 'column',
-        py: `${HEADER.H_MOBILE + SPACING}px`,
-        ...(lgUp && {
-          px: 2,
-          py: `${HEADER.H_DESKTOP + SPACING}px`,
-          width: `calc(100% - ${NAV.WIDTH}px)`,
-        }),
-      }}
-      {...other}
-    >
-      {children}
+    <Box component="main" sx={style.container} {...other}>
+      <Container maxWidth="xl" sx={{ mt: 5 }}>
+        {children}
+      </Container>
     </Box>
   );
 };

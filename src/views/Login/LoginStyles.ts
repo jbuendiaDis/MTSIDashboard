@@ -1,33 +1,33 @@
-export const LoginStyles = {
-  container: {
-    display: 'flex',
-    justifyContent: 'center',
-    flexDirection: 'column',
-    minHeight: '100vh',
-    alignItems: 'center',
-    position: 'relative',
-    paddingBottom: 8,
-  },
-  contentForm: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    maxWidth: 350,
-    p: { xs: 2, md: 0 },
-    // flexDirection: 'column',
-    // width: 380,
-  },
-  form: {
-    '& .MuiFormControl-root': {
-      marginBottom: 2.5,
-      borderRadius: 0.5,
-      '& div:first-of-type': {
-        borderRadius: 0.5,
-      },
-      '& p.Mui-error': {
-        margin: 0,
-        marginTop: 0.5,
-      },
-    },
-  },
+import backgroundImg from '../../assets/overlay_1.svg';
+import { alpha, useTheme } from '@mui/material/styles';
+import { bgGradient } from '../../components/Theme/css';
+
+export const LoginStyles = () => {
+  const theme = useTheme();
+
+  const container = {
+    ...bgGradient({
+      color: alpha(theme.palette.background.default, 0.9),
+      imgUrl: backgroundImg,
+    }),
+    height: '100vh',
+  };
+
+  const rootCard = {
+    p: 5,
+    width: 1,
+    maxWidth: 420,
+  };
+
+  const titleForm = {
+    textAlign: 'center',
+    mb: 4,
+    letterSpacing: '1.2px',
+  };
+
+  return {
+    container,
+    rootCard,
+    titleForm,
+  };
 };

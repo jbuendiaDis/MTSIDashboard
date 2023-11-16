@@ -39,6 +39,7 @@ const Tabletoolbar = ({
         </>
       ) : (
         <OutlinedInput
+        sx={{width: '280px'}}
           value={searchTerm}
           onChange={handleSearch}
           placeholder="Buscar..."

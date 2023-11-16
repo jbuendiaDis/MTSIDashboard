@@ -1,34 +1,45 @@
-import { AuthContextType, FormValues, Roles } from '../../models';
+/* eslint-disable react-hooks/exhaustive-deps */
+import { AuthContextType, FormValues, PayloadAuth } from '../../models';
 import { ReactNode, useMemo, useState } from 'react';
 import { AuthContext } from './AuthContext';
 import { getItem, setItem } from '../../utils/persistentStorage';
+import { useApi } from '../../hooks/useApi';
+import { Response } from '../../models/responseApi';
 
 interface Props {
   children: ReactNode;
 }
 
 const AuthProvider = ({ children }: Props) => {
-  const [user, setUser] = useState<AuthContextType['user']>(getItem('session'));
+  const [user, setUser] = useState<AuthContextType['user'] | any>(
+    getItem('session')
+  );
+
+  const _loginAuth = useApi({
+    endpoint: '/login',
+    method: 'post',
+  });
 
   const login: AuthContextType['login'] = async (
     values: FormValues
   ): Promise<boolean> => {
     try {
-      //TODO: Peticion login a la API
-      console.log('AUTH_PROVIDER', values);
+      const { payload, response }: PayloadAuth = await _loginAuth({
+        body: values,
+      });
+      const code: Response['code'] = response.code;
+      const user = payload.user;
+      const token = payload.token;
 
-      //datos que retorna nuestra API
-
-      if (values) {
-        const response = {
-          name: 'Juan Carlos',
-          rol: Roles.ADMIN,
+      if (code === 200) {
+        const session = {
+          user,
+          token,
         };
-        setItem('session', response);
 
-        setUser(response);
-
-        console.log('RES', response);
+        setItem('session', session.user);
+        setItem('token', session.token);
+        setUser(session.user);
       }
 
       return true;

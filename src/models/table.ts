@@ -1,5 +1,15 @@
 import { ReactNode } from 'react';
 
+export interface TableProps {
+  title?: string;
+  columns: Column[];
+  data: any[];
+  showCheckboxes: boolean;
+  tableHead: boolean;
+  customButton: boolean;
+  renderCustomButton: ReactNode;
+}
+
 export interface Column {
   id: string;
   label: string;
@@ -10,7 +20,7 @@ export interface Column {
 export interface Action {
   label: string;
   icon: ReactNode;
-  onClick: (rowData: Row) => void;
+  onClick: (rowData: any) => void;
 }
 
 export interface Row {

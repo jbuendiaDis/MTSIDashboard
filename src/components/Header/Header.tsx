@@ -1,21 +1,16 @@
 import { AppBar, Box, IconButton, Stack, Toolbar } from '@mui/material';
 import { Menu } from '@mui/icons-material';
-import { useTheme } from '@mui/material/styles';
-// import { HeaderStyles } from './HeaderStyles';
-// import { useAuth } from '../Auth';
-import { bgBlur } from '../Theme/css';
 import { useResponsive } from '../../hooks/useResponsive';
-import { HEADER, NAV } from '../../layouts/configLayout';
 import { Account } from '../Account';
+import { HeaderStyles } from './HeaderStyles';
 
-interface Props {
+interface HeaderProps {
   onOpenNav: () => void;
 }
 
-const Header = ({ onOpenNav }: Props) => {
-  const theme = useTheme();
+const Header = ({ onOpenNav }: HeaderProps) => {
+  const style = HeaderStyles();
   const lgUp = useResponsive('up', 'lg');
-  // const auth = useAuth();
 
   const renderContent = (
     <>
@@ -38,23 +33,7 @@ const Header = ({ onOpenNav }: Props) => {
   );
 
   return (
-    <AppBar
-      sx={{
-        boxShadow: 'none',
-        height: HEADER.H_MOBILE,
-        zIndex: theme.zIndex.appBar + 1,
-        ...bgBlur({
-          color: theme.palette.background.default,
-        }),
-        transition: theme.transitions.create(['height'], {
-          duration: theme.transitions.duration.shorter,
-        }),
-        ...(lgUp && {
-          width: `calc(100% - ${NAV.WIDTH + 1}px)`,
-          height: HEADER.H_DESKTOP,
-        }),
-      }}
-    >
+    <AppBar sx={style.appBar}>
       <Toolbar
         sx={{
           height: 1,
