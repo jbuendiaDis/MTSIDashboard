@@ -28,6 +28,7 @@ export interface Payload {
 }
 
 export interface FormCreateUserValues {
+  _id?: string;
   name: string;
   lastname: string;
   age: string;

@@ -21,7 +21,7 @@ const Drawer = ({ open, title, children, anchor, onClose }: DrawerProps) => {
         maxWidth: '100%',
       }}
     >
-      <Box sx={{ width: { xs: 320, sm: 480 }, p: { xs: 2, md: 3 } }}>
+      <Box sx={{ width: { xs: 320, sm: 540 }, p: { xs: 2, md: 3 } }}>
         <Box sx={{ display: 'flex', justifyContent: 'end', mb: 1 }}>
           <IconButton onClick={onClose}>
             <Close />

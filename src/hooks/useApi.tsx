@@ -10,7 +10,7 @@ import { useAuth } from '../components/Auth';
 
 interface Props {
   endpoint: string;
-  method: 'post' | 'put' | 'get' | 'post' | 'delete' | 'patch';
+  method: 'post' | 'put' | 'get' | 'delete' | 'patch';
   customMessagesKey?: string;
 }
 

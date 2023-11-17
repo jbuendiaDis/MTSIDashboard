@@ -3,48 +3,46 @@ import { useEffect, useState } from 'react';
 import { useLoader } from '../../components/Loader';
 import { LoaderContextType } from '../../models';
 import { useApi } from '../../hooks/useApi';
-import {
-  DataUsers,
-  FormCreateUserValues,
-  PaylaodUsers,
-  Payload,
-} from './types';
+import { DataUsers, Payload } from './types';
 import { Table } from '../../components/Table';
 import {
   Add,
   ModeEditOutlineOutlined,
   DeleteOutlineOutlined,
 } from '@mui/icons-material';
-import { Button } from '@mui/material';
-import { get } from 'lodash';
+import {
+  Button,
+  Grid,
+  Stack,
+  IconButton,
+  InputAdornment,
+  TextField,
+} from '@mui/material';
+import { VisibilityOff, Visibility } from '@mui/icons-material';
 import { Column } from '../../models/table';
 import { Drawer } from '../../components/Drawer';
-import { Form, Formik } from 'formik';
-import * as Yup from 'yup';
-import { UserForm } from './UserForm';
-import { useModalConfirmation } from '../../hooks/useModalConfirmation';
 import { Response } from '../../models/responseApi';
+import { useHelpers } from './helpers';
+import { useModalConfirmation } from '../../hooks/useModalConfirmation';
 
 const Users = () => {
-  const { handleShowLoader }: LoaderContextType = useLoader();
-  const { modalSuccess, modalInformation, modalDelete } =
-    useModalConfirmation();
-  const [usersTable, setUsersTable] = useState<PaylaodUsers['data'][]>([]);
   const [openDrawer, setOpenDrawer] = useState<boolean>(false);
   useState<boolean>(false);
-
-  const requiredValue: string = 'Este campo es obligatorio.';
-  const noMatchPassword = 'No coinciden las contraseñas.';
-
-  const _getUsers = useApi({
-    endpoint: '/users',
-    method: 'get',
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [showConfirmPassword, setShowConfirmPassword] =
+    useState<boolean>(false);
+  const { handleShowLoader }: LoaderContextType = useLoader();
+  const {
+    formik,
+    usersTable,
+    idUserEdit,
+    handleGetUsers,
+    handleUpdateUser,
+    setIdUserEdit,
+  } = useHelpers({
+    setOpenDrawer,
   });
-
-  const _createUsers = useApi({
-    endpoint: '/users',
-    method: 'post',
-  });
+  const { modalDelete, modalSuccess } = useModalConfirmation();
 
   const _deleteUser = useApi({
     endpoint: '/users',
@@ -56,26 +54,7 @@ const Users = () => {
     handleGetUsers();
   }, []);
 
-  const handleGetUsers = async (): Promise<boolean> => {
-    try {
-      const response: Payload = await _getUsers();
-      const payload = get(response, 'payload', {});
-      const dataResponse: PaylaodUsers['data'][] = get(payload, 'data', []);
-      const headerResponse: Payload['response'] = get(response, 'response');
-
-      if (headerResponse.code === 200) {
-        handleShowLoader(false);
-        setUsersTable(dataResponse);
-      }
-
-      return true;
-    } catch (error) {
-      return false;
-    }
-  };
-
   const handleOpenModalDelete = (data: DataUsers) => {
-    console.log('Data', data);
     const message: string = '¿Seguro que desea eliminar:';
     const dataValue = `${data?.name} ${data?.lastname}`;
     modalDelete({
@@ -87,11 +66,16 @@ const Users = () => {
 
   const handleDelete = async (id: string): Promise<boolean> => {
     try {
-      const response = await _deleteUser({
+      const { response }: Payload = await _deleteUser({
         urlParam: id,
       });
-      handleGetUsers();
-      console.log('RESPONSE_DELETE', response);
+      const code: Response['code'] = response.code;
+      const message: Response['message'] = response.message;
+
+      if (code === 200) {
+        modalSuccess({ message });
+        handleGetUsers();
+      }
       return true;
     } catch (error) {
       return false;
@@ -113,7 +97,7 @@ const Users = () => {
         {
           label: 'Editar',
           icon: <ModeEditOutlineOutlined sx={{ width: 20, height: 20 }} />,
-          onClick: (rowData: DataUsers) => console.log('click', rowData),
+          onClick: (rowData: DataUsers) => handleUpdateUser(rowData),
         },
         {
           label: 'Eliminar',
@@ -127,78 +111,6 @@ const Users = () => {
       ],
     },
   ];
-
-  const validationSchema = Yup.object().shape({
-    name: Yup.string().required(requiredValue),
-    lastname: Yup.string().required(requiredValue),
-    age: Yup.string().nullable(),
-    email: Yup.string()
-      .email('Ingrese un email válido.')
-      .required(requiredValue),
-    password: Yup.string()
-      .min(8, 'La contraseña debe tener al menos 8 caracteres')
-      .max(15, 'La contraseña no puede tener más de 15 caracteres')
-      .matches(
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]+$/,
-        'La contraseña debe cumplir con los criterios'
-      )
-      .required(requiredValue),
-    confirmPassword: Yup.string()
-      .min(8, 'La contraseña debe tener al menos 8 caracteres')
-      .max(15, 'La contraseña no puede tener más de 15 caracteres')
-      .matches(
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]+$/,
-        'La contraseña debe cumplir con los criterios'
-      )
-      .required(requiredValue)
-      .oneOf([Yup.ref('password')], noMatchPassword),
-    position: Yup.string().required(requiredValue),
-    signature: Yup.string().required(requiredValue),
-  });
-
-  const initialValues: FormCreateUserValues = {
-    name: '',
-    lastname: '',
-    age: '',
-    email: '',
-    password: '',
-    confirmPassword: '',
-    position: '',
-    signature: '',
-  };
-
-  const handleSubmit = async (
-    values: FormCreateUserValues
-  ): Promise<boolean> => {
-    try {
-      const newValues: Omit<FormCreateUserValues, 'confirmPassword'> = {
-        name: values.name,
-        lastname: values.lastname,
-        age: values.age,
-        email: values.email,
-        password: values.password,
-        position: values.position,
-        signature: values.signature,
-      };
-
-      const { response }: Payload = await _createUsers({
-        body: newValues,
-      });
-      const message: Response['message'] = response.message;
-      const code: Response['code'] = response.code;
-
-      if (code === 200) {
-        setOpenDrawer(false);
-        handleGetUsers();
-        modalSuccess({ message });
-      } else {
-        modalInformation({ message });
-      }
-      return true;
-    } catch (error) {
-      return false;
-    }
-  };
 
   return (
     <>
@@ -225,18 +137,200 @@ const Users = () => {
       <Drawer
         open={openDrawer}
         anchor="right"
-        onClose={() => setOpenDrawer(!openDrawer)}
-        title="Crear Usuario"
+        onClose={() => {
+          setOpenDrawer(!openDrawer);
+          formik.resetForm();
+          setShowConfirmPassword(false);
+          setShowPassword(false);
+          setIdUserEdit('');
+        }}
+        title={idUserEdit !== '' ? 'Editar Usuario' : 'Crear Usuario'}
       >
-        <Formik
-          initialValues={initialValues}
-          validationSchema={validationSchema}
-          onSubmit={handleSubmit}
-        >
-          <Form>
-            <UserForm setOpenDrawer={() => setOpenDrawer(!openDrawer)} />
-          </Form>
-        </Formik>
+        <form onSubmit={formik.handleSubmit}>
+          <Grid container spacing={3} sx={{ mt: 3 }}>
+            <Grid xs={12} sm={6} item>
+              <TextField
+                fullWidth
+                label="Nombre"
+                type="text"
+                id="name"
+                name="name"
+                value={formik.values.name}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                error={formik.touched.name && Boolean(formik.errors.name)}
+                helperText={formik.touched.name && formik.errors.name}
+              />
+            </Grid>
+            <Grid xs={12} sm={6} item>
+              <TextField
+                fullWidth
+                label="Apellido"
+                type="text"
+                id="lastname"
+                name="lastname"
+                value={formik.values.lastname}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                error={
+                  formik.touched.lastname && Boolean(formik.errors.lastname)
+                }
+                helperText={formik.touched.lastname && formik.errors.lastname}
+              />
+            </Grid>
+            <Grid xs={12} sm={6} item>
+              <TextField
+                fullWidth
+                label="Edad"
+                type="text"
+                id="age"
+                name="age"
+                value={formik.values.age}
+                onChange={formik.handleChange}
+              />
+            </Grid>
+            <Grid xs={12} sm={6} item>
+              <TextField
+                fullWidth
+                label="Email"
+                type="text"
+                id="email"
+                name="email"
+                value={formik.values.email}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                error={formik.touched.email && Boolean(formik.errors.email)}
+                helperText={formik.touched.email && formik.errors.email}
+              />
+            </Grid>
+
+            {idUserEdit === '' ? (
+              <>
+                <Grid xs={12} sm={6} item>
+                  <TextField
+                    fullWidth
+                    label="Contraseña"
+                    id="password"
+                    name="password"
+                    type={showPassword ? 'texto' : 'password'}
+                    value={formik.values.password}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    error={
+                      formik.touched.password && Boolean(formik.errors.password)
+                    }
+                    helperText={
+                      formik.touched.password && formik.errors.password
+                    }
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <IconButton
+                            onClick={() => setShowPassword(!showPassword)}
+                            edge="end"
+                          >
+                            {showPassword ? <Visibility /> : <VisibilityOff />}
+                          </IconButton>
+                        </InputAdornment>
+                      ),
+                    }}
+                  />
+                </Grid>
+                <Grid xs={12} sm={6} item>
+                  <TextField
+                    fullWidth
+                    label="Confirme Contraseña"
+                    name="confirmPassword"
+                    type={showConfirmPassword ? 'texto' : 'password'}
+                    value={formik.values.confirmPassword}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    error={
+                      formik.touched.confirmPassword &&
+                      Boolean(formik.errors.confirmPassword)
+                    }
+                    helperText={
+                      formik.touched.confirmPassword &&
+                      formik.errors.confirmPassword
+                    }
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <IconButton
+                            onClick={() =>
+                              setShowConfirmPassword(!showConfirmPassword)
+                            }
+                            edge="end"
+                          >
+                            {showConfirmPassword ? (
+                              <Visibility />
+                            ) : (
+                              <VisibilityOff />
+                            )}
+                          </IconButton>
+                        </InputAdornment>
+                      ),
+                    }}
+                  />
+                </Grid>
+              </>
+            ) : null}
+            <Grid xs={12} sm={6} item>
+              <TextField
+                fullWidth
+                label="Puesto"
+                id="position"
+                name="position"
+                type="text"
+                value={formik.values.position}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                error={
+                  formik.touched.position && Boolean(formik.errors.position)
+                }
+                helperText={formik.touched.position && formik.errors.position}
+              />
+            </Grid>
+            <Grid xs={12} sm={6} item>
+              <TextField
+                fullWidth
+                label="Firma"
+                id="signature"
+                name="signature"
+                type="text"
+                value={formik.values.signature}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                error={
+                  formik.touched.signature && Boolean(formik.errors.signature)
+                }
+                helperText={formik.touched.signature && formik.errors.signature}
+              />
+            </Grid>
+          </Grid>
+          <Stack
+            direction="row"
+            spacing={2}
+            sx={{ mt: 10, width: 1, display: 'flex', justifyContent: 'end' }}
+          >
+            <Button
+              variant="outlined"
+              color="inherit"
+              onClick={() => {
+                setOpenDrawer(!openDrawer);
+                formik.resetForm();
+                setShowConfirmPassword(false);
+                setShowPassword(false);
+                setIdUserEdit('');
+              }}
+            >
+              Cancelar
+            </Button>
+            <Button variant="contained" type="submit">
+              {idUserEdit !== '' ? 'Guardar' : 'Crear Usuario'}
+            </Button>
+          </Stack>
+        </form>
       </Drawer>
     </>
   );
