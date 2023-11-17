@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { ReactNode, useMemo, useState } from 'react';
 import { ModalContext, initialState } from './ModalContext';
 import { ModalProps } from '../../models';

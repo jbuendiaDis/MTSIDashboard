@@ -1,12 +1,11 @@
 import { Response } from '../../models/responseApi';
 import { Action } from '../../models/table';
 
-
 export interface ColumnsTable {
-  id: string,
-  label: string,
-  align: string,
-  actions?:Action[]
+  id: string;
+  label: string;
+  align: string;
+  actions?: Action[];
 }
 
 export interface DataUsers {
@@ -26,4 +25,15 @@ export interface PaylaodUsers {
 export interface Payload {
   payload: PaylaodUsers;
   response: Response;
+}
+
+export interface FormCreateUserValues {
+  name: string;
+  lastname: string;
+  age: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+  position: string;
+  signature: string;
 }

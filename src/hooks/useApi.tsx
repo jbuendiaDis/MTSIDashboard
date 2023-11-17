@@ -5,7 +5,7 @@ import { useLoader } from '../components/Loader';
 import { useModal } from '../components/Modal';
 import { toQueryString } from '../utils/https';
 import { instance } from '../providers/api';
-import { useTranslation } from '../hooks/useTranslations';
+// import { useTranslation } from '../hooks/useTranslations';
 import { useAuth } from '../components/Auth';
 
 interface Props {
@@ -14,8 +14,12 @@ interface Props {
   customMessagesKey?: string;
 }
 
-function useApi<U = null>({ endpoint, method, customMessagesKey }: Props) {
-  const { t } = useTranslation();
+function useApi<U = null>({
+  endpoint,
+  method,
+}: // customMessagesKey
+Props) {
+  // const { t } = useTranslation();
   const { handleOpenModal, handleCloseModal } = useModal();
   const { handleShowLoader } = useLoader();
   const auth = useAuth();

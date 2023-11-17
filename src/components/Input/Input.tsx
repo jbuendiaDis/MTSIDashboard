@@ -5,6 +5,7 @@ import TextField, { TextFieldProps } from '@mui/material/TextField';
 interface FormikTextFieldProps extends Omit<TextFieldProps, 'variant'> {
   name: string;
   label?: ReactNode;
+  // showPassword?: boolean;
 }
 
 const Input: React.FC<FormikTextFieldProps> = ({ name, label, ...props }) => {
@@ -17,6 +18,7 @@ const Input: React.FC<FormikTextFieldProps> = ({ name, label, ...props }) => {
       {...field}
       {...props}
       label={label}
+      // type={showPassword ? 'text' : 'password'}
       error={!!showError}
       helperText={showError ? meta.error : ''}
     />
