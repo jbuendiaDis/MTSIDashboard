@@ -14,7 +14,7 @@ interface DataCustomer {
   telefono: string | number;
   usoCFDI: string;
   _id?: string;
-  __v?: number | undefined | string;
+  // __v?: number | undefined | string;
 }
 
 export interface PaylaodCustomers {

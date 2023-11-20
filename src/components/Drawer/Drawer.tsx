@@ -9,7 +9,13 @@ import { Close } from '@mui/icons-material';
 import { DrawerProps } from '../../models/drawer';
 import { DrawerStyles } from './DrawerStyles';
 
-const Drawer = ({ open, title, children, anchor, onClose }: DrawerProps) => {
+const Drawer = ({
+  open,
+  title,
+  children,
+  anchor = 'right',
+  onClose,
+}: DrawerProps) => {
   const style = DrawerStyles;
 
   return (

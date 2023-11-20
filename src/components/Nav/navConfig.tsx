@@ -5,6 +5,7 @@ import {
   Groups2Outlined,
   RouteOutlined,
   LocalShippingOutlined,
+  AttachMoneyOutlined,
 } from '@mui/icons-material';
 
 export interface Menu {
@@ -33,5 +34,10 @@ export const navConfig: Menu[] = [
     title: 'Traslados',
     path: '/transfers',
     icon: <LocalShippingOutlined />,
+  },
+  {
+    title: 'Gastos',
+    path: '/bills',
+    icon: <AttachMoneyOutlined />,
   },
 ];

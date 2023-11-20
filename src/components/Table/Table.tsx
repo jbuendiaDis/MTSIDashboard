@@ -18,8 +18,9 @@ import {
   ListItem,
   ListItemText,
   Card,
+  Paper,
 } from '@mui/material';
-import { MoreVert } from '@mui/icons-material';
+import { MoreVert, InsertChartOutlinedOutlined } from '@mui/icons-material';
 import { Tabletoolbar } from './TableToolbar';
 import { TableNoData } from './TableNoData';
 import { Action, Row, SortData, TableProps } from '../../models/table';
@@ -167,6 +168,7 @@ const Table = ({
         </Grid>
       )}
       <Card>
+        {/* {data.length > 0 &&} */}
         <Tabletoolbar
           showCheckboxes={showCheckboxes}
           searchTerm={searchTerm}
@@ -212,45 +214,69 @@ const Table = ({
               </TableRow>
             </TableHead>
             <TableBody>
-              {sortedData.length === 0 ? (
-                <TableNoData
-                  searchTerm={searchTerm}
-                  columns={columns}
-                  showCheckboxes={showCheckboxes}
-                />
-              ) : (
-                sortedData
-                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  .map((row, index) => (
-                    <TableRow key={index} hover>
-                      {showCheckboxes && (
-                        <TableCell>
-                          <Checkbox
-                            checked={selectedRows.includes(
-                              index + page * rowsPerPage
+              {data.length > 0 ? (
+                sortedData.length === 0 ? (
+                  <TableNoData
+                    searchTerm={searchTerm}
+                    columns={columns}
+                    showCheckboxes={showCheckboxes}
+                  />
+                ) : (
+                  sortedData
+                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                    .map((row, index) => (
+                      <TableRow key={index} hover>
+                        {showCheckboxes && (
+                          <TableCell>
+                            <Checkbox
+                              checked={selectedRows.includes(
+                                index + page * rowsPerPage
+                              )}
+                              onChange={() =>
+                                handleSelectRow(index + page * rowsPerPage)
+                              }
+                            />
+                          </TableCell>
+                        )}
+                        {columns.map((column) => (
+                          <TableCell key={column.id} align={column.align}>
+                            {column.label === 'Acciones' ? (
+                              <IconButton
+                                aria-label="acciones"
+                                onClick={(e) => handleMoreVertClick(e, row)}
+                              >
+                                <MoreVert />
+                              </IconButton>
+                            ) : (
+                              row[column.id]
                             )}
-                            onChange={() =>
-                              handleSelectRow(index + page * rowsPerPage)
-                            }
-                          />
-                        </TableCell>
-                      )}
-                      {columns.map((column) => (
-                        <TableCell key={column.id} align={column.align}>
-                          {column.label === 'Acciones' ? (
-                            <IconButton
-                              aria-label="acciones"
-                              onClick={(e) => handleMoreVertClick(e, row)}
-                            >
-                              <MoreVert />
-                            </IconButton>
-                          ) : (
-                            row[column.id]
-                          )}
-                        </TableCell>
-                      ))}
-                    </TableRow>
-                  ))
+                          </TableCell>
+                        ))}
+                      </TableRow>
+                    ))
+                )
+              ) : (
+                <TableRow>
+                  <TableCell
+                    align="center"
+                    colSpan={columns.length + (showCheckboxes ? 1 : 0)}
+                    sx={{ py: 3 }}
+                  >
+                    <Paper
+                      sx={{
+                        textAlign: 'center',
+                      }}
+                    >
+                      <InsertChartOutlinedOutlined
+                        color="primary"
+                        sx={{ width: 40, height: 40 }}
+                      />
+                      <Typography variant="h6" paragraph>
+                        No hay información por mostrar
+                      </Typography>
+                    </Paper>
+                  </TableCell>
+                </TableRow>
               )}
             </TableBody>
           </MuiTable>

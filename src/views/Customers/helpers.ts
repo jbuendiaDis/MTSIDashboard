@@ -8,7 +8,11 @@ import { Response } from '../../models/responseApi';
 import { useModalConfirmation } from '../../hooks/useModalConfirmation';
 import { useModal } from '../../components/Modal';
 
-export const useHelpers = () => {
+interface HelpersProps {
+  dataEdit: PaylaodCustomers['data'] | null;
+}
+
+export const useHelpers = ({ dataEdit }: HelpersProps) => {
   const [customersData, setCustomersTable] = useState<
     PaylaodCustomers['data'][]
   >([]);
@@ -31,6 +35,11 @@ export const useHelpers = () => {
     method: 'put',
   });
 
+  const getBusinessName = useApi({
+    endpoint: '/clientes/razonSocial/dai',
+    method: 'get',
+  });
+
   const handleGetCustomers = async (): Promise<boolean> => {
     try {
       const response: Payload = await _getCustomers();
@@ -49,10 +58,18 @@ export const useHelpers = () => {
     }
   };
 
+  const handleGetBusinessName = async (): Promise<boolean> => {
+    try {
+      const response = await getBusinessName();
+      console.log('RESPONSE', response);
+      return true;
+    } catch (error) {
+      return false;
+    }
+  };
+
   const handleSubmit = async (values: PaylaodCustomers['data']) => {
     try {
-      console.log('VALUES', values);
-
       const newValues = {
         calle: values.calle,
         codigoCliente: values.codigoCliente,
@@ -68,20 +85,38 @@ export const useHelpers = () => {
         usoCFDI: values.usoCFDI,
       };
 
-      console.log('NEW', newValues);
+      if (dataEdit) {
+        const response: Payload = await _updateCustomer({
+          urlParam: values._id,
+          body: newValues,
+        });
 
-      const { response }: Payload = await _createCustomer({
-        body: newValues,
-      });
-      const message: Response['message'] = response.message;
-      const code: Response['code'] = response.code;
+        const codeUpdate: Response['code'] = get(response, 'response.code');
+        const message: Response['message'] = get(response, 'response.message');
 
-      if (code === 200) {
-        console.log('RESPONSE', response);
-        handleCloseModal();
-        modalSuccess({ message });
+        if (codeUpdate === 200) {
+          handleCloseModal();
+          handleGetCustomers();
+          modalSuccess({ message });
+        } else {
+          modalInformation({ message });
+        }
       } else {
-        modalInformation({ message });
+        console.log('CREAR', newValues);
+
+        const { response }: Payload = await _createCustomer({
+          body: newValues,
+        });
+        const message: Response['message'] = response.message;
+        const code: Response['code'] = response.code;
+
+        if (code === 200) {
+          console.log('RESPONSE', response);
+          handleCloseModal();
+          modalSuccess({ message });
+        } else {
+          modalInformation({ message });
+        }
       }
       return true;
     } catch (error) {
@@ -89,9 +124,27 @@ export const useHelpers = () => {
     }
   };
 
+  const initialValuesForm: PaylaodCustomers['data'] = {
+    calle: dataEdit ? dataEdit.calle : '',
+    codigoCliente: dataEdit ? dataEdit.codigoCliente : '',
+    colonia: dataEdit ? dataEdit.colonia : '',
+    formaPago: dataEdit ? dataEdit.formaPago : '',
+    metodoPago: dataEdit ? dataEdit.metodoPago : '',
+    numeroExterior: dataEdit ? dataEdit.numeroExterior : '',
+    numeroInterior: dataEdit ? dataEdit.numeroInterior : '',
+    razonSocial: dataEdit ? dataEdit.razonSocial : '',
+    regimenFiscal: dataEdit ? dataEdit.regimenFiscal : '',
+    rfc: dataEdit ? dataEdit.rfc : '',
+    telefono: dataEdit ? dataEdit.telefono : '',
+    usoCFDI: dataEdit ? dataEdit.usoCFDI : '',
+    _id: dataEdit ? dataEdit._id : '',
+  };
+
   return {
+    initialValuesForm,
     customersData,
     handleGetCustomers,
+    handleGetBusinessName,
     handleSubmit,
   };
 };

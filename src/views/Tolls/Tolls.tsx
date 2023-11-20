@@ -12,16 +12,52 @@ const Tolls = () => {
     method: 'get',
   });
 
+  const _getStates = useApi({
+    endpoint: '/states',
+    method: 'get',
+  });
+
+  const _getCountries = useApi({
+    endpoint: '/countries',
+    method: 'get',
+  });
+
   useEffect(() => {
     handleShowLoader(true);
     handleGetTolls();
+    handleGetState();
+    handleGetCountries();
   }, []);
 
   const handleGetTolls = async (): Promise<boolean> => {
     try {
       const response = await _getTolls();
 
-      console.log('RESPONSE', response);
+      console.log('PEAJES', response);
+      handleShowLoader(false);
+      return true;
+    } catch (error) {
+      return false;
+    }
+  };
+
+  const handleGetState = async (): Promise<boolean> => {
+    try {
+      const response = await _getStates();
+
+      console.log('COUTRIES', response);
+      handleShowLoader(false);
+      return true;
+    } catch (error) {
+      return false;
+    }
+  };
+
+  const handleGetCountries = async (): Promise<boolean> => {
+    try {
+      const response = await _getCountries();
+
+      console.log('SATES', response);
       handleShowLoader(false);
       return true;
     } catch (error) {

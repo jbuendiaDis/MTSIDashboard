@@ -16,6 +16,8 @@ export const useModalConfirmation = () => {
 
   const modalSuccess = ({ message, callbackConfirm }: ModalSuccessProps) => {
     handleOpenModal({
+      fullWidth: true,
+      maxWidth: 'xs',
       title: (
         <Grid sx={{ textAlign: 'center' }}>
           <Grid
@@ -64,6 +66,8 @@ export const useModalConfirmation = () => {
     message,
   }: Omit<ModalSuccessProps, 'callbackConfirm'>) => {
     handleOpenModal({
+      fullWidth: true,
+      maxWidth: 'xs',
       title: (
         <Grid sx={{ textAlign: 'center' }}>
           <Grid

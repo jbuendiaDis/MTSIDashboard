@@ -1,5 +1,7 @@
-import { Box } from "@mui/material";
-import { ReactNode } from "react";
+import { Box } from '@mui/material';
+import { ReactNode } from 'react';
+import { Modal } from '../../components/Modal';
+import { Loader } from '../../components/Loader';
 
 interface Props {
   children: ReactNode;
@@ -8,6 +10,8 @@ interface Props {
 const FullScreenLayout = ({ children }: Props) => {
   return (
     <Box>
+      <Modal />
+      <Loader />
       <>{children}</>
     </Box>
   );

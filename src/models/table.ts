@@ -5,9 +5,9 @@ export interface TableProps {
   columns: Column[];
   data: any[];
   showCheckboxes: boolean;
-  tableHead: boolean;
-  customButton: boolean;
-  renderCustomButton: ReactNode;
+  tableHead?: boolean;
+  customButton?: boolean;
+  renderCustomButton?: ReactNode;
 }
 
 export interface Column {
