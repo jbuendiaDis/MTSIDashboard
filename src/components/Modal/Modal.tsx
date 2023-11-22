@@ -19,6 +19,7 @@ const Modal = () => {
     body,
     actionButtons,
     maxWidth = 'xs',
+    iconClose,
   } = modalState;
 
   return (
@@ -32,11 +33,13 @@ const Modal = () => {
       }}
     >
       <DialogTitle>
-        <Box sx={{ display: 'flex', justifyContent: 'end' }}>
-          <IconButton onClick={() => handleCloseModal()}>
-            <Close />
-          </IconButton>
-        </Box>
+        {iconClose && (
+          <Box sx={{ display: 'flex', justifyContent: 'end' }}>
+            <IconButton onClick={() => handleCloseModal()}>
+              <Close />
+            </IconButton>
+          </Box>
+        )}
         {title && title}
       </DialogTitle>
       <DialogContent>{body}</DialogContent>

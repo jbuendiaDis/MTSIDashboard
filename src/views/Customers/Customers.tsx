@@ -3,8 +3,13 @@ import { useEffect, useState } from 'react';
 import { useLoader } from '../../components/Loader';
 import { LoaderContextType, ModalContextType } from '../../models';
 import { Table } from '../../components/Table';
-import { Add, ModeEditOutlineOutlined } from '@mui/icons-material';
-import { Box, Button, Typography } from '@mui/material';
+import {
+  Add,
+  Close,
+  DeleteOutlineOutlined,
+  ModeEditOutlineOutlined,
+} from '@mui/icons-material';
+import { Box, Button, IconButton, Typography } from '@mui/material';
 import { useHelpers } from './helpers';
 import { PaylaodCustomers, Payload } from './types';
 import { Response } from '../../models/responseApi';
@@ -12,20 +17,20 @@ import { useApi } from '../../hooks/useApi';
 import { useModal } from '../../components/Modal';
 import { Form, Formik } from 'formik';
 import { CustomerForm } from './CustomerForm';
-import { Column } from '../../models/table';
+import { Column } from '../../models';
 
 export const Customers = () => {
-  const [dataEdit, setDataEdit] = useState<PaylaodCustomers['data'] | null>(
-    null
-  );
   const { handleShowLoader }: LoaderContextType = useLoader();
   const {
+    dataEdit,
     initialValuesForm,
     customersData,
+    setDataEdit,
     handleGetCustomers,
     handleGetBusinessName,
+    handleOpenModalDelete,
     handleSubmit,
-  } = useHelpers({ dataEdit });
+  } = useHelpers();
   const { handleOpenModal, handleCloseModal }: ModalContextType = useModal();
 
   useEffect(() => {
@@ -65,13 +70,24 @@ export const Customers = () => {
         {
           label: 'Editar',
           icon: <ModeEditOutlineOutlined sx={{ width: 20, height: 20 }} />,
-          onClick: (rowData: any) => handleGetCustomer(rowData),
+          onClick: (rowData: PaylaodCustomers['data']) =>
+            handleGetCustomer(rowData),
+        },
+        {
+          label: 'Eliminar',
+          icon: (
+            <DeleteOutlineOutlined
+              sx={{ width: 20, height: 20, color: 'red' }}
+            />
+          ),
+          onClick: (rowData: PaylaodCustomers['data']) =>
+            handleOpenModalDelete(rowData),
         },
       ],
     },
   ];
 
-  const handleToggleDrawer = (): void => {
+  const handleToggleModal = (): void => {
     handleCloseModal();
     setDataEdit(null);
   };
@@ -102,28 +118,33 @@ export const Customers = () => {
       fullWidth: true,
       maxWidth: 'md',
       title: (
-        <Typography
-          sx={{
-            textAlign: 'center',
-            fontWeight: 700,
-            letterSpacing: '1.2px',
-            fontSize: '20px',
-          }}
-        >
-          {dataEdit ? 'EDITAR CLIENTE' : 'CREAR CLIENTE'}
-        </Typography>
+        <Box>
+          <Box sx={{ display: 'flex', justifyContent: 'end' }}>
+            <IconButton onClick={handleToggleModal}>
+              <Close />
+            </IconButton>
+          </Box>
+          <Typography
+            sx={{
+              textAlign: 'center',
+              fontWeight: 700,
+              letterSpacing: '1.2px',
+              fontSize: '20px',
+            }}
+          >
+            {dataEdit ? 'EDITAR CLIENTE' : 'CREAR CLIENTE'}
+          </Typography>
+        </Box>
       ),
       body: (
-        <Box sx={{ mt: 2 }}>
-          <Formik initialValues={initialValuesForm} onSubmit={handleSubmit}>
-            <Form>
-              <CustomerForm
-                handleToggleDrawer={handleToggleDrawer}
-                dataEdit={dataEdit}
-              />
-            </Form>
-          </Formik>
-        </Box>
+        <Formik initialValues={initialValuesForm} onSubmit={handleSubmit}>
+          <Form>
+            <CustomerForm
+              handleToggleModal={handleToggleModal}
+              dataEdit={dataEdit}
+            />
+          </Form>
+        </Formik>
       ),
     });
   };

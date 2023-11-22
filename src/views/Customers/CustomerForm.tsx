@@ -3,11 +3,11 @@ import Input from '../../components/Input/Input';
 import { PaylaodCustomers } from './types';
 
 interface Props {
-  handleToggleDrawer: () => void;
+  handleToggleModal: () => void;
   dataEdit: PaylaodCustomers['data'] | null;
 }
 
-const CustomerForm = ({ handleToggleDrawer, dataEdit }: Props) => {
+const CustomerForm = ({ handleToggleModal, dataEdit }: Props) => {
   return (
     <>
       <Grid container spacing={2}>
@@ -74,7 +74,7 @@ const CustomerForm = ({ handleToggleDrawer, dataEdit }: Props) => {
         spacing={2}
         sx={{ mt: 4, display: 'flex', justifyContent: 'end' }}
       >
-        <Button variant="outlined" color="inherit" onClick={handleToggleDrawer}>
+        <Button variant="outlined" color="inherit" onClick={handleToggleModal}>
           Cancelar
         </Button>
         <Button variant="contained" type="submit">

@@ -1,12 +1,4 @@
-import { Response } from '../../models/responseApi';
-import { Action } from '../../models/table';
-
-export interface ColumnsTable {
-  id: string;
-  label: string;
-  align: string;
-  actions?: Action[];
-}
+import { Response } from '../../models';
 
 export interface DataUsers {
   age: string;

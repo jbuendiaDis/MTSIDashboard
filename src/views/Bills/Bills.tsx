@@ -4,18 +4,24 @@ import { useLoader } from '../../components/Loader';
 import { LoaderContextType, ModalContextType } from '../../models';
 import { useHelpers } from './helpers';
 import { Table } from '../../components/Table';
-import { Column } from '../../models/table';
-import { Add } from '@mui/icons-material';
+import { Column } from '../../models';
+import { Add, ModeEditOutlineOutlined } from '@mui/icons-material';
 import { Box, Button } from '@mui/material';
 import { useModal } from '../../components/Modal';
 import { Formik, Form } from 'formik';
 import Input from '../../components/Input/Input';
+import { PayloadData } from './types';
 
 const Bills = () => {
   const { handleOpenModal }: ModalContextType = useModal();
   const { handleShowLoader }: LoaderContextType = useLoader();
-  const { initialValues, billsDataTable, handleGetAllBills, handleSubmit } =
-    useHelpers();
+  const {
+    initialValues,
+    billsDataTable,
+    handleGetAllBills,
+    handleGetBill,
+    handleSubmit,
+  } = useHelpers();
 
   useEffect(() => {
     handleShowLoader(true);
@@ -30,27 +36,27 @@ const Bills = () => {
     { id: 'pasajeOrigen', label: 'Pasaje Origen', align: 'left' },
     { id: 'pasajeDestino', label: 'Pasaje Destino', align: 'left' },
     { id: 'peajes', label: 'Peajes', align: 'left' },
-    // {
-    //   id: 'actions',
-    //   label: 'Acciones',
-    //   align: 'center',
-    //   actions: [
-    //     {
-    //       label: 'Editar',
-    //       icon: <ModeEditOutlineOutlined sx={{ width: 20, height: 20 }} />,
-    //       onClick: (rowData: DataUsers) => handleUpdateUser(rowData),
-    //     },
-    //     {
-    //       label: 'Eliminar',
-    //       icon: (
-    //         <DeleteOutlineOutlined
-    //           sx={{ width: 20, height: 20, color: 'red' }}
-    //         />
-    //       ),
-    //       onClick: (rowData: DataUsers) => handleOpenModalDelete(rowData),
-    //     },
-    //   ],
-    // },
+    {
+      id: 'actions',
+      label: 'Acciones',
+      align: 'center',
+      actions: [
+        {
+          label: 'Editar',
+          icon: <ModeEditOutlineOutlined sx={{ width: 20, height: 20 }} />,
+          onClick: (rowData: PayloadData) => handleGetBill(rowData.idCliente),
+        },
+        // {
+        //   label: 'Eliminar',
+        //   icon: (
+        //     <DeleteOutlineOutlined
+        //       sx={{ width: 20, height: 20, color: 'red' }}
+        //     />
+        //   ),
+        //   onClick: (rowData: DataUsers) => handleOpenModalDelete(rowData),
+        // },
+      ],
+    },
   ];
 
   const handleModal = () => {

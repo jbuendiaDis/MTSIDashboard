@@ -8,17 +8,17 @@ import { Response } from '../../models/responseApi';
 import { useModalConfirmation } from '../../hooks/useModalConfirmation';
 import { useModal } from '../../components/Modal';
 
-interface HelpersProps {
-  dataEdit: PaylaodCustomers['data'] | null;
-}
-
-export const useHelpers = ({ dataEdit }: HelpersProps) => {
+export const useHelpers = () => {
+  const [dataEdit, setDataEdit] = useState<PaylaodCustomers['data'] | null>(
+    null
+  );
   const [customersData, setCustomersTable] = useState<
     PaylaodCustomers['data'][]
   >([]);
   const { handleCloseModal }: ModalContextType = useModal();
   const { handleShowLoader }: LoaderContextType = useLoader();
-  const { modalInformation, modalSuccess } = useModalConfirmation();
+  const { modalInformation, modalSuccess, modalDelete } =
+    useModalConfirmation();
 
   const _getCustomers = useApi({
     endpoint: '/clientes',
@@ -33,6 +33,11 @@ export const useHelpers = ({ dataEdit }: HelpersProps) => {
   const _updateCustomer = useApi({
     endpoint: '/clientes',
     method: 'put',
+  });
+
+  const _deleteCustomer = useApi({
+    endpoint: '/clientes',
+    method: 'delete',
   });
 
   const getBusinessName = useApi({
@@ -50,6 +55,40 @@ export const useHelpers = ({ dataEdit }: HelpersProps) => {
       if (headerResponse.code === 200) {
         handleShowLoader(false);
         setCustomersTable(dataResponse);
+      }
+
+      return true;
+    } catch (error) {
+      return false;
+    }
+  };
+
+  const handleOpenModalDelete = (data: PaylaodCustomers['data']) => {
+    const message: string = '¿Seguro que desea eliminar código cliente:';
+    const dataValue = `${data?.codigoCliente}`;
+    modalDelete({
+      message,
+      dataValue,
+      callbackConfirm: () => handleDeleteCustomer(data._id),
+    });
+  };
+
+  const handleDeleteCustomer = async (id: string): Promise<boolean> => {
+    try {
+      console.log('ID_DELETE', id);
+      const { response }: Payload = await _deleteCustomer({
+        urlParam: id,
+      });
+
+      const code: Response['code'] = response.code;
+      const message: Response['message'] = response.message;
+
+      if (code === 200) {
+        modalSuccess({ message });
+        handleGetCustomers();
+      } else {
+        const message = 'Ha ocurrido un error inesperado.';
+        modalInformation({ message });
       }
 
       return true;
@@ -102,8 +141,6 @@ export const useHelpers = ({ dataEdit }: HelpersProps) => {
           modalInformation({ message });
         }
       } else {
-        console.log('CREAR', newValues);
-
         const { response }: Payload = await _createCustomer({
           body: newValues,
         });
@@ -111,8 +148,8 @@ export const useHelpers = ({ dataEdit }: HelpersProps) => {
         const code: Response['code'] = response.code;
 
         if (code === 200) {
-          console.log('RESPONSE', response);
           handleCloseModal();
+          handleGetCustomers();
           modalSuccess({ message });
         } else {
           modalInformation({ message });
@@ -141,10 +178,13 @@ export const useHelpers = ({ dataEdit }: HelpersProps) => {
   };
 
   return {
+    dataEdit,
     initialValuesForm,
     customersData,
+    setDataEdit,
     handleGetCustomers,
     handleGetBusinessName,
+    handleOpenModalDelete,
     handleSubmit,
   };
 };

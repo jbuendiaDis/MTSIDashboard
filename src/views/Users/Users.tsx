@@ -19,7 +19,7 @@ import {
   TextField,
 } from '@mui/material';
 import { VisibilityOff, Visibility } from '@mui/icons-material';
-import { Column } from '../../models/table';
+import { Column } from '../../models';
 import { Drawer } from '../../components/Drawer';
 import { Response } from '../../models/responseApi';
 import { useHelpers } from './helpers';

@@ -13,7 +13,7 @@ interface DataCustomer {
   rfc: string;
   telefono: string | number;
   usoCFDI: string;
-  _id?: string;
+  _id: string;
   // __v?: number | undefined | string;
 }
 

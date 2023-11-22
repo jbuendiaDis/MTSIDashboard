@@ -8,6 +8,7 @@ export const initialState: ModalProps = {
   body: null,
   actionButtons: null,
   maxWidth: null,
+  iconClose: false,
 };
 
 export const ModalContext: Context<ModalContextType> | any =

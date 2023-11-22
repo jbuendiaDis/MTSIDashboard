@@ -7,6 +7,7 @@ export interface ModalProps {
   body: ReactNode;
   actionButtons: ReactNode;
   maxWidth?: any;
+  iconClose: boolean;
 }
 
 export interface ModalContextType {

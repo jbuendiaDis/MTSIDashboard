@@ -14,6 +14,11 @@ export const useHelpers = () => {
     method: 'get',
   });
 
+  const _getBillByid = useApi({
+    endpoint: '/gastos',
+    method: 'get',
+  });
+
   const handleGetAllBills = async (): Promise<boolean> => {
     try {
       const response: PayloadData[] = await _getAllBills();
@@ -36,12 +41,24 @@ export const useHelpers = () => {
           };
         });
 
-        console.log('>>>', formaterData);
-
         setBillsDataTable(formaterData);
         handleShowLoader(false);
       }
 
+      return true;
+    } catch (error) {
+      return false;
+    }
+  };
+
+  const handleGetBill = async (data: string): Promise<boolean> => {
+    console.log('DATA', data);
+    try {
+      const response = await _getBillByid({
+        urlParam: data,
+      });
+
+      console.log('RESPONSe', response);
       return true;
     } catch (error) {
       return false;
@@ -61,5 +78,11 @@ export const useHelpers = () => {
     }
   };
 
-  return { initialValues, billsDataTable, handleGetAllBills, handleSubmit };
+  return {
+    initialValues,
+    billsDataTable,
+    handleGetAllBills,
+    handleGetBill,
+    handleSubmit,
+  };
 };
