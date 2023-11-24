@@ -7,10 +7,10 @@ import { Menu, navConfig } from './navConfig';
 import MemoizedScrollbar from '../ScrollBar/ScrollBar';
 import { useResponsive } from '../../hooks/useResponsive';
 import { useLocation } from 'react-router-dom';
-import { NAV } from '../../layouts/configLayout';
 import { RouterLink } from '../../routes/RouterLink';
 import { useAuth } from '../Auth';
 import { NavStyles } from './NavStyles';
+import { NAV } from '../../utils/configLayout';
 
 interface NavProps {
   openNav: boolean;

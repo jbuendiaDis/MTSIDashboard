@@ -165,11 +165,12 @@ export const useHelpers = ({ setOpenDrawer }: HelpersProps) => {
             signature: values.signature,
           };
 
-          const response = await _updateUser({
+          const response: DataUsers = await _updateUser({
             urlParam: `${values._id}`,
             body: editValues,
           });
-          const message = 'Se ha editado correctamente';
+
+          const message = `El usuario ${response.name} ${response.lastname} se ha editado correctamente`;
 
           if (response) {
             handleGetUsers();

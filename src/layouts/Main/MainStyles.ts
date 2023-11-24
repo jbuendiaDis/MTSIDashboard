@@ -1,5 +1,5 @@
 import { useResponsive } from '../../hooks/useResponsive';
-import { HEADER, NAV } from '../configLayout';
+import { HEADER, NAV } from '../../utils/configLayout';
 
 const SPACING: number = 8;
 

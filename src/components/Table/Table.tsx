@@ -19,6 +19,7 @@ import {
   ListItemText,
   Card,
   Paper,
+  Box,
 } from '@mui/material';
 import { MoreVert, InsertChartOutlinedOutlined } from '@mui/icons-material';
 import { Tabletoolbar } from './TableToolbar';
@@ -79,7 +80,7 @@ const Table = ({
     setSelectedRows([]);
   };
 
-  const handleChangePage = (event: unknown, newPage: number) => {
+  const handleChangePage = (_event: unknown, newPage: number) => {
     setPage(newPage);
   };
 
@@ -196,7 +197,12 @@ const Table = ({
                   <TableCell
                     key={column.id}
                     align={column.align}
-                    sx={{ fontWeight: 700 }}
+                    sx={{
+                      width: 'auto',
+                      fontWeight: 700,
+                      whiteSpace: 'nowrap',
+                      overflow: 'hidden',
+                    }}
                   >
                     {column.label === 'Acciones' ? (
                       <div>Acciones</div>
@@ -239,7 +245,14 @@ const Table = ({
                           </TableCell>
                         )}
                         {columns.map((column) => (
-                          <TableCell key={column.id} align={column.align}>
+                          <TableCell
+                            key={column.id}
+                            align={column.align}
+                            sx={{
+                              whiteSpace: 'nowrap',
+                              overflow: 'hidden',
+                            }}
+                          >
                             {column.label === 'Acciones' ? (
                               <IconButton
                                 aria-label="acciones"

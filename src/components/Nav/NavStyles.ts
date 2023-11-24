@@ -1,5 +1,5 @@
 import { Theme, alpha } from '@mui/material';
-import { NAV } from '../../layouts/configLayout';
+import { NAV } from '../../utils/configLayout';
 
 export const NavStyles = (active?: boolean) => {
   const containerNav = {

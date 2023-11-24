@@ -1,8 +1,8 @@
 import { useTheme } from '@mui/system';
-import { HEADER, NAV } from '../../layouts/configLayout';
 import { Theme } from '@mui/material';
 import { bgBlur } from '../Theme/css';
 import { useResponsive } from '../../hooks/useResponsive';
+import { HEADER, NAV } from '../../utils/configLayout';
 
 export const HeaderStyles = () => {
   const theme = useTheme();

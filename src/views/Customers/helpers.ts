@@ -75,7 +75,6 @@ export const useHelpers = () => {
 
   const handleDeleteCustomer = async (id: string): Promise<boolean> => {
     try {
-      console.log('ID_DELETE', id);
       const { response }: Payload = await _deleteCustomer({
         urlParam: id,
       });

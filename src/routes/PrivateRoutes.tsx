@@ -6,6 +6,7 @@ import { Customers } from '../views/Customers';
 import { Transfers } from '../views/Transfers';
 import { Tolls } from '../views/Tolls';
 import { Bills } from '../views/Bills';
+import { Returns } from '../views/Returns';
 
 const PrivateRoutes = () => {
   return (
@@ -16,6 +17,7 @@ const PrivateRoutes = () => {
         <Route path="/transfers" element={<Transfers />} />
         <Route path="/tolls" element={<Tolls />} />
         <Route path="/bills" element={<Bills />} />
+        <Route path="/returns" element={<Returns />} />
         <Route path="/example-components" element={<Home />} />
         <Route path="*" element={<Navigate to="/users" replace />} />
       </Routes>
