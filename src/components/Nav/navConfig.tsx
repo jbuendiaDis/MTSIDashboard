@@ -7,6 +7,7 @@ import {
   LocalShippingOutlined,
   AttachMoneyOutlined,
   TrendingUpOutlined,
+  Diversity3Outlined,
 } from '@mui/icons-material';
 
 export interface Menu {
@@ -20,6 +21,11 @@ export const navConfig: Menu[] = [
     title: 'Usuarios',
     path: '/users',
     icon: <GroupAddOutlined />,
+  },
+  {
+    title: 'Clientes usuario',
+    path: '/user-clients',
+    icon: <Diversity3Outlined />,
   },
   {
     title: 'Clientes',

@@ -1,36 +1,39 @@
 import { Response } from '../../models/responseApi';
 
-export interface PayloadData {
-  comidas: number;
-  destino: string;
-  estadoDestino: string;
-  estadoOrigen: string;
-  hoteles: number;
-  idCliente: string;
-  localidadDestino: string;
-  localidadOrigen: string;
-  origen: string;
-  pasajeDestino: number;
-  pasajeOrigen: number;
-  peajes: any[];
+interface Points {
+  costo: number;
+  nombreCaseta: string;
+  _id: string;
 }
 
-export interface FormaterData {
-  comidas: string;
-  hoteles: string;
-  pasajeOrigen: string;
-  pasajeDestino: string;
-  destino: string;
-  estadoDestino: string | number;
-  estadoOrigen: string | number;
-  idCliente: string;
-  localidadDestino: string;
-  localidadOrigen: string;
-  origen: string;
-  peajes: any[];
+interface Tolls {
+  casetas: string;
+  idgasto: string;
+  kms: number;
+  puntos: Points[];
+  totalPeajes: number;
+  __v?: number;
+  _id: string;
 }
 
-export interface PayloadBills {
-  payload: PayloadData;
+export interface PayloadTollExpenses {
+  data: {
+    comidas: number;
+    hoteles: number;
+    pasajeOrigen: number;
+    pasajeDestino: number;
+    destino: string;
+    estadoDestino: string;
+    estadoOrigen: string;
+    idCliente: string;
+    localidadDestino: string;
+    localidadOrigen: string;
+    origen: string;
+    peajes: Tolls[];
+  }[];
+}
+
+export interface ResponseTollExpenses {
+  payload: PayloadTollExpenses;
   response: Response;
 }

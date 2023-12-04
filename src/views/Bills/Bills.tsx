@@ -5,15 +5,21 @@ import { LoaderContextType, ModalContextType } from '../../models';
 import { useHelpers } from './helpers';
 import { Table } from '../../components/Table';
 import { Column } from '../../models';
-import { Add, ModeEditOutlineOutlined } from '@mui/icons-material';
-import { Box, Button } from '@mui/material';
+import {
+  Add,
+  Close,
+  ModeEditOutlineOutlined,
+  SnoozeTwoTone,
+  VisibilityOutlined,
+} from '@mui/icons-material';
+import { Box, Button, IconButton, Typography } from '@mui/material';
 import { useModal } from '../../components/Modal';
 import { Formik, Form } from 'formik';
 import Input from '../../components/Input/Input';
-import { PayloadData } from './types';
+import { PayloadTollExpenses } from './types';
 
 const Bills = () => {
-  const { handleOpenModal }: ModalContextType = useModal();
+  const { handleOpenModal, handleCloseModal }: ModalContextType = useModal();
   const { handleShowLoader }: LoaderContextType = useLoader();
   const {
     initialValues,
@@ -35,16 +41,22 @@ const Bills = () => {
     { id: 'hoteles', label: 'Hoteles', align: 'left' },
     { id: 'pasajeOrigen', label: 'Pasaje Origen', align: 'left' },
     { id: 'pasajeDestino', label: 'Pasaje Destino', align: 'left' },
-    { id: 'peajes', label: 'Peajes', align: 'left' },
+    { id: 'totalKilometers', label: 'Total Kms', align: 'left' },
+    { id: 'totalPeajes', label: 'Total Peajes', align: 'left' },
     {
       id: 'actions',
       label: 'Acciones',
       align: 'center',
       actions: [
+        // {
+        //   label: 'Editar',
+        //   icon: <ModeEditOutlineOutlined sx={{ width: 20, height: 20 }} />,
+        //   onClick: (rowData: PayloadTollExpenses) => handleGetBill(rowData),
+        // },
         {
-          label: 'Editar',
-          icon: <ModeEditOutlineOutlined sx={{ width: 20, height: 20 }} />,
-          onClick: (rowData: PayloadData) => handleGetBill(rowData.idCliente),
+          label: 'Detalle',
+          icon: <VisibilityOutlined sx={{ width: 20, height: 20 }} />,
+          onClick: (rowData: PayloadTollExpenses) => hanldeDetailBills(rowData),
         },
         // {
         //   label: 'Eliminar',
@@ -58,6 +70,35 @@ const Bills = () => {
       ],
     },
   ];
+
+  const hanldeDetailBills = (data: PayloadTollExpenses) => {
+    handleOpenModal({
+      fullWidth: true,
+      maxWidth: 'sm',
+      title: (
+        <Box component="div">
+          <Box sx={{ display: 'flex', justifyContent: 'end' }}>
+            <IconButton onClick={() => handleCloseModal()}>
+              <Close />
+            </IconButton>
+          </Box>
+          <Typography
+            variant="body1"
+            sx={{
+              textAlign: 'center',
+              fontWeight: 700,
+              letterSpacing: '1.2px',
+              fontSize: '20px',
+              textTransform: 'uppercase',
+            }}
+          >
+            Detalle
+          </Typography>
+        </Box>
+      ),
+      body: <Box component="div">hola</Box>,
+    });
+  };
 
   const handleModal = () => {
     handleOpenModal({

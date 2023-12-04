@@ -2,8 +2,8 @@
 import { useEffect, useState } from 'react';
 import { useApi } from '../../hooks/useApi';
 import { useLoader } from '../../components/Loader';
-import { LoaderContextType } from '../../models';
-import { PayloadData, ResponseReturns } from './types';
+import { LoaderContextType, Response } from '../../models';
+import { DataReturns, PayloadDataReturns, ResponseReturns } from './types';
 import * as Yup from 'yup';
 import { useModalConfirmation } from '../../hooks/useModalConfirmation';
 import { useModal } from '../../components/Modal';
@@ -13,10 +13,8 @@ export const useHelpers = () => {
   const { modalSuccess, modalInformation, modalDelete } =
     useModalConfirmation();
   const { handleCloseModal } = useModal();
-  const [dataEdit, setDataEdit] = useState<ResponseReturns['payload'] | null>(
-    null
-  );
-  const [returnsData, setReturnsData] = useState<ResponseReturns['payload'][]>(
+  const [dataEdit, setDataEdit] = useState<any | null>(null);
+  const [returnsData, setReturnsData] = useState<PayloadDataReturns['data']>(
     []
   );
 
@@ -47,11 +45,13 @@ export const useHelpers = () => {
 
   const handleGetReturns = async (): Promise<boolean> => {
     try {
-      const response: ResponseReturns['payload'][] = await _getReturns();
+      const { payload, response }: ResponseReturns = await _getReturns();
+      const code: Response['code'] = response.code;
+      const dataResponse: PayloadDataReturns['data'] = payload.data;
 
-      if (response.length > 0) {
+      if (code === 200) {
         handleShowLoader(false);
-        setReturnsData(response);
+        setReturnsData(dataResponse);
       }
       return true;
     } catch (error) {
@@ -59,7 +59,7 @@ export const useHelpers = () => {
     }
   };
 
-  const handleOpenModalDelete = (data: PayloadData) => {
+  const handleOpenModalDelete = (data: any) => {
     const message: string = '¿Seguro que desea eliminar marca:';
     const dataValue = `${data?.marca}`;
     modalDelete({
@@ -86,7 +86,7 @@ export const useHelpers = () => {
     }
   };
 
-  const initialValues: PayloadData = {
+  const initialValues: any = {
     marca: dataEdit ? dataEdit?.marca : '',
     modelo: dataEdit ? dataEdit?.modelo : '',
     rendimiento: dataEdit ? dataEdit?.rendimiento : 0,
@@ -102,23 +102,24 @@ export const useHelpers = () => {
     _id: Yup.string(),
   });
 
-  const handleSubmit = async (values: PayloadData): Promise<boolean> => {
+  const handleSubmit = async (values: DataReturns): Promise<boolean> => {
     try {
-      const newValues = {
+      const newValues: DataReturns = {
         marca: values.marca,
         modelo: values.modelo,
         rendimiento: values.rendimiento,
       };
 
       if (dataEdit) {
-        const response: PayloadData = await _updateReturn({
+        const { response }: ResponseReturns = await _updateReturn({
           urlParam: values._id,
           body: newValues,
         });
+        const code: Response['code'] = response.code;
+        const message: Response['message'] = response.message;
 
-        if (response) {
+        if (code) {
           handleCloseModal();
-          const message: string = `La marca ${response.marca} se ha actualizado correctamente.`;
           modalSuccess({ message });
           handleGetReturns();
         } else {
@@ -127,10 +128,10 @@ export const useHelpers = () => {
           modalInformation({ message });
         }
       } else {
-        const response: PayloadData = await _createReturn({
+        const { response }: ResponseReturns = await _createReturn({
           body: newValues,
         });
-        const message: string = `la marca: ${response.marca} se ha creado correctamente.`;
+        const message: Response['message'] = response.message;
 
         if (response) {
           handleCloseModal();

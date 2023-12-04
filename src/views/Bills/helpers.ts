@@ -1,18 +1,23 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useLoader } from '../../components/Loader';
 import { useApi } from '../../hooks/useApi';
-import { LoaderContextType } from '../../models';
-import { FormaterData, PayloadData } from './types';
+import { LoaderContextType, Response } from '../../models';
+import { PayloadTollExpenses, ResponseTollExpenses } from './types';
 import { formatToCurrency } from '../../utils/amountFormater';
 
 export const useHelpers = () => {
-  const [billsDataTable, setBillsDataTable] = useState<FormaterData[]>([]);
+  const [billsDataTable, setBillsDataTable] = useState<any[]>([]);
   const { handleShowLoader }: LoaderContextType = useLoader();
 
-  const _getAllBills = useApi({
-    endpoint: '/gastos',
+  const _getAllTollExpenses = useApi({
+    endpoint: '/gastosPeajes',
     method: 'get',
   });
+
+  // const _getAllBills = useApi({
+  //   endpoint: '/gastos',
+  //   method: 'get',
+  // });
 
   const _getBillByid = useApi({
     endpoint: '/gastos',
@@ -21,16 +26,28 @@ export const useHelpers = () => {
 
   const handleGetAllBills = async (): Promise<boolean> => {
     try {
-      const response: PayloadData[] = await _getAllBills();
+      const { payload, response }: ResponseTollExpenses =
+        await _getAllTollExpenses();
+      const code: Response['code'] = response.code;
+      const dataResponse: PayloadTollExpenses['data'] = payload.data;
 
-      if (response.length > 0) {
-        console.log(response);
-
-        const formaterData: FormaterData[] = response.map((item) => {
+      if (code === 200) {
+        const formaterData = dataResponse.map((item) => {
           const foods = formatToCurrency(item.comidas);
           const hotels = formatToCurrency(item.hoteles);
           const originPassage = formatToCurrency(item.pasajeOrigen);
           const destinyPassage = formatToCurrency(item.pasajeDestino);
+          const kilometers = item.peajes.reduce(
+            (totalKilometers, kilometers) => {
+              return totalKilometers + kilometers.kms;
+            },
+            0
+          );
+          const totalPeajes = formatToCurrency(
+            item.peajes.reduce((total, costTotal) => {
+              return total + costTotal.totalPeajes;
+            }, 0)
+          );
 
           return {
             ...item,
@@ -38,8 +55,12 @@ export const useHelpers = () => {
             hoteles: hotels,
             pasajeOrigen: originPassage,
             pasajeDestino: destinyPassage,
+            totalKilometers: `${kilometers} kms`,
+            totalPeajes: totalPeajes,
           };
         });
+
+        console.log('>>>', formaterData);
 
         setBillsDataTable(formaterData);
         handleShowLoader(false);

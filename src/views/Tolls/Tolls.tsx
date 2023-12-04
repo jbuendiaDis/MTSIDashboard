@@ -1,71 +1,70 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect } from 'react';
-import { useApi } from '../../hooks/useApi';
-import { useLoader } from '../../components/Loader';
-import { LoaderContextType } from '../../models';
+import { Table } from '../../components/Table';
+import { Button } from '@mui/material';
+import {
+  Add,
+  DeleteOutlineOutlined,
+  ModeEditOutlineOutlined,
+} from '@mui/icons-material';
+import { useHelpers } from './helpers';
+import { Column } from '../../models';
+import { DataTolls } from './types';
 
 const Tolls = () => {
-  const { handleShowLoader }: LoaderContextType = useLoader();
+  const { tollsData, handleOpenModalDelete } = useHelpers();
 
-  const _getTolls = useApi({
-    endpoint: '/peajes',
-    method: 'get',
-  });
+  const columns: Column[] = [
+    { id: 'casetas', label: 'Casetas', align: 'left' },
+    { id: 'totalKilometers', label: 'Kilometros', align: 'left' },
+    { id: 'costTotalPeajes', label: 'Total Peajes', align: 'left' },
+    { id: 'tipoUnidad', label: 'Tipo Unidad', align: 'left' },
+    // { id: 'totalPeajes', label: 'Rendimiento', align: 'left' },
+    {
+      id: 'actions',
+      label: 'Acciones',
+      align: 'center',
+      actions: [
+        {
+          label: 'Editar',
+          icon: <ModeEditOutlineOutlined sx={{ width: 20, height: 20 }} />,
+          onClick: (rowData: any) => console.log('EDIT', rowData),
+        },
+        {
+          label: 'Eliminar',
+          icon: (
+            <DeleteOutlineOutlined
+              sx={{ width: 20, height: 20, color: 'red' }}
+            />
+          ),
+          onClick: (rowData: DataTolls) => handleOpenModalDelete(rowData),
+        },
+      ],
+    },
+  ];
 
-  const _getStates = useApi({
-    endpoint: '/states',
-    method: 'get',
-  });
-
-  const _getCountries = useApi({
-    endpoint: '/countries',
-    method: 'get',
-  });
-
-  useEffect(() => {
-    handleShowLoader(true);
-    handleGetTolls();
-    handleGetState();
-    handleGetCountries();
-  }, []);
-
-  const handleGetTolls = async (): Promise<boolean> => {
-    try {
-      const response = await _getTolls();
-
-      console.log('PEAJES', response);
-      handleShowLoader(false);
-      return true;
-    } catch (error) {
-      return false;
-    }
-  };
-
-  const handleGetState = async (): Promise<boolean> => {
-    try {
-      const response = await _getStates();
-
-      console.log('COUTRIES', response);
-      handleShowLoader(false);
-      return true;
-    } catch (error) {
-      return false;
-    }
-  };
-
-  const handleGetCountries = async (): Promise<boolean> => {
-    try {
-      const response = await _getCountries();
-
-      console.log('SATES', response);
-      handleShowLoader(false);
-      return true;
-    } catch (error) {
-      return false;
-    }
-  };
-
-  return <div>Tolls</div>;
+  return (
+    <div>
+      <Table
+        tableHead
+        customButton
+        showCheckboxes={false}
+        title="Peajes"
+        renderCustomButton={
+          <Button
+            variant="contained"
+            color="inherit"
+            sx={{ p: '10px 20px', letterSpacing: '1px' }}
+            onClick={() => console.log('Click')}
+            startIcon={<Add />}
+          >
+            Agregar Peaje
+          </Button>
+        }
+        columns={columns}
+        data={tollsData}
+      />
+    </div>
+  );
 };
 
 export { Tolls };

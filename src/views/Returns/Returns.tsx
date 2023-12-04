@@ -7,14 +7,14 @@ import {
   ModeEditOutlineOutlined,
 } from '@mui/icons-material';
 import { Table } from '../../components/Table';
-import { Column } from '../../models';
+import { Column, Response } from '../../models';
 import { useHelpers } from './helpers';
-import { PayloadData } from './types';
 import { useModal } from '../../components/Modal';
 import { useApi } from '../../hooks/useApi';
 import { Form, Formik } from 'formik';
 import { ReturnsForm } from './ReturnsForm';
 import { useEffect } from 'react';
+import { PayloadDataReturns, ResponseReturns } from './types';
 
 const Returns = () => {
   const {
@@ -54,7 +54,7 @@ const Returns = () => {
         {
           label: 'Editar',
           icon: <ModeEditOutlineOutlined sx={{ width: 20, height: 20 }} />,
-          onClick: (rowData: PayloadData) => handleGetReturn(rowData._id),
+          onClick: (rowData: any) => handleGetReturn(rowData._id),
         },
         {
           label: 'Eliminar',
@@ -63,7 +63,7 @@ const Returns = () => {
               sx={{ width: 20, height: 20, color: 'red' }}
             />
           ),
-          onClick: (rowData: PayloadData) => handleOpenModalDelete(rowData),
+          onClick: (rowData: any) => handleOpenModalDelete(rowData),
         },
       ],
     },
@@ -71,12 +71,15 @@ const Returns = () => {
 
   const handleGetReturn = async (id: string): Promise<boolean> => {
     try {
-      const response: PayloadData = await _getReturn({
+      const { payload, response }: ResponseReturns = await _getReturn({
         urlParam: id,
       });
+      const code: Response['code'] = response.code;
+      const dataEditResponse: PayloadDataReturns['data'] = payload.data;
 
-      if (response) setDataEdit(response);
-
+      if (code === 200) {
+        setDataEdit(dataEditResponse);
+      }
       return true;
     } catch (error) {
       return false;
