@@ -8,15 +8,17 @@ import { Column } from '../../models';
 import {
   Add,
   Close,
+  DeleteOutlineOutlined,
   ModeEditOutlineOutlined,
-  SnoozeTwoTone,
   VisibilityOutlined,
 } from '@mui/icons-material';
 import { Box, Button, IconButton, Typography } from '@mui/material';
 import { useModal } from '../../components/Modal';
 import { Formik, Form } from 'formik';
 import Input from '../../components/Input/Input';
-import { PayloadTollExpenses } from './types';
+import { TollExpensesData } from './types';
+import { DetailBills } from './DetailBills';
+import { BillForm } from './BillForm';
 
 const Bills = () => {
   const { handleOpenModal, handleCloseModal }: ModalContextType = useModal();
@@ -26,6 +28,7 @@ const Bills = () => {
     billsDataTable,
     handleGetAllBills,
     handleGetBill,
+    handleOpenDeleteModal,
     handleSubmit,
   } = useHelpers();
 
@@ -34,47 +37,56 @@ const Bills = () => {
     handleGetAllBills();
   }, []);
 
+  const handleToggleModal = (): void => {
+    handleCloseModal();
+    // setDataEdit(null);
+  };
+
   const columns: Column[] = [
     { id: 'origen', label: 'Origen', align: 'left' },
     { id: 'destino', label: 'Destino', align: 'left' },
-    { id: 'comidas', label: 'Comidas', align: 'left' },
-    { id: 'hoteles', label: 'Hoteles', align: 'left' },
     { id: 'pasajeOrigen', label: 'Pasaje Origen', align: 'left' },
     { id: 'pasajeDestino', label: 'Pasaje Destino', align: 'left' },
-    { id: 'totalKilometers', label: 'Total Kms', align: 'left' },
+    { id: 'comidas', label: 'Comidas', align: 'left' },
+    { id: 'hoteles', label: 'Hoteles', align: 'left' },
     { id: 'totalPeajes', label: 'Total Peajes', align: 'left' },
+    { id: 'totalKilometers', label: 'Total Kms', align: 'left' },
     {
       id: 'actions',
       label: 'Acciones',
       align: 'center',
       actions: [
-        // {
-        //   label: 'Editar',
-        //   icon: <ModeEditOutlineOutlined sx={{ width: 20, height: 20 }} />,
-        //   onClick: (rowData: PayloadTollExpenses) => handleGetBill(rowData),
-        // },
+        {
+          label: 'Editar',
+          icon: <ModeEditOutlineOutlined sx={{ width: 20, height: 20 }} />,
+          onClick: (rowData: TollExpensesData['data']) =>
+            handleGetBill(rowData._id),
+        },
         {
           label: 'Detalle',
           icon: <VisibilityOutlined sx={{ width: 20, height: 20 }} />,
-          onClick: (rowData: PayloadTollExpenses) => hanldeDetailBills(rowData),
+          onClick: (rowData: TollExpensesData['data']) =>
+            hanldeDetailBills(rowData),
         },
-        // {
-        //   label: 'Eliminar',
-        //   icon: (
-        //     <DeleteOutlineOutlined
-        //       sx={{ width: 20, height: 20, color: 'red' }}
-        //     />
-        //   ),
-        //   onClick: (rowData: DataUsers) => handleOpenModalDelete(rowData),
-        // },
+        {
+          label: 'Eliminar',
+          icon: (
+            <DeleteOutlineOutlined
+              sx={{ width: 20, height: 20, color: 'red' }}
+            />
+          ),
+          onClick: (rowData: TollExpensesData['data']) =>
+            handleOpenDeleteModal(rowData),
+        },
       ],
     },
   ];
 
-  const hanldeDetailBills = (data: PayloadTollExpenses) => {
+  const hanldeDetailBills = (data: TollExpensesData['data']) => {
+    console.log('data', data);
     handleOpenModal({
       fullWidth: true,
-      maxWidth: 'sm',
+      maxWidth: 'md',
       title: (
         <Box component="div">
           <Box sx={{ display: 'flex', justifyContent: 'end' }}>
@@ -92,24 +104,42 @@ const Bills = () => {
               textTransform: 'uppercase',
             }}
           >
-            Detalle
+            Detalle de Gastos
           </Typography>
         </Box>
       ),
-      body: <Box component="div">hola</Box>,
+      body: <DetailBills detailBillsData={data} />,
     });
   };
 
   const handleModal = () => {
     handleOpenModal({
-      // fullWidth: true,
-      // maxWidth: 'sm',
-      title: 'Modal',
+      fullWidth: true,
+      maxWidth: 'sm',
+      title: (
+        <Box>
+          <Box sx={{ display: 'flex', justifyContent: 'end' }}>
+            <IconButton onClick={handleToggleModal}>
+              <Close />
+            </IconButton>
+          </Box>
+          <Typography
+            sx={{
+              textAlign: 'center',
+              fontWeight: 700,
+              letterSpacing: '1.2px',
+              fontSize: '20px',
+            }}
+          >
+            {'CREAR GASTO'}
+          </Typography>
+        </Box>
+      ),
       body: (
         <Box sx={{ mt: 2 }}>
           <Formik initialValues={initialValues} onSubmit={handleSubmit}>
             <Form>
-              <Input label="example" name="canem" />
+              <BillForm handleToggleModal={handleToggleModal} />
             </Form>
           </Formik>
         </Box>

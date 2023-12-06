@@ -14,7 +14,8 @@ const CustomerForm = ({ handleToggleModal, dataEdit }: Props) => {
         <Grid xs={12} item>
           <Typography
             sx={{
-              fontSize: '16px',
+              letterSpacing: '1px',
+              fontSize: '15px',
               color: (theme: Theme) => theme.palette.grey[500],
             }}
           >
@@ -39,7 +40,8 @@ const CustomerForm = ({ handleToggleModal, dataEdit }: Props) => {
         <Grid xs={12} item>
           <Typography
             sx={{
-              fontSize: '16px',
+              letterSpacing: '1px',
+              fontSize: '15px',
               mt: 2,
               color: (theme: Theme) => theme.palette.grey[500],
             }}

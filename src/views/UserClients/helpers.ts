@@ -8,6 +8,8 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useAuth } from '../../components/Auth';
 import { useModalConfirmation } from '../../hooks/useModalConfirmation';
+import { PaylaodCustomers, Payload } from '../Customers/types';
+import { get } from 'lodash';
 
 interface ValuesForm {
   direccion?: string;
@@ -15,7 +17,7 @@ interface ValuesForm {
   genero: string;
   idCliente?: string;
   nombre: string;
-  nombreCliente: string;
+  nombreCliente: any;
   notas?: string;
   password?: string;
   confirmPassword?: string;
@@ -38,12 +40,19 @@ export const useHelpers = ({ setOpenDrawer }: HelpersProps) => {
   const [userClientsData, setUserClientsData] = useState<
     dataUserClient['data']
   >([]);
+  const [customersData, setCustomersTable] = useState<
+    PaylaodCustomers['data'][]
+  >([]);
   const [dataEdit, setDataEdit] = useState<ValuesForm | null>(null);
   const requiredValue: string = 'Este campo es obligatorio.';
   const noMatchPassword = 'No coinciden las contraseñas.';
 
   useEffect(() => {
     if (dataEdit !== null) {
+      const filterCustomerName = customersData.filter(
+        (item) => item._id === dataEdit.nombreCliente
+      )[0];
+      console.log('dataEdit', dataEdit, filterCustomerName);
       setOpenDrawer(true);
       formik.setValues({
         direccion: dataEdit ? dataEdit.direccion : '',
@@ -51,7 +60,8 @@ export const useHelpers = ({ setOpenDrawer }: HelpersProps) => {
         genero: dataEdit ? dataEdit.genero : '',
         idCliente: dataEdit ? dataEdit.idCliente : '',
         nombre: dataEdit ? dataEdit.nombre : '',
-        nombreCliente: dataEdit ? dataEdit.nombre : '',
+        nombreCliente:
+          dataEdit && dataEdit.nombreCliente ? filterCustomerName : null,
         notas: dataEdit ? dataEdit.notas : '',
         password: dataEdit ? dataEdit.password : '',
         puesto: dataEdit ? dataEdit.puesto : '',
@@ -63,6 +73,13 @@ export const useHelpers = ({ setOpenDrawer }: HelpersProps) => {
       });
     }
   }, [dataEdit]);
+
+  console.log('dataEdit', dataEdit);
+
+  const _getCustomers = useApi({
+    endpoint: '/clientes',
+    method: 'get',
+  });
 
   const _getUserClients = useApi({
     endpoint: '/userClient',
@@ -82,7 +99,26 @@ export const useHelpers = ({ setOpenDrawer }: HelpersProps) => {
   useEffect(() => {
     handleShowLoader(true);
     hanldeGetUserClients();
+    handleGetCustomers();
   }, []);
+
+  const handleGetCustomers = async (): Promise<boolean> => {
+    try {
+      const response: Payload = await _getCustomers();
+      const payload = get(response, 'payload', {});
+      const dataResponse: PaylaodCustomers['data'][] = get(payload, 'data', []);
+      const headerResponse: Payload['response'] = get(response, 'response');
+
+      if (headerResponse.code === 200) {
+        handleShowLoader(false);
+        setCustomersTable(dataResponse);
+      }
+
+      return true;
+    } catch (error) {
+      return false;
+    }
+  };
 
   const hanldeGetUserClients = async (): Promise<boolean> => {
     try {
@@ -106,7 +142,7 @@ export const useHelpers = ({ setOpenDrawer }: HelpersProps) => {
     genero: '',
     idCliente: '',
     nombre: '',
-    nombreCliente: '',
+    nombreCliente: null,
     notas: '',
     password: '',
     confirmPassword: '',
@@ -119,7 +155,9 @@ export const useHelpers = ({ setOpenDrawer }: HelpersProps) => {
   };
 
   const validationSchema = Yup.object().shape({
-    nombreCliente: Yup.string().required('Este campo es obligatorio.'),
+    // nombreCliente: Yup.object()
+    //   .nullable()
+    //   .required('Este campo es obligatorio.'),
     nombre: Yup.string().required('Este campo es obligatorio.'),
     genero: Yup.string().required('Este campo es obligatorio.'),
     puesto: Yup.string(),
@@ -151,7 +189,9 @@ export const useHelpers = ({ setOpenDrawer }: HelpersProps) => {
   });
 
   const validationSchemaDataEdit = Yup.object().shape({
-    nombreCliente: Yup.string().required('Este campo es obligatorio.'),
+    // nombreCliente: Yup.object()
+    //   .nullable()
+    //   .required('Este campo es obligatorio.'),
     nombre: Yup.string().required('Este campo es obligatorio.'),
     genero: Yup.string().required('Este campo es obligatorio.'),
     puesto: Yup.string(),
@@ -174,7 +214,8 @@ export const useHelpers = ({ setOpenDrawer }: HelpersProps) => {
       if (dataEdit !== null) {
         const newDataEdit = {
           idCliente: user?.id,
-          nombreCliente: values.nombreCliente,
+          // nombreCliente: values.nombreCliente,
+          nombreCliente: get(values, 'nombreCliente._id', ''),
           nombre: values.nombre,
           genero: values.genero,
           puesto: values.puesto,
@@ -204,7 +245,7 @@ export const useHelpers = ({ setOpenDrawer }: HelpersProps) => {
       } else {
         const newData = {
           idCliente: user?.id,
-          nombreCliente: values.nombreCliente,
+          nombreCliente: get(values, 'nombreCliente._id', ''),
           nombre: values.nombre,
           genero: values.genero,
           puesto: values.puesto,
@@ -216,6 +257,8 @@ export const useHelpers = ({ setOpenDrawer }: HelpersProps) => {
           direccion: values.direccion,
           notas: values.notas,
         };
+
+        console.log('new', newData);
 
         const response: ResponseUserClient = await _createClient({
           body: newData,
@@ -239,6 +282,7 @@ export const useHelpers = ({ setOpenDrawer }: HelpersProps) => {
     formik,
     dataEdit,
     userClientsData,
+    customersData,
     hanldeGetUserClients,
     setDataEdit,
   };

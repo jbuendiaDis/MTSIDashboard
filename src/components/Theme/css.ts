@@ -6,8 +6,6 @@ import { autocompleteClasses } from '@mui/material/Autocomplete';
 import { SxProps } from '@mui/system';
 import { BgBlurProps } from '../../models/theme';
 
-// ----------------------------------------------------------------------
-
 export const paper = ({ theme, bgcolor, dropdown }: any) => ({
   ...bgBlur({
     blur: 20,
@@ -30,8 +28,6 @@ export const paper = ({ theme, bgcolor, dropdown }: any) => ({
     borderRadius: theme.shape.borderRadius * 1.25,
   }),
 });
-
-// ----------------------------------------------------------------------
 
 export const menuItem = (theme: any) => ({
   ...theme.typography.body2,
@@ -62,8 +58,6 @@ export const menuItem = (theme: any) => ({
     margin: theme.spacing(0.5, 0),
   },
 });
-
-// ----------------------------------------------------------------------
 
 export function bgBlur(props: BgBlurProps): SxProps {
   const color = props?.color || '#000000';
@@ -97,8 +91,6 @@ export function bgBlur(props: BgBlurProps): SxProps {
   };
 }
 
-// ----------------------------------------------------------------------
-
 export function bgGradient(props: any) {
   const direction = props?.direction || 'to bottom';
   const startColor = props?.startColor;
@@ -122,8 +114,6 @@ export function bgGradient(props: any) {
   };
 }
 
-// ----------------------------------------------------------------------
-
 export function textGradient(value: any) {
   return {
     background: `-webkit-linear-gradient(${value})`,
@@ -131,8 +121,6 @@ export function textGradient(value: any) {
     WebkitTextFillColor: 'transparent',
   };
 }
-
-// ----------------------------------------------------------------------
 
 export const hideScroll = {
   x: {

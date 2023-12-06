@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-types */
 import {
   Typography,
   Grid,
@@ -5,6 +6,7 @@ import {
   TextField,
   InputAdornment,
   IconButton,
+  Autocomplete,
 } from '@mui/material';
 import { useHelpers } from './helpers';
 import { Card } from '../../components/Card/Card';
@@ -22,11 +24,15 @@ const UserClients = () => {
     formik,
     dataEdit,
     userClientsData,
+    customersData,
     hanldeGetUserClients,
     setDataEdit,
   } = useHelpers({
     setOpenDrawer,
   });
+
+  const [value, setValue] = useState<string | null>();
+  const [inputValue, setInputValue] = useState('');
 
   return (
     <Grid>
@@ -90,23 +96,35 @@ const UserClients = () => {
       >
         <form onSubmit={formik.handleSubmit}>
           <Grid container spacing={2}>
-            <Grid item xs={12} sm={6} md={6}>
-              <TextField
-                fullWidth
-                label="Nombre del Cliente"
-                type="text"
+            <Grid item xs={12}>
+              <Autocomplete
                 id="nombreCliente"
-                name="nombreCliente"
-                value={formik.values.nombreCliente}
-                onChange={formik.handleChange}
+                options={customersData}
+                getOptionLabel={(option) => option.razonSocial}
+                onChange={(_event, selected) => {
+                  formik.setFieldValue('nombreCliente', selected);
+                }}
                 onBlur={formik.handleBlur}
-                error={
-                  formik.touched.nombreCliente &&
-                  Boolean(formik.errors.nombreCliente)
-                }
-                helperText={
-                  formik.touched.nombreCliente && formik.errors.nombreCliente
-                }
+                // inputValue={formik.values.nombreCliente}
+                renderInput={(params) => (
+                  <TextField
+                    name="nombreCliente"
+                    {...params}
+                    label="Seleccione una opción"
+                    error={
+                      formik.touched.nombreCliente &&
+                      Boolean(formik.errors.nombreCliente)
+                    }
+                    // helperText={
+                    //   formik.touched.nombreCliente &&
+                    //   formik.errors.nombreCliente
+                    // }
+                    value={formik.values.nombreCliente}
+                    onChange={(event) =>
+                      formik.setFieldValue('nombreCliente', event.target.value)
+                    }
+                  />
+                )}
               />
             </Grid>
             <Grid item xs={12} sm={6} md={6}>

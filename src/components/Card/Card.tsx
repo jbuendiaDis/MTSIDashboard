@@ -89,6 +89,7 @@ const Card = ({
 
   const handleGetClient = async (id: string): Promise<boolean> => {
     try {
+      setOpen(null);
       const { payload, response }: ResponseUserClient = await _getClientById({
         urlParam: id,
       });
@@ -97,7 +98,6 @@ const Card = ({
 
       if (code === 200) {
         setDataEdit(dataResponseEdit);
-        setOpen(null);
       }
       return true;
     } catch (error) {
@@ -110,7 +110,7 @@ const Card = ({
       <MuiCard sx={{ p: 2, borderRadius: '10px' }}>
         <Grid container>
           <Grid item xs={10} sx={{ display: 'flex', justifyContent: 'center' }}>
-            <Avatar>JP</Avatar>
+            <Avatar>{data.nombre?.charAt(0).toUpperCase()}</Avatar>
           </Grid>
           <Grid item xs={2} sx={{}}>
             <Tooltip title="Acciones">

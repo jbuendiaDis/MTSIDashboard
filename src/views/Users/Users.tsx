@@ -17,13 +17,16 @@ import {
   IconButton,
   InputAdornment,
   TextField,
+  Typography,
+  Popover,
 } from '@mui/material';
-import { VisibilityOff, Visibility } from '@mui/icons-material';
+import { VisibilityOff, Visibility, InfoOutlined } from '@mui/icons-material';
 import { Column } from '../../models';
 import { Drawer } from '../../components/Drawer';
 import { Response } from '../../models/responseApi';
 import { useHelpers } from './helpers';
 import { useModalConfirmation } from '../../hooks/useModalConfirmation';
+import { UserStyles } from './UserStyles';
 
 const Users = () => {
   const [openDrawer, setOpenDrawer] = useState<boolean>(false);
@@ -31,7 +34,10 @@ const Users = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [showConfirmPassword, setShowConfirmPassword] =
     useState<boolean>(false);
+  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
+  const style = UserStyles;
   const { handleShowLoader }: LoaderContextType = useLoader();
+  const { modalDelete, modalSuccess } = useModalConfirmation();
   const {
     formik,
     usersTable,
@@ -42,7 +48,8 @@ const Users = () => {
   } = useHelpers({
     setOpenDrawer,
   });
-  const { modalDelete, modalSuccess } = useModalConfirmation();
+
+  const open = Boolean(anchorEl);
 
   const _deleteUser = useApi({
     endpoint: '/users',
@@ -112,6 +119,14 @@ const Users = () => {
     },
   ];
 
+  const handlePopoverOpen = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handlePopoverClose = () => {
+    setAnchorEl(null);
+  };
+
   return (
     <>
       <Table
@@ -148,6 +163,11 @@ const Users = () => {
       >
         <form onSubmit={formik.handleSubmit}>
           <Grid container spacing={3} sx={{ mt: 3 }}>
+            <Grid item xs={12}>
+              <Typography sx={style.textDescription}>
+                Información General del Contacto:
+              </Typography>
+            </Grid>
             <Grid xs={12} sm={6} item>
               <TextField
                 fullWidth
@@ -206,6 +226,22 @@ const Users = () => {
 
             {idUserEdit === '' ? (
               <>
+                <Grid item xs={12}>
+                  <Typography sx={style.textDescription}>
+                    Ingrese una contraseña:
+                  </Typography>
+                  <Grid
+                    component="div"
+                    aria-owns={open ? 'mouse-over-popover' : undefined}
+                    aria-haspopup="true"
+                    onMouseEnter={handlePopoverOpen}
+                    onMouseLeave={handlePopoverClose}
+                    sx={style.contentInfoText}
+                  >
+                    <Typography sx={style.infoText}>Información</Typography>
+                    <InfoOutlined sx={{ fontSize: '14px', ml: 0.5 }} />
+                  </Grid>
+                </Grid>
                 <Grid xs={12} sm={6} item>
                   <TextField
                     fullWidth
@@ -275,6 +311,11 @@ const Users = () => {
                 </Grid>
               </>
             ) : null}
+            <Grid item xs={12}>
+              <Typography sx={style.textDescription}>
+                Datos Adicionales:
+              </Typography>
+            </Grid>
             <Grid xs={12} sm={6} item>
               <TextField
                 fullWidth
@@ -308,11 +349,7 @@ const Users = () => {
               />
             </Grid>
           </Grid>
-          <Stack
-            direction="row"
-            spacing={2}
-            sx={{ mt: 10, width: 1, display: 'flex', justifyContent: 'end' }}
-          >
+          <Stack direction="row" spacing={2} sx={style.contentButtons}>
             <Button
               variant="outlined"
               color="inherit"
@@ -331,6 +368,44 @@ const Users = () => {
             </Button>
           </Stack>
         </form>
+
+        <Popover
+          id="mouse-over-popover"
+          sx={{
+            pointerEvents: 'none',
+          }}
+          open={open}
+          anchorEl={anchorEl}
+          onClose={handlePopoverClose}
+          anchorOrigin={{
+            vertical: 'center',
+            horizontal: 'right',
+          }}
+          transformOrigin={{
+            vertical: 'center',
+            horizontal: 'left',
+          }}
+        >
+          <Grid component="div" sx={{ padding: 2 }}>
+            <Typography sx={{ fontSize: '12px' }}>
+              La contraseña debe tener:
+            </Typography>
+            <Grid component="ul">
+              <Grid component="li" sx={{ fontSize: '12px' }}>
+                mínimo 8 caracteres.
+              </Grid>
+              <Grid component="li" sx={{ fontSize: '12px' }}>
+                máximo 15 caracteres.
+              </Grid>
+              <Grid component="li" sx={{ fontSize: '12px' }}>
+                1a. letra mayuscula.
+              </Grid>
+              <Grid component="li" sx={{ fontSize: '12px' }}>
+                1 caracter especial.
+              </Grid>
+            </Grid>
+          </Grid>
+        </Popover>
       </Drawer>
     </>
   );

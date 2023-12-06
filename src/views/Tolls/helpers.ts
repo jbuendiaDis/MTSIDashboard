@@ -4,17 +4,22 @@ import { useApi } from '../../hooks/useApi';
 import { useLoader } from '../../components/Loader';
 import { LoaderContextType, Response } from '../../models';
 import { DataTolls, ResponseTolls } from './types';
-import { PayloadDataReturns } from '../Returns/types';
 import { formatToCurrency } from '../../utils/amountFormater';
 import { useModalConfirmation } from '../../hooks/useModalConfirmation';
 
 export const useHelpers = () => {
   const [tollsData, setTollsData] = useState<DataTolls[]>([]);
+  const [dataEdit, setDataEdit] = useState<DataTolls[] | null>(null);
   const { handleShowLoader }: LoaderContextType = useLoader();
   const { modalDelete, modalSuccess, modalInformation } =
     useModalConfirmation();
 
   const _getTolls = useApi({
+    endpoint: '/peajes',
+    method: 'get',
+  });
+
+  const _getTollById = useApi({
     endpoint: '/peajes',
     method: 'get',
   });
@@ -71,6 +76,24 @@ export const useHelpers = () => {
     }
   };
 
+  const handleGetToll = async (id: string): Promise<boolean> => {
+    try {
+      const { payload, response }: ResponseTolls = await _getTollById({
+        urlParam: id,
+      });
+      const code: Response['code'] = response.code;
+      const dataResponse: DataTolls[] = payload.data;
+
+      if (code === 200) {
+        console.log('RES', dataResponse);
+        setDataEdit(dataResponse);
+      }
+      return true;
+    } catch (error) {
+      return false;
+    }
+  };
+
   const handleGetState = async (): Promise<boolean> => {
     try {
       const response = await _getStates();
@@ -96,7 +119,6 @@ export const useHelpers = () => {
   };
 
   const handleOpenModalDelete = (data: DataTolls) => {
-    console.log('data', data);
     const message: string = '¿Seguro que desea eliminar este dato';
     const dataValue = '';
     modalDelete({
@@ -108,12 +130,18 @@ export const useHelpers = () => {
 
   const handleDeleteToll = async (id: string): Promise<boolean> => {
     try {
-      console.log('ID_DELETE', id);
-      // const response = await _deleteToll({
-      //   urlParam: id,
-      // });
-      // console.log('RESponse', response);
-      // handleGetTolls();
+      const response: ResponseTolls = await _deleteToll({
+        urlParam: id,
+      });
+      const code: Response['code'] = response.response.code;
+      const message: Response['message'] = response.response.message;
+
+      if (code === 200) {
+        modalSuccess({ message });
+        handleGetTolls();
+      } else {
+        modalInformation({ message });
+      }
 
       return true;
     } catch (error) {
@@ -124,5 +152,6 @@ export const useHelpers = () => {
   return {
     tollsData,
     handleOpenModalDelete,
+    handleGetToll,
   };
 };

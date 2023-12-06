@@ -11,14 +11,14 @@ import { Column } from '../../models';
 import { DataTolls } from './types';
 
 const Tolls = () => {
-  const { tollsData, handleOpenModalDelete } = useHelpers();
+  const { tollsData, handleOpenModalDelete, handleGetToll } = useHelpers();
 
   const columns: Column[] = [
-    { id: 'casetas', label: 'Casetas', align: 'left' },
+    { id: 'localidadOrigen', label: 'Localidad Origen', align: 'left' },
+    { id: 'localidadDestino', label: 'Localidad Destino', align: 'left' },
     { id: 'totalKilometers', label: 'Kilometros', align: 'left' },
     { id: 'costTotalPeajes', label: 'Total Peajes', align: 'left' },
     { id: 'tipoUnidad', label: 'Tipo Unidad', align: 'left' },
-    // { id: 'totalPeajes', label: 'Rendimiento', align: 'left' },
     {
       id: 'actions',
       label: 'Acciones',
@@ -27,7 +27,7 @@ const Tolls = () => {
         {
           label: 'Editar',
           icon: <ModeEditOutlineOutlined sx={{ width: 20, height: 20 }} />,
-          onClick: (rowData: any) => console.log('EDIT', rowData),
+          onClick: (rowData: DataTolls) => handleGetToll(rowData._id),
         },
         {
           label: 'Eliminar',
