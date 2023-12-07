@@ -1,6 +1,6 @@
 import { Response } from '../../models/responseApi';
 
-interface DataCustomer {
+export interface DataCustomer {
   calle: string;
   codigoCliente: string;
   colonia: string;

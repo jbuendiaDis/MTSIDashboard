@@ -14,8 +14,11 @@ import { Add, Visibility, VisibilityOff } from '@mui/icons-material';
 import { Drawer } from '../../components/Drawer';
 import { useState } from 'react';
 import { Stack } from '@mui/system';
+import { PopInformation } from '../../components/PopInformation';
+import { UserClientsStyles } from './USerClientsStyles';
 
 const UserClients = () => {
+  const style = UserClientsStyles;
   const [openDrawer, setOpenDrawer] = useState<boolean>(false);
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [showConfirmPassword, setShowConfirmPassword] =
@@ -30,9 +33,6 @@ const UserClients = () => {
   } = useHelpers({
     setOpenDrawer,
   });
-
-  const [value, setValue] = useState<string | null>();
-  const [inputValue, setInputValue] = useState('');
 
   return (
     <Grid>
@@ -95,37 +95,11 @@ const UserClients = () => {
         title={dataEdit ? 'Editar Cliente' : 'Crear Cliente'}
       >
         <form onSubmit={formik.handleSubmit}>
-          <Grid container spacing={2}>
+          <Grid container spacing={1.5}>
             <Grid item xs={12}>
-              <Autocomplete
-                id="nombreCliente"
-                options={customersData}
-                getOptionLabel={(option) => option.razonSocial}
-                onChange={(_event, selected) => {
-                  formik.setFieldValue('nombreCliente', selected);
-                }}
-                onBlur={formik.handleBlur}
-                // inputValue={formik.values.nombreCliente}
-                renderInput={(params) => (
-                  <TextField
-                    name="nombreCliente"
-                    {...params}
-                    label="Seleccione una opción"
-                    error={
-                      formik.touched.nombreCliente &&
-                      Boolean(formik.errors.nombreCliente)
-                    }
-                    // helperText={
-                    //   formik.touched.nombreCliente &&
-                    //   formik.errors.nombreCliente
-                    // }
-                    value={formik.values.nombreCliente}
-                    onChange={(event) =>
-                      formik.setFieldValue('nombreCliente', event.target.value)
-                    }
-                  />
-                )}
-              />
+              <Typography sx={style.infoText}>
+                Informacion de contacto:
+              </Typography>
             </Grid>
             <Grid item xs={12} sm={6} md={6}>
               <TextField
@@ -169,7 +143,7 @@ const UserClients = () => {
                 helperText={formik.touched.puesto && formik.errors.puesto}
               />
             </Grid>
-            <Grid item xs={12}>
+            <Grid item xs={12} sm={6} md={6}>
               <TextField
                 fullWidth
                 label="Email"
@@ -183,8 +157,61 @@ const UserClients = () => {
                 helperText={formik.touched.email && formik.errors.email}
               />
             </Grid>
+            <Grid item xs={12} sx={{ mt: 1 }}>
+              <Typography sx={style.infoText}>Medios de contacto:</Typography>
+            </Grid>
+            <Grid item xs={12} sm={6} md={6}>
+              <TextField
+                fullWidth
+                label="Télefono de oficina"
+                type="text"
+                id="telOficina"
+                name="telOficina"
+                value={formik.values.telOficina}
+                onChange={formik.handleChange}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6} md={6}>
+              <TextField
+                fullWidth
+                label="Télefono Móvil"
+                type="text"
+                id="telMovil"
+                name="telMovil"
+                value={formik.values.telMovil}
+                onChange={formik.handleChange}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6} md={6}>
+              <TextField
+                fullWidth
+                label="WhatsApp"
+                type="text"
+                id="whatsapp"
+                name="whatsapp"
+                value={formik.values.whatsapp}
+                onChange={formik.handleChange}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                fullWidth
+                label="Dirección"
+                type="text"
+                id="direccion"
+                name="direccion"
+                value={formik.values.direccion}
+                onChange={formik.handleChange}
+              />
+            </Grid>
             {dataEdit === null ? (
               <>
+                <Grid item xs={12} sx={{ mt: 1 }}>
+                  <Typography sx={style.infoText}>
+                    Ingrese una contraseña:
+                  </Typography>
+                  <PopInformation text="Información" />
+                </Grid>
                 <Grid xs={12} sm={6} item>
                   <TextField
                     fullWidth
@@ -254,48 +281,31 @@ const UserClients = () => {
                 </Grid>
               </>
             ) : null}
-            <Grid item xs={12} sm={6} md={6}>
-              <TextField
-                fullWidth
-                label="Télefono de oficina"
-                type="text"
-                id="telOficina"
-                name="telOficina"
-                value={formik.values.telOficina}
-                onChange={formik.handleChange}
-              />
-            </Grid>
-            <Grid item xs={12} sm={6} md={6}>
-              <TextField
-                fullWidth
-                label="Télefono Móvil"
-                type="text"
-                id="telMovil"
-                name="telMovil"
-                value={formik.values.telMovil}
-                onChange={formik.handleChange}
-              />
-            </Grid>
-            <Grid item xs={12} sm={6} md={6}>
-              <TextField
-                fullWidth
-                label="WhatsApp"
-                type="text"
-                id="whatsapp"
-                name="whatsapp"
-                value={formik.values.whatsapp}
-                onChange={formik.handleChange}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                fullWidth
-                label="Dirección"
-                type="text"
-                id="direccion"
-                name="direccion"
-                value={formik.values.direccion}
-                onChange={formik.handleChange}
+            <Grid item xs={12} sx={{ m: '20px 0px' }}>
+              <Autocomplete
+                id="nombreCliente"
+                options={customersData}
+                getOptionLabel={(option: any) => option.razonSocial}
+                value={formik.values.nombreCliente}
+                onChange={(_event, selected) => {
+                  formik.setFieldValue('nombreCliente', selected);
+                }}
+                onBlur={formik.handleBlur}
+                renderInput={(params) => (
+                  <TextField
+                    name="nombreCliente"
+                    {...params}
+                    label="Seleccione una opción"
+                    error={
+                      formik.touched.nombreCliente &&
+                      Boolean(formik.errors.nombreCliente)
+                    }
+                    helperText={
+                      formik.touched.nombreCliente &&
+                      formik.errors.nombreCliente
+                    }
+                  />
+                )}
               />
             </Grid>
             <Grid item xs={12}>
@@ -310,11 +320,10 @@ const UserClients = () => {
               />
             </Grid>
           </Grid>
-
           <Stack
             direction="row"
             spacing={2}
-            sx={{ mt: 10, width: 1, display: 'flex', justifyContent: 'end' }}
+            sx={{ mt: 4, width: 1, display: 'flex', justifyContent: 'end' }}
           >
             <Button
               variant="outlined"

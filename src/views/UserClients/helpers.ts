@@ -8,7 +8,7 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useAuth } from '../../components/Auth';
 import { useModalConfirmation } from '../../hooks/useModalConfirmation';
-import { PaylaodCustomers, Payload } from '../Customers/types';
+import { DataCustomer, PaylaodCustomers, Payload } from '../Customers/types';
 import { get } from 'lodash';
 
 interface ValuesForm {
@@ -17,7 +17,7 @@ interface ValuesForm {
   genero: string;
   idCliente?: string;
   nombre: string;
-  nombreCliente: any;
+  nombreCliente?: DataCustomer | string | null;
   notas?: string;
   password?: string;
   confirmPassword?: string;
@@ -52,7 +52,6 @@ export const useHelpers = ({ setOpenDrawer }: HelpersProps) => {
       const filterCustomerName = customersData.filter(
         (item) => item._id === dataEdit.nombreCliente
       )[0];
-      console.log('dataEdit', dataEdit, filterCustomerName);
       setOpenDrawer(true);
       formik.setValues({
         direccion: dataEdit ? dataEdit.direccion : '',
@@ -155,9 +154,9 @@ export const useHelpers = ({ setOpenDrawer }: HelpersProps) => {
   };
 
   const validationSchema = Yup.object().shape({
-    // nombreCliente: Yup.object()
-    //   .nullable()
-    //   .required('Este campo es obligatorio.'),
+    nombreCliente: Yup.object()
+      .nullable()
+      .required('Este campo es obligatorio.'),
     nombre: Yup.string().required('Este campo es obligatorio.'),
     genero: Yup.string().required('Este campo es obligatorio.'),
     puesto: Yup.string(),
@@ -189,9 +188,9 @@ export const useHelpers = ({ setOpenDrawer }: HelpersProps) => {
   });
 
   const validationSchemaDataEdit = Yup.object().shape({
-    // nombreCliente: Yup.object()
-    //   .nullable()
-    //   .required('Este campo es obligatorio.'),
+    nombreCliente: Yup.object()
+      .nullable()
+      .required('Este campo es obligatorio.'),
     nombre: Yup.string().required('Este campo es obligatorio.'),
     genero: Yup.string().required('Este campo es obligatorio.'),
     puesto: Yup.string(),
@@ -214,8 +213,8 @@ export const useHelpers = ({ setOpenDrawer }: HelpersProps) => {
       if (dataEdit !== null) {
         const newDataEdit = {
           idCliente: user?.id,
-          // nombreCliente: values.nombreCliente,
-          nombreCliente: get(values, 'nombreCliente._id', ''),
+          nombreCliente: values.nombreCliente,
+          // nombreCliente: get(values, 'nombreCliente._id', ''),
           nombre: values.nombre,
           genero: values.genero,
           puesto: values.puesto,

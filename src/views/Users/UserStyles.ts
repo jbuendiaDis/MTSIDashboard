@@ -12,23 +12,23 @@ export const UserStyles = {
     display: 'flex',
     justifyContent: 'end',
   },
-  contentInfoText: {
-    width: { xs: '35%', sm: '20%' },
-    display: 'flex',
-    alignItems: 'center',
-    cursor: 'pointer',
-    '&:hover': {
-      color: (theme: Theme) => theme.palette.primary.main,
-      textDecoration: 'underline',
-    },
-  },
-  infoText: {
-    letterSpacing: '0.8px',
-    mt: 0.5,
-    fontSize: '13px',
-    '&:hover': {
-      color: (theme: Theme) => theme.palette.primary.main,
-      //   textDecoration: 'underline',
-    },
-  },
+  // contentInfoText: {
+  //   width: { xs: '35%', sm: '20%' },
+  //   display: 'flex',
+  //   alignItems: 'center',
+  //   cursor: 'pointer',
+  //   '&:hover': {
+  //     color: (theme: Theme) => theme.palette.primary.main,
+  //     textDecoration: 'underline',
+  //   },
+  // },
+  // infoText: {
+  //   letterSpacing: '0.8px',
+  //   mt: 0.5,
+  //   fontSize: '13px',
+  //   '&:hover': {
+  //     color: (theme: Theme) => theme.palette.primary.main,
+  //     //   textDecoration: 'underline',
+  //   },
+  // },
 };
