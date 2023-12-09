@@ -295,7 +295,7 @@ const UserClients = () => {
                   <TextField
                     name="nombreCliente"
                     {...params}
-                    label="Seleccione una opción"
+                    label="Seleccione un cliente"
                     error={
                       formik.touched.nombreCliente &&
                       Boolean(formik.errors.nombreCliente)

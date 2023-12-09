@@ -1,4 +1,4 @@
-import { Button, Grid } from '@mui/material';
+import { Button, Grid, InputAdornment } from '@mui/material';
 import Input from '../../components/Input/Input';
 import { Stack } from '@mui/system';
 import { ResponseReturns } from './types';
@@ -18,7 +18,15 @@ const ReturnsForm = ({ toggleModal, dataEdit }: ReturnsFormProps) => {
         <Input fullWidth label="Modelo" name="modelo" />
       </Grid>
       <Grid item>
-        <Input fullWidth label="Rendimiento" name="rendimiento" />
+        <Input
+          fullWidth
+          label="Rendimiento"
+          placeholder="00.0"
+          name="rendimiento"
+          InputProps={{
+            startAdornment: <InputAdornment position="start">$</InputAdornment>,
+          }}
+        />
       </Grid>
       <Stack
         direction="row"

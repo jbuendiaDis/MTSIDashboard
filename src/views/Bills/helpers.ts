@@ -3,14 +3,19 @@ import { useLoader } from '../../components/Loader';
 import { useApi } from '../../hooks/useApi';
 import { LoaderContextType, Response } from '../../models';
 import {
+  FormValues,
   PayloadTollExpenses,
   ResponseTollExpenses,
   TollExpensesData,
 } from './types';
 import { formatToCurrency } from '../../utils/amountFormater';
 import { useModalConfirmation } from '../../hooks/useModalConfirmation';
+import { useAuth } from '../../components/Auth';
+import { get } from 'lodash';
+import * as Yup from 'yup';
 
 export const useHelpers = () => {
+  const { user } = useAuth();
   const { handleShowLoader }: LoaderContextType = useLoader();
   const { modalDelete, modalInformation, modalSuccess } =
     useModalConfirmation();
@@ -49,6 +54,8 @@ export const useHelpers = () => {
       const code: Response['code'] = response.code;
       const dataResponse: PayloadTollExpenses['data'] = payload.data;
 
+      console.log('dataResponse__', dataResponse);
+
       if (code === 200) {
         const formaterData = dataResponse.map((item) => {
           const foods = formatToCurrency(item.comidas);
@@ -66,7 +73,6 @@ export const useHelpers = () => {
               return total + costTotal.totalPeajes;
             }, 0)
           );
-
           return {
             ...item,
             comidas: foods,
@@ -77,6 +83,8 @@ export const useHelpers = () => {
             totalPeajes: totalPeajes,
           };
         });
+
+        console.log('FORMAT', formaterData);
 
         setBillsDataTable(formaterData);
         handleShowLoader(false);
@@ -136,20 +144,40 @@ export const useHelpers = () => {
     }
   };
 
-  const initialValues = {
-    comidas: 0,
-    hoteles: 0,
+  const validationSchema = Yup.object().shape({
+    comidas: Yup.number().nullable(),
+    hoteles: Yup.number().nullable(),
+    pasajeDestino: Yup.number().nullable(),
+    pasajeOrigen: Yup.number().nullable(),
+  });
+
+  const initialValues: FormValues = {
+    comidas: '',
+    hoteles: '',
+    pasajeDestino: '',
+    pasajeOrigen: '',
   };
 
   const handleSubmit = async (values: any): Promise<boolean> => {
     try {
       console.log('VALUES', values);
+      const newValues = {
+        ...values,
+        idCliente: user?.id,
+      };
 
-      // const response = await _createBill({
-      //   body: values,
-      // });
+      const response: ResponseTollExpenses = await _createBill({
+        body: newValues,
+      });
+      const code: Response['code'] = get(response, 'response.code');
+      const message: Response['message'] = get(response, 'response.message');
 
-      // console.log('RES', response);
+      if (code === 200) {
+        modalSuccess({ message });
+        handleGetAllBills();
+      } else {
+        modalInformation({ message });
+      }
       return true;
     } catch (error) {
       return false;
@@ -166,5 +194,6 @@ export const useHelpers = () => {
     handleGetBill,
     handleOpenDeleteModal,
     handleSubmit,
+    validationSchema,
   };
 };

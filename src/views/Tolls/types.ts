@@ -1,29 +1,36 @@
 import { Response } from '../../models';
 
-interface Puntos {
-  costo: number;
-  nombreCaseta: string;
+interface State {
+  codigo: number;
+  label: string;
   _id: string;
 }
+export interface FormValues {
+  nombre: string;
+  costo: string | null;
+  state: State | undefined;
+  codigo: string | undefined;
+}
 
-export interface DataTolls {
-  casetas?: string;
-  idgasto: string;
-  kms: number;
-  puntos: Puntos[];
-  totalPeajes: number;
-  localidadDestino?: string;
-  localidadOrigen?: string;
-  tipoUnidad?: string;
-  __v?: number;
+export interface DataToll {
+  codigo: number;
+  coordenadas: [
+    {
+      0: number;
+      1: number;
+    }
+  ];
+  costo?: string | number;
+  estado: number;
+  fechaCreacion: string | Date;
+  nombre: string;
+  __v: number;
   _id: string;
 }
-
-export interface PayloadDataTolls {
-  data: DataTolls[];
+export interface PayloadTolls {
+  data: DataToll[];
 }
-
 export interface ResponseTolls {
-  payload: PayloadDataTolls;
   response: Response;
+  payload: PayloadTolls;
 }

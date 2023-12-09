@@ -1,12 +1,12 @@
 import {
   DeleteOutlineOutlined,
+  ExpandMoreOutlined,
   ModeEditOutlineOutlined,
   MoreVert,
 } from '@mui/icons-material';
 import {
   Avatar,
   Grid,
-  IconButton,
   Card as MuiCard,
   Theme,
   Typography,
@@ -17,7 +17,14 @@ import {
   ListItemButton,
   Tooltip,
   Divider,
+  CardHeader,
+  CardMedia,
+  CardContent,
+  CardActions,
+  styled,
+  Collapse,
 } from '@mui/material';
+import IconButton, { IconButtonProps } from '@mui/material/IconButton';
 import { Stack } from '@mui/system';
 import { useState } from 'react';
 import { useModalConfirmation } from '../../hooks/useModalConfirmation';
@@ -35,12 +42,17 @@ interface CardProps {
   setDataEdit: (data: any) => void;
 }
 
+interface ExpandMoreProps extends IconButtonProps {
+  expand: boolean;
+}
+
 const Card = ({
   data,
   hanldeGetUserClients,
   setOpenDrawer,
   setDataEdit,
 }: CardProps) => {
+  const [expanded, setExpanded] = useState<boolean>(false);
   const [open, setOpen] = useState<null>(null);
   const { modalDelete, modalSuccess, modalInformation } =
     useModalConfirmation();
@@ -105,10 +117,125 @@ const Card = ({
     }
   };
 
+  const ExpandMore = styled((props: ExpandMoreProps) => {
+    const { ...other } = props;
+    return <IconButton {...other} />;
+  })(({ theme, expand }) => ({
+    transform: !expand ? 'rotate(0deg)' : 'rotate(180deg)',
+    marginLeft: 'auto',
+    transition: theme.transitions.create('transform', {
+      duration: theme.transitions.duration.shortest,
+    }),
+  }));
+
   return (
     <>
-      <MuiCard sx={{ p: 2, borderRadius: '10px' }}>
-        <Grid container>
+      <MuiCard sx={{ borderRadius: '10px' }}>
+        <CardHeader
+          avatar={<Avatar>{data.nombre?.charAt(0).toUpperCase()}</Avatar>}
+          action={
+            <Tooltip title="Acciones">
+              <IconButton
+                onClick={(event: any) => setOpen(event.currentTarget)}
+              >
+                <MoreVert />
+              </IconButton>
+            </Tooltip>
+          }
+          title={data.nombre}
+          subheader={data.puesto}
+        />
+        <CardContent>
+          <Grid container>
+            <Grid item xs={12} sx={{ display: 'flex' }}>
+              <Typography sx={{ fontSize: '14px', fontWeight: 'bold' }}>
+                Género:
+              </Typography>
+              &nbsp;
+              <Typography sx={{ fontSize: '14px' }}>{data.genero}</Typography>
+            </Grid>
+            <Grid item xs={12} sx={{ display: 'flex' }}>
+              <Typography sx={{ fontSize: '14px', fontWeight: 'bold' }}>
+                Dirección:
+              </Typography>
+              &nbsp;
+              <Typography sx={{ fontSize: '14px' }}>
+                {data.direccion}
+              </Typography>
+            </Grid>
+          </Grid>
+          <Divider sx={{ mt: 2, mb: 2 }} />
+          <Grid container>
+            <Grid item xs={12}>
+              <Typography
+                sx={{
+                  mb: 1,
+                  fontSize: '15px',
+                  color: (theme: Theme) => theme.palette.grey[500],
+                }}
+              >
+                Medios de contacto:
+              </Typography>
+            </Grid>
+            <Grid item xs={12}>
+              <Stack spacing={1} direction="row">
+                <Typography sx={{ fontSize: '14px', fontWeight: 'bold' }}>
+                  Tel Movil:
+                </Typography>
+                <Typography sx={{ fontSize: '14px' }}>
+                  {data.telMovil ? data.telMovil : '-'}
+                </Typography>
+              </Stack>
+            </Grid>
+            <Grid item xs={12}>
+              <Stack spacing={1} direction="row">
+                <Typography sx={{ fontSize: '14px', fontWeight: 'bold' }}>
+                  Tel Oficina:
+                </Typography>
+                <Typography sx={{ fontSize: '14px' }}>
+                  {data.telOficina ? data.telOficina : '-'}
+                </Typography>
+              </Stack>
+            </Grid>
+            <Grid item xs={12}>
+              <Stack spacing={1} direction="row">
+                <Typography sx={{ fontSize: '14px', fontWeight: 'bold' }}>
+                  WhatsApp:
+                </Typography>
+                <Typography sx={{ fontSize: '14px' }}>
+                  {data.whatsapp ? data.whatsapp : '-'}
+                </Typography>
+              </Stack>
+            </Grid>
+            <Grid item xs={12}>
+              <Stack spacing={1} direction="row">
+                <Typography sx={{ fontSize: '14px', fontWeight: 'bold' }}>
+                  Email:
+                </Typography>
+                <Typography sx={{ fontSize: '14px' }}>
+                  {data.email ? data.email : '-'}
+                </Typography>
+              </Stack>
+            </Grid>
+          </Grid>
+        </CardContent>
+        <CardActions>
+          {data.notas !== '' && (
+            <ExpandMore
+              expand={expanded}
+              onClick={() => setExpanded(!expanded)}
+              aria-expanded={expanded}
+              aria-label="show more"
+            >
+              <ExpandMoreOutlined />
+            </ExpandMore>
+          )}
+        </CardActions>
+        <Collapse in={expanded} timeout="auto" unmountOnExit>
+          <CardContent>{data.notas}</CardContent>
+        </Collapse>
+
+        {/* <Grid container>
           <Grid item xs={10} sx={{ display: 'flex', justifyContent: 'center' }}>
             <Avatar>{data.nombre?.charAt(0).toUpperCase()}</Avatar>
           </Grid>
@@ -218,7 +345,7 @@ const Card = ({
               </Typography>
             </Stack>
           </Grid>
-        </Grid>
+        </Grid> */}
       </MuiCard>
       <Popover
         open={!!open}

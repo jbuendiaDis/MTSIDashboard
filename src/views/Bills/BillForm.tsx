@@ -9,7 +9,35 @@ const BillForm = ({ handleToggleModal }: BillFormProps) => {
   return (
     <>
       <Grid container spacing={2}>
-        <Grid item xs={12} sm={6} md={4}>
+        <Grid item xs={12} sm={6}>
+          <Input
+            fullWidth
+            label="Pasaje Origen"
+            placeholder="0.00"
+            name="pasajeOrigen"
+            type="number"
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">$</InputAdornment>
+              ),
+            }}
+          />
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <Input
+            fullWidth
+            label="Pasaje Destino"
+            placeholder="0.00"
+            name="pasajeDestino"
+            type="number"
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">$</InputAdornment>
+              ),
+            }}
+          />
+        </Grid>
+        <Grid item xs={12} sm={6}>
           <Input
             fullWidth
             label="Comidas"
@@ -23,7 +51,7 @@ const BillForm = ({ handleToggleModal }: BillFormProps) => {
             }}
           />
         </Grid>
-        <Grid item xs={12} sm={6} md={4}>
+        <Grid item xs={12} sm={6}>
           <Input
             fullWidth
             label="Hoteles"

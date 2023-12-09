@@ -7,6 +7,7 @@ import { LoaderProvider } from './components/Loader/LoaderProvider.tsx';
 import { AuthProvider } from './components/Auth/AuthProvider.tsx';
 import ThemeProvider from './components/Theme';
 import './global.css';
+import { RootProvider } from './components/RootProvider/RootProvider.tsx';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
@@ -14,9 +15,11 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
       <ModalProvider>
         <LoaderProvider>
           <AuthProvider>
-            <Suspense>
-              <App />
-            </Suspense>
+            <RootProvider>
+              <Suspense>
+                <App />
+              </Suspense>
+            </RootProvider>
           </AuthProvider>
         </LoaderProvider>
       </ModalProvider>

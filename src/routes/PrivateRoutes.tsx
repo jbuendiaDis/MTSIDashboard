@@ -8,6 +8,7 @@ import { Tolls } from '../views/Tolls';
 import { Bills } from '../views/Bills';
 import { Returns } from '../views/Returns';
 import { UserClients } from '../views/UserClients/UserClients';
+import { Routes as RoutesPage } from '../views/Routes';
 
 const PrivateRoutes = () => {
   return (
@@ -16,6 +17,7 @@ const PrivateRoutes = () => {
         <Route path="/users" element={<Users />} />
         <Route path="/customers" element={<Customers />} />
         <Route path="/transfers" element={<Transfers />} />
+        <Route path="/routes" element={<RoutesPage />} />
         <Route path="/tolls" element={<Tolls />} />
         <Route path="/bills" element={<Bills />} />
         <Route path="/returns" element={<Returns />} />

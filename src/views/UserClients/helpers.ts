@@ -26,7 +26,7 @@ interface ValuesForm {
   telOficina?: string;
   whatsapp?: string;
   __v?: number;
-  _id?: string;
+  _id: string;
 }
 
 interface HelpersProps {
@@ -211,10 +211,13 @@ export const useHelpers = ({ setOpenDrawer }: HelpersProps) => {
     onSubmit: async (values: ValuesForm) => {
       console.log('VALUES', values);
       if (dataEdit !== null) {
+        console.log('???', values.nombreCliente);
         const newDataEdit = {
           idCliente: user?.id,
-          nombreCliente: values.nombreCliente,
-          // nombreCliente: get(values, 'nombreCliente._id', ''),
+          nombreCliente:
+            typeof values?.nombreCliente === 'string'
+              ? ''
+              : values?.nombreCliente?._id,
           nombre: values.nombre,
           genero: values.genero,
           puesto: values.puesto,
@@ -225,7 +228,6 @@ export const useHelpers = ({ setOpenDrawer }: HelpersProps) => {
           direccion: values.direccion,
           notas: values.notas,
         };
-
         const response: ResponseUserClient = await _updateClient({
           urlParam: values._id,
           body: newDataEdit,
@@ -239,8 +241,6 @@ export const useHelpers = ({ setOpenDrawer }: HelpersProps) => {
         } else {
           modalInformation({ message });
         }
-
-        console.log('UPDATE', response);
       } else {
         const newData = {
           idCliente: user?.id,
@@ -256,9 +256,6 @@ export const useHelpers = ({ setOpenDrawer }: HelpersProps) => {
           direccion: values.direccion,
           notas: values.notas,
         };
-
-        console.log('new', newData);
-
         const response: ResponseUserClient = await _createClient({
           body: newData,
         });

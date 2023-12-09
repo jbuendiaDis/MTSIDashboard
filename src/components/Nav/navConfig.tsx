@@ -8,6 +8,7 @@ import {
   AttachMoneyOutlined,
   TrendingUpOutlined,
   Diversity3Outlined,
+  WarehouseOutlined,
 } from '@mui/icons-material';
 
 export interface Menu {
@@ -33,14 +34,19 @@ export const navConfig: Menu[] = [
     icon: <Groups2Outlined />,
   },
   {
-    title: 'Peajes',
-    path: '/tolls',
+    title: 'Rutas',
+    path: '/routes',
     icon: <RouteOutlined />,
   },
   {
     title: 'Traslados',
     path: '/transfers',
     icon: <LocalShippingOutlined />,
+  },
+  {
+    title: 'Peajes',
+    path: '/tolls',
+    icon: <WarehouseOutlined />,
   },
   {
     title: 'Gastos',

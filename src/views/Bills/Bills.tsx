@@ -30,6 +30,7 @@ const Bills = () => {
     handleGetBill,
     handleOpenDeleteModal,
     handleSubmit,
+    validationSchema,
   } = useHelpers();
 
   useEffect(() => {
@@ -137,7 +138,11 @@ const Bills = () => {
       ),
       body: (
         <Box sx={{ mt: 2 }}>
-          <Formik initialValues={initialValues} onSubmit={handleSubmit}>
+          <Formik
+            initialValues={initialValues}
+            validationSchema={validationSchema}
+            onSubmit={handleSubmit}
+          >
             <Form>
               <BillForm handleToggleModal={handleToggleModal} />
             </Form>

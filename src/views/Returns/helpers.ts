@@ -89,7 +89,7 @@ export const useHelpers = () => {
   const initialValues: any = {
     marca: dataEdit ? dataEdit?.marca : '',
     modelo: dataEdit ? dataEdit?.modelo : '',
-    rendimiento: dataEdit ? dataEdit?.rendimiento : 0,
+    rendimiento: dataEdit ? dataEdit?.rendimiento : null,
     _id: dataEdit ? dataEdit?._id : '',
   };
 
