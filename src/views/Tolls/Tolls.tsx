@@ -1,16 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { Table } from '../../components/Table';
-import {
-  Box,
-  Button,
-  IconButton,
-  Typography,
-  InputAdornment,
-  Grid,
-} from '@mui/material';
+import { Button, InputAdornment, Grid } from '@mui/material';
 import {
   Add,
-  Close,
   DeleteOutlineOutlined,
   ModeEditOutlineOutlined,
 } from '@mui/icons-material';
@@ -25,15 +17,17 @@ import { AutoCompleteComponent } from '../../components/Input/AutoCompleteCompon
 import { useRootProvider } from '../../components/RootProvider/hooks/useRootProvider';
 import { useEffect } from 'react';
 import { useLoader } from '../../components/Loader';
+import { Helmet } from 'react-helmet-async';
+import { HeaderTitleModal } from '../../components/Modal/HeaderTitleModal';
 
 const Tolls = () => {
   const { handleShowLoader }: LoaderContextType = useLoader();
   const { handleOpenModal, handleCloseModal } = useModal();
-  const { actionsState }: any = useRootProvider();
+  const { actionsState, actionsCountries }: any = useRootProvider();
   const { states, handleGetStates } = actionsState;
+  const { countries, handleGetAllCountries } = actionsCountries;
   const {
     dataEdit,
-    tollsData,
     initialValues,
     validationSchema,
     handleSubmit,
@@ -45,6 +39,7 @@ const Tolls = () => {
   useEffect(() => {
     handleShowLoader(true);
     handleGetStates();
+    handleGetAllCountries();
   }, []);
 
   useEffect(() => {
@@ -88,23 +83,10 @@ const Tolls = () => {
       fullWidth: true,
       maxWidth: 'xs',
       title: (
-        <Box>
-          <Box sx={{ display: 'flex', justifyContent: 'end' }}>
-            <IconButton onClick={handleToggleModal}>
-              <Close />
-            </IconButton>
-          </Box>
-          <Typography
-            sx={{
-              textAlign: 'center',
-              fontWeight: 700,
-              letterSpacing: '1.2px',
-              fontSize: '20px',
-            }}
-          >
-            {dataEdit ? 'EDITAR PEAJE' : 'CREAR PEAJE'}
-          </Typography>
-        </Box>
+        <HeaderTitleModal
+          handleToggleModal={handleToggleModal}
+          title={dataEdit ? 'EDITAR PEAJE' : 'CREAR PEAJE'}
+        />
       ),
       body: (
         <Formik
@@ -173,7 +155,10 @@ const Tolls = () => {
   };
 
   return (
-    <div>
+    <>
+      <Helmet>
+        <title>MTSI | Peajes</title>
+      </Helmet>
       <Table
         tableHead
         customButton
@@ -194,9 +179,9 @@ const Tolls = () => {
           </Button>
         }
         columns={columns}
-        data={tollsData}
+        data={countries}
       />
-    </div>
+    </>
   );
 };
 

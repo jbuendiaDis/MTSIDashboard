@@ -10,12 +10,14 @@ interface AutoCompleteFieldProps extends FieldAttributes<any> {
   label: string;
   options: Record<string, unknown>[];
   labelField: string;
+  onSelected?: (value?: any) => void;
 }
 
 const AutoCompleteComponent: React.FC<AutoCompleteFieldProps> = ({
   label,
   options,
   labelField,
+  onSelected,
   ...props
 }) => {
   const { name, ...restProps } = props;
@@ -26,6 +28,10 @@ const AutoCompleteComponent: React.FC<AutoCompleteFieldProps> = ({
     value: Record<string, unknown> | Record<string, unknown>[] | null
   ) => {
     helpers.setValue(value);
+
+    if (onSelected) {
+      onSelected(value);
+    }
   };
 
   return (

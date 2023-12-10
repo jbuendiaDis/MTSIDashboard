@@ -1,36 +1,21 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useApi } from '../../hooks/useApi';
-import { useLoader } from '../../components/Loader';
-import { LoaderContextType, Response } from '../../models';
-import { DataToll, FormValues, PayloadTolls, ResponseTolls } from './types';
-import { format, parseISO } from 'date-fns';
+import { Response } from '../../models';
+import { DataToll, FormValues, ResponseTolls } from './types';
 import * as Yup from 'yup';
-// import { useRootProvider } from '../../components/RootProvider/hooks/useRootProvider';
-// import { formatToCurrency } from '../../utils/amountFormater';
 import { useModalConfirmation } from '../../hooks/useModalConfirmation';
-import { formatToCurrency } from '../../utils/amountFormater';
 import { get } from 'lodash';
+import { useRootProvider } from '../../components/RootProvider/hooks/useRootProvider';
 
 export const useHelpers = () => {
-  const [tollsData, setTollsData] = useState<PayloadTolls['data']>([]);
   const [dataEdit, setDataEdit] = useState<any | null>(null);
-  const { handleShowLoader }: LoaderContextType = useLoader();
+  const { actionsCountries }: any = useRootProvider();
+  const { handleGetAllCountries } = actionsCountries;
   const { modalDelete, modalSuccess, modalInformation } =
     useModalConfirmation();
-  // const { actionsState }: any = useRootProvider();
-  // const { states }: any = actionsState;
-
-  // const { actionsCustomers }: any = useRootProvider();
-  // const { handleGetCustomers, customers } = actionsCustomers;
-  // console.log('customers', customers);
 
   const requiredField: string = 'Este campo es obligatorio.';
-
-  const _getAllCountries = useApi({
-    endpoint: '/countries',
-    method: 'get',
-  });
 
   const _getCountrieById = useApi({
     endpoint: '/countries',
@@ -52,47 +37,6 @@ export const useHelpers = () => {
     method: 'put',
   });
 
-  useEffect(() => {
-    handleShowLoader(true);
-    handleGetCountries();
-    // handleGetCustomers();
-  }, []);
-
-  const handleGetCountries = async (): Promise<boolean> => {
-    try {
-      const { payload, response }: ResponseTolls = await _getAllCountries();
-      const code: Response['code'] = response.code;
-      const dataResponse: PayloadTolls['data'] = payload.data;
-
-      if (code === 200) {
-        const dataFormat: DataToll[] = dataResponse.map((item) => {
-          const costoNumber =
-            typeof item.costo === 'number'
-              ? item.costo
-              : parseFloat(item.costo || '0');
-
-          return {
-            ...item,
-            costo: item.costo
-              ? formatToCurrency(costoNumber)
-              : formatToCurrency(0),
-            fechaCreacion:
-              typeof item.fechaCreacion === 'string'
-                ? format(parseISO(item.fechaCreacion), 'dd/MM/yyyy')
-                : format(item.fechaCreacion, 'dd/MM/yyyy'),
-          };
-        });
-
-        setTollsData(dataFormat);
-        handleShowLoader(false);
-      }
-
-      return true;
-    } catch (error) {
-      return false;
-    }
-  };
-
   const handleOpenModalDelete = (data: DataToll): void => {
     const message: string = '¿Seguro que desea eliminar esta caseta:';
     const dataValue = `${data.nombre}`;
@@ -113,7 +57,7 @@ export const useHelpers = () => {
 
       if (code === 200) {
         modalSuccess({ message });
-        handleGetCountries();
+        handleGetAllCountries();
       } else {
         modalInformation({ message });
       }
@@ -155,7 +99,7 @@ export const useHelpers = () => {
     nombre: Yup.string().required(requiredField),
     costo: Yup.number().nullable().required(requiredField),
     state: Yup.object().nullable().required(requiredField),
-    codigo: Yup.number().nullable(),
+    codigo: Yup.number().nullable().required(requiredField),
     _id: Yup.string(),
   });
 
@@ -189,7 +133,7 @@ export const useHelpers = () => {
 
         if (code === 200) {
           modalSuccess({ message });
-          handleGetCountries();
+          handleGetAllCountries();
         } else {
           modalInformation({ message });
         }
@@ -206,7 +150,7 @@ export const useHelpers = () => {
 
         if (code === 200) {
           modalSuccess({ message });
-          handleGetCountries();
+          handleGetAllCountries();
         } else {
           modalInformation({ message });
         }
@@ -219,7 +163,6 @@ export const useHelpers = () => {
 
   return {
     dataEdit,
-    tollsData,
     initialValues,
     validationSchema,
     handleSubmit,

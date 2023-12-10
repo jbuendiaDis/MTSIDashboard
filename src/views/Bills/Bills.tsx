@@ -7,18 +7,17 @@ import { Table } from '../../components/Table';
 import { Column } from '../../models';
 import {
   Add,
-  Close,
   DeleteOutlineOutlined,
   ModeEditOutlineOutlined,
   VisibilityOutlined,
 } from '@mui/icons-material';
-import { Box, Button, IconButton, Typography } from '@mui/material';
+import { Box, Button } from '@mui/material';
 import { useModal } from '../../components/Modal';
 import { Formik, Form } from 'formik';
-import Input from '../../components/Input/Input';
 import { TollExpensesData } from './types';
 import { DetailBills } from './DetailBills';
 import { BillForm } from './BillForm';
+import { HeaderTitleModal } from '../../components/Modal/HeaderTitleModal';
 
 const Bills = () => {
   const { handleOpenModal, handleCloseModal }: ModalContextType = useModal();
@@ -89,25 +88,10 @@ const Bills = () => {
       fullWidth: true,
       maxWidth: 'md',
       title: (
-        <Box component="div">
-          <Box sx={{ display: 'flex', justifyContent: 'end' }}>
-            <IconButton onClick={() => handleCloseModal()}>
-              <Close />
-            </IconButton>
-          </Box>
-          <Typography
-            variant="body1"
-            sx={{
-              textAlign: 'center',
-              fontWeight: 700,
-              letterSpacing: '1.2px',
-              fontSize: '20px',
-              textTransform: 'uppercase',
-            }}
-          >
-            Detalle de Gastos
-          </Typography>
-        </Box>
+        <HeaderTitleModal
+          handleToggleModal={() => handleCloseModal()}
+          title={'DETALLE DE GASTOS'}
+        />
       ),
       body: <DetailBills detailBillsData={data} />,
     });
@@ -118,23 +102,10 @@ const Bills = () => {
       fullWidth: true,
       maxWidth: 'sm',
       title: (
-        <Box>
-          <Box sx={{ display: 'flex', justifyContent: 'end' }}>
-            <IconButton onClick={handleToggleModal}>
-              <Close />
-            </IconButton>
-          </Box>
-          <Typography
-            sx={{
-              textAlign: 'center',
-              fontWeight: 700,
-              letterSpacing: '1.2px',
-              fontSize: '20px',
-            }}
-          >
-            {'CREAR GASTO'}
-          </Typography>
-        </Box>
+        <HeaderTitleModal
+          handleToggleModal={handleToggleModal}
+          title={'CREAR GASTO'}
+        />
       ),
       body: (
         <Box sx={{ mt: 2 }}>

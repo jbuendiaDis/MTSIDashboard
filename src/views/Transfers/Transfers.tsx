@@ -1,11 +1,10 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect } from 'react';
-import { Button, Typography, IconButton, Box } from '@mui/material';
+import { Button } from '@mui/material';
 import {
   Add,
   ModeEditOutlineOutlined,
   DeleteOutlineOutlined,
-  Close,
 } from '@mui/icons-material';
 import { useLoader } from '../../components/Loader';
 import { LoaderContextType, ModalContextType } from '../../models';
@@ -16,6 +15,7 @@ import { useModal } from '../../components/Modal';
 import { Form, Formik } from 'formik';
 import { Transfer } from './types';
 import { TransferForm } from './TransferForm';
+import { HeaderTitleModal } from '../../components/Modal/HeaderTitleModal';
 
 const Transfers = () => {
   const { handleOpenModal, handleCloseModal }: ModalContextType = useModal();
@@ -68,7 +68,7 @@ const Transfers = () => {
     },
   ];
 
-  const toggleCloseModal = (): void => {
+  const handleToggleModal = (): void => {
     setDataEdit(null);
     handleCloseModal();
   };
@@ -78,25 +78,10 @@ const Transfers = () => {
       fullWidth: true,
       maxWidth: 'sm',
       title: (
-        <Box>
-          <Box sx={{ display: 'flex', justifyContent: 'end' }}>
-            <IconButton onClick={toggleCloseModal}>
-              <Close />
-            </IconButton>
-          </Box>
-          <Typography
-            variant="body1"
-            sx={{
-              textAlign: 'center',
-              fontWeight: 700,
-              letterSpacing: '1.2px',
-              fontSize: '20px',
-              textTransform: 'uppercase',
-            }}
-          >
-            {dataEdit ? 'Editar Traslado' : 'Crear Traslado'}
-          </Typography>
-        </Box>
+        <HeaderTitleModal
+          handleToggleModal={handleToggleModal}
+          title={dataEdit ? 'EDITAR TRASLADO' : 'CREAR TRASLADO'}
+        />
       ),
       body: (
         <Formik
@@ -106,7 +91,7 @@ const Transfers = () => {
         >
           <Form>
             <TransferForm
-              toggleCloseModal={toggleCloseModal}
+              toggleCloseModal={handleToggleModal}
               dataEdit={dataEdit}
             />
           </Form>

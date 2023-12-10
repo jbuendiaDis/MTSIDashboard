@@ -1,15 +1,14 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useLoader } from '../../components/Loader';
 import { LoaderContextType, ModalContextType } from '../../models';
 import { Table } from '../../components/Table';
 import {
   Add,
-  Close,
   DeleteOutlineOutlined,
   ModeEditOutlineOutlined,
 } from '@mui/icons-material';
-import { Box, Button, IconButton, Typography } from '@mui/material';
+import { Button } from '@mui/material';
 import { useHelpers } from './helpers';
 import { PaylaodCustomers, Payload } from './types';
 import { Response } from '../../models/responseApi';
@@ -18,6 +17,7 @@ import { useModal } from '../../components/Modal';
 import { Form, Formik } from 'formik';
 import { CustomerForm } from './CustomerForm';
 import { Column } from '../../models';
+import { HeaderTitleModal } from '../../components/Modal/HeaderTitleModal';
 
 export const Customers = () => {
   const { handleShowLoader }: LoaderContextType = useLoader();
@@ -118,23 +118,10 @@ export const Customers = () => {
       fullWidth: true,
       maxWidth: 'md',
       title: (
-        <Box>
-          <Box sx={{ display: 'flex', justifyContent: 'end' }}>
-            <IconButton onClick={handleToggleModal}>
-              <Close />
-            </IconButton>
-          </Box>
-          <Typography
-            sx={{
-              textAlign: 'center',
-              fontWeight: 700,
-              letterSpacing: '1.2px',
-              fontSize: '20px',
-            }}
-          >
-            {dataEdit ? 'EDITAR CLIENTE' : 'CREAR CLIENTE'}
-          </Typography>
-        </Box>
+        <HeaderTitleModal
+          handleToggleModal={handleToggleModal}
+          title={dataEdit ? 'EDITAR CLIENTE' : 'CREAR CLIENTE'}
+        />
       ),
       body: (
         <Formik initialValues={initialValuesForm} onSubmit={handleSubmit}>

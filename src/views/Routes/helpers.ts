@@ -2,17 +2,39 @@
 import { useEffect, useState } from 'react';
 import { useApi } from '../../hooks/useApi';
 import { useLoader } from '../../components/Loader';
-import { LoaderContextType, Response } from '../../models';
-import { DataTolls, ResponseTolls } from './types';
-import { formatToCurrency } from '../../utils/amountFormater';
+import { FormatDataState, LoaderContextType, Response } from '../../models';
+import { DataTolls, ResponseTolls, TableDots } from './types';
+import {
+  formatToCurrency,
+  parseCurrencyStringToNumber,
+} from '../../utils/amountFormater';
 import { useModalConfirmation } from '../../hooks/useModalConfirmation';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
+
+interface FormValues {
+  tipoUnidad: string;
+  localidadOrigen: number | null | FormatDataState;
+  localidadDestino: number | null | FormatDataState;
+  kms: null | string | number;
+  state: null;
+}
 
 export const useHelpers = () => {
   const [tollsData, setTollsData] = useState<DataTolls[]>([]);
+  const [errorDots, setErrorDots] = useState<string>('');
   const [dataEdit, setDataEdit] = useState<DataTolls[] | null>(null);
+  const [pagoCasetas, setPagoCasetas] = useState<string>('');
+  const [nombreCaseta, setNombreCaseta] = useState<string>('');
+  const [costo, setCosto] = useState<number>(0);
+  const [dataDotsTable, setDataDotsTable] = useState<any[]>([]);
   const { handleShowLoader }: LoaderContextType = useLoader();
   const { modalDelete, modalSuccess, modalInformation } =
     useModalConfirmation();
+
+  console.log('TABLE', dataDotsTable);
+
+  const requiredField: string = 'Este campo es obligatorio.';
 
   const _getTolls = useApi({
     endpoint: '/peajes',
@@ -24,14 +46,9 @@ export const useHelpers = () => {
     method: 'get',
   });
 
-  const _getStates = useApi({
-    endpoint: '/states',
-    method: 'get',
-  });
-
-  const _getCountries = useApi({
-    endpoint: '/countries',
-    method: 'get',
+  const _createToll = useApi({
+    endpoint: '/peajes',
+    method: 'post',
   });
 
   const _deleteToll = useApi({
@@ -42,9 +59,11 @@ export const useHelpers = () => {
   useEffect(() => {
     handleShowLoader(true);
     handleGetTolls();
-    handleGetState();
-    handleGetCountries();
   }, []);
+
+  useEffect(() => {
+    if (dataDotsTable.length > 0) setErrorDots('');
+  }, [dataDotsTable]);
 
   const handleGetTolls = async (): Promise<boolean> => {
     try {
@@ -68,7 +87,7 @@ export const useHelpers = () => {
       if (code === 200) {
         handleShowLoader(false);
         setTollsData(formatData);
-        console.log('DATA', formatData);
+        // console.log('DATA', formatData);
       }
       return true;
     } catch (error) {
@@ -88,30 +107,6 @@ export const useHelpers = () => {
         console.log('RES', dataResponse);
         setDataEdit(dataResponse);
       }
-      return true;
-    } catch (error) {
-      return false;
-    }
-  };
-
-  const handleGetState = async (): Promise<boolean> => {
-    try {
-      const response = await _getStates();
-
-      //   console.log('COUTRIES', response);
-      handleShowLoader(false);
-      return true;
-    } catch (error) {
-      return false;
-    }
-  };
-
-  const handleGetCountries = async (): Promise<boolean> => {
-    try {
-      const response = await _getCountries();
-
-      //   console.log('SATES', response);
-      handleShowLoader(false);
       return true;
     } catch (error) {
       return false;
@@ -149,9 +144,111 @@ export const useHelpers = () => {
     }
   };
 
+  const handleAddDot = () => {
+    const newDot: TableDots = {
+      casetas: pagoCasetas === '1' ? 'VIAPASS' : 'Efectivo',
+      nombreCaseta,
+      costo: formatToCurrency(costo),
+      _id: dataDotsTable.length + 1,
+    };
+
+    setDataDotsTable((prevDots) => [...prevDots, newDot]);
+    setPagoCasetas('');
+    setNombreCaseta('');
+    setCosto(0);
+    setErrorDots('');
+  };
+
+  const handleRemoveDot = (id: number) => {
+    setDataDotsTable((prevDots) => {
+      const updatedDots = prevDots.filter((dot) => dot._id !== id);
+
+      return updatedDots.map((dot, index) => ({
+        ...dot,
+        _id: (index + 1).toString(),
+      }));
+    });
+  };
+
+  const initialValues: FormValues = {
+    tipoUnidad: '',
+    localidadOrigen: null,
+    localidadDestino: null,
+    kms: '',
+    state: null,
+  };
+
+  const validationSchema = Yup.object().shape({
+    tipoUnidad: Yup.string().required(requiredField),
+    localidadOrigen: Yup.object().nullable().required(requiredField),
+    localidadDestino: Yup.object().nullable().required(requiredField),
+    kms: Yup.number()
+      .min(1, 'El kilometraje debe ser mayor a 0.')
+      .required(requiredField),
+    state: Yup.object().nullable().required(requiredField),
+  });
+
+  const formik = useFormik({
+    initialValues: initialValues,
+    validationSchema,
+    onSubmit: async (values: FormValues) => {
+      try {
+        console.log('VALUES', values);
+        const arrayDots: any = [];
+
+        dataDotsTable.map((item: any) => {
+          arrayDots.push({
+            casetas: item.pagoCasetas,
+            nombreCaseta: item.nombreCaseta,
+            costo: parseCurrencyStringToNumber(item.costo),
+            _id: item._id.toString(),
+          });
+        });
+
+        const newValues: any = {
+          tipoUnidad: values.tipoUnidad,
+          localidadOrigen: (
+            values.localidadOrigen as FormatDataState
+          ).codigo.toString(),
+          localidadDestino: (
+            values.localidadDestino as FormatDataState
+          ).codigo.toString(),
+          kms: values.kms,
+          puntos: arrayDots,
+          totalPeajes: 100,
+        };
+
+        console.log('newValues', newValues);
+        const response = await _createToll({
+          body: newValues,
+        });
+        handleGetTolls();
+
+        console.log('POST', response);
+
+        return true;
+      } catch (error) {
+        return false;
+      }
+    },
+  });
+
   return {
     tollsData,
+    formik,
+    pagoCasetas,
+    nombreCaseta,
+    costo,
+    dataDotsTable,
+    errorDots,
+    setErrorDots,
+    setPagoCasetas,
+    setNombreCaseta,
+    setCosto,
     handleOpenModalDelete,
     handleGetToll,
+    handleAddDot,
+    handleRemoveDot,
+    setDataDotsTable,
   };
 };

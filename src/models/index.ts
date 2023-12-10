@@ -4,4 +4,5 @@ export * from './auth';
 export * from './configuration';
 export * from './responseApi';
 export * from './table';
-export * from './rootProvider';
+export * from './states';
+export * from './countries';

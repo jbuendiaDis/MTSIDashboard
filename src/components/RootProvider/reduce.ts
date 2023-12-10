@@ -18,6 +18,11 @@ export const reducer = (state: Values, action: ActionValues) => {
         ...state,
         states: _.get(action, ['payload'], []),
       };
+    case 'countries':
+      return {
+        ...state,
+        countries: _.get(action, ['payload'], []),
+      };
     default:
       return state;
   }

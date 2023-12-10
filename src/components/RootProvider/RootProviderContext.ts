@@ -3,11 +3,13 @@ import { Context, createContext } from 'react';
 export interface Values {
   customers: [];
   states: [];
+  countries: [];
 }
 
 export const initialState: Values = {
   customers: [],
   states: [],
+  countries: [],
   // countries: [],
   // userAdmin: {},
   // users: [],

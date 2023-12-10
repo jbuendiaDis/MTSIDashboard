@@ -1,8 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Button, Box, IconButton, Typography } from '@mui/material';
+import { Button } from '@mui/material';
 import {
   Add,
-  Close,
   DeleteOutlineOutlined,
   ModeEditOutlineOutlined,
 } from '@mui/icons-material';
@@ -15,6 +14,7 @@ import { Form, Formik } from 'formik';
 import { ReturnsForm } from './ReturnsForm';
 import { useEffect } from 'react';
 import { PayloadDataReturns, ResponseReturns } from './types';
+import { HeaderTitleModal } from '../../components/Modal/HeaderTitleModal';
 
 const Returns = () => {
   const {
@@ -91,23 +91,10 @@ const Returns = () => {
       fullWidth: true,
       maxWidth: 'xs',
       title: (
-        <Box>
-          <Box sx={{ display: 'flex', justifyContent: 'end' }}>
-            <IconButton onClick={handleToggleModal}>
-              <Close />
-            </IconButton>
-          </Box>
-          <Typography
-            sx={{
-              textAlign: 'center',
-              fontWeight: 700,
-              letterSpacing: '1.2px',
-              fontSize: '20px',
-            }}
-          >
-            {dataEdit ? 'EDITAR RENDIMIENTO' : 'CREAR RENDIMIENTO'}
-          </Typography>
-        </Box>
+        <HeaderTitleModal
+          handleToggleModal={handleToggleModal}
+          title={dataEdit ? 'EDITAR RENDIMIENTO' : 'CREAR RENDIMIENTO'}
+        />
       ),
       body: (
         <Formik

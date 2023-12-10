@@ -27,3 +27,10 @@ export interface ResponseTolls {
   payload: PayloadDataTolls;
   response: Response;
 }
+
+export interface TableDots {
+  casetas: string;
+  nombreCaseta: string;
+  costo: string | number;
+  _id: number;
+}

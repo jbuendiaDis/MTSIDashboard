@@ -5,6 +5,7 @@ import { reducer } from './reduce';
 import { RootProviderContext } from './RootProviderContext';
 import { useCustomers } from './useCustomers/useCustomers';
 import { useStates } from './hooks/useStates';
+import { useCountries } from './hooks/useCountries';
 
 interface RootProviderProps {
   children: ReactNode;
@@ -18,11 +19,13 @@ const RootProvider = ({ children }: RootProviderProps) => {
 
   const actionsCustomers = useCustomers({ rootState, rootDispatch });
   const actionsState = useStates({ rootState, rootDispatch });
+  const actionsCountries = useCountries({ rootState, rootDispatch });
 
   const contextValue = useMemo(
     () => ({
       actionsCustomers,
       actionsState,
+      actionsCountries,
       rootState,
     }),
     [rootState]

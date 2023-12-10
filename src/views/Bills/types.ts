@@ -58,7 +58,7 @@ export interface TollExpensesData {
     localidadDestino: string;
     localidadOrigen: string;
     origen: string;
-    peajes: Tolls[] | null;
+    peajes: Tolls[];
     __v: number;
     _id: string;
   };

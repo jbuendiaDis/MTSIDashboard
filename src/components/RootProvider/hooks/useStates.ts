@@ -1,25 +1,13 @@
 import { useApi } from '../../../hooks/useApi';
-import { LoaderContextType, Response } from '../../../models';
-import { useLoader } from '../../Loader';
-
-interface DataStates {
-  data: Array<{ [key: string]: string }>;
-}
-
-interface ResponseStates {
-  response: Response;
-  payload: DataStates;
-}
-
-interface FormatDataState {
-  codigo: number;
-  label: string;
-  _id: string;
-}
+import {
+  DataStates,
+  FormatDataState,
+  Response,
+  ResponseStates,
+} from '../../../models';
 
 export const useStates = ({ rootState, rootDispatch }: any) => {
   const { states } = rootState;
-  const { handleShowLoader }: LoaderContextType = useLoader();
 
   const _getStates = useApi({
     endpoint: '/states',
@@ -49,7 +37,6 @@ export const useStates = ({ rootState, rootDispatch }: any) => {
         }
 
         rootDispatch({ type: 'states', payload });
-        handleShowLoader(false);
       }
       return true;
     } catch (error) {
