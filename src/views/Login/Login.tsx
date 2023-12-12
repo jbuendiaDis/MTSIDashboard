@@ -21,6 +21,7 @@ const Login = () => {
   const style = LoginStyles();
   const auth = useAuth();
   const [showPassword, setShowPassword] = useState<boolean>(false);
+  const logoCompany = '/assets/logo.svg';
 
   const initialValues: FormValues = {
     email: '',
@@ -41,9 +42,15 @@ const Login = () => {
   return (
     <Box sx={style.container}>
       <Stack alignItems="center" justifyContent="center" sx={{ height: 1 }}>
+        <Box
+          component="img"
+          src={logoCompany}
+          alt="compony-logo"
+          sx={{ mb: 3 }}
+        />
         <Card sx={style.rootCard}>
           <Typography variant="h4" sx={style.titleForm}>
-            Bienvenido
+            ¡Bienvenido!
           </Typography>
           <Formik
             initialValues={initialValues}
@@ -77,6 +84,7 @@ const Login = () => {
                   type="submit"
                   variant="contained"
                   color="inherit"
+                  sx={style.button}
                 >
                   Iniciar sesión
                 </Button>

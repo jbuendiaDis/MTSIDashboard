@@ -33,8 +33,11 @@ const Nav = ({ openNav, onCloseNav }: NavProps) => {
     <Box sx={style.containerNav}>
       <Avatar src={'JC'} alt="J" />
       <Box sx={{ ml: 2 }}>
-        <Typography variant="subtitle2">{`${user?.name} ${user?.lastname}`}</Typography>
-        <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+        <Typography
+          variant="subtitle2"
+          sx={{ color: '#fff' }}
+        >{`${user?.name} ${user?.lastname}`}</Typography>
+        <Typography variant="body2" sx={{ color: '#fff' }}>
           {user?.position}
         </Typography>
       </Box>
@@ -49,6 +52,8 @@ const Nav = ({ openNav, onCloseNav }: NavProps) => {
           height: 1,
           display: 'flex',
           flexDirection: 'column',
+          background:
+            'linear-gradient(180deg, #253883 30%, rgba(36, 56, 131, 0.5) 100%)',
         },
       }}
     >
@@ -69,6 +74,8 @@ const Nav = ({ openNav, onCloseNav }: NavProps) => {
       sx={{
         flexShrink: { lg: 0 },
         width: { lg: NAV.WIDTH },
+        background:
+          'linear-gradient(180deg, #253883 30%, rgba(36, 56, 131, 0.5) 100%)',
       }}
     >
       {upLg ? (

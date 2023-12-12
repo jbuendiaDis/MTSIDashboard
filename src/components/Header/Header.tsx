@@ -16,7 +16,7 @@ const Header = ({ onOpenNav }: HeaderProps) => {
   const renderContent = (
     <>
       {!lgUp && (
-        <IconButton onClick={onOpenNav} sx={{ mr: 1 }}>
+        <IconButton onClick={onOpenNav} sx={{ mr: 1, color: '#fff' }}>
           <Menu />
         </IconButton>
       )}

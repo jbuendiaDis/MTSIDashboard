@@ -24,10 +24,23 @@ export const LoginStyles = () => {
     mb: 4,
     letterSpacing: '1.2px',
   };
+  const button = {
+    backgroundColor: '#E73E3B',
+    color: '#FFFFFF',
+    padding: '10px 20px',
+    border: 'none',
+    cursor: 'pointer',
+    letterSpacing: '1px',
+    transition: 'background-color 0.3s, color 0.3s',
+    '&:hover': {
+      backgroundColor: '#FF7A68',
+    },
+  };
 
   return {
     container,
     rootCard,
     titleForm,
+    button,
   };
 };

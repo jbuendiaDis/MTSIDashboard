@@ -24,15 +24,15 @@ export const NavStyles = (active?: boolean) => {
     minHeight: 44,
     borderRadius: 0.75,
     typography: 'body2',
-    color: 'text.secondary',
+    color: (theme: Theme) => theme.palette.common.white,
     textTransform: 'capitalize',
     fontWeight: 'fontWeightMedium',
     ...(active && {
-      color: 'primary.main',
+      color: (theme: Theme) => theme.palette.error.main,
       fontWeight: 'fontWeightSemiBold',
-      bgcolor: (theme: Theme) => alpha(theme.palette.primary.main, 0.08),
+      bgcolor: (theme: Theme) => alpha(theme.palette.error.main, 0.3),
       '&:hover': {
-        bgcolor: (theme: Theme) => alpha(theme.palette.primary.main, 0.16),
+        bgcolor: (theme: Theme) => alpha(theme.palette.error.main, 0.38),
       },
     }),
   };
