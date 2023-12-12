@@ -1,6 +1,6 @@
 import { Response } from '../../models';
 
-interface Puntos {
+export interface Puntos {
   costo: number;
   nombreCaseta: string;
   _id: string;

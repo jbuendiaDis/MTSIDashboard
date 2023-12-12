@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { useApi } from '../../hooks/useApi';
 import { useLoader } from '../../components/Loader';
 import { FormatDataState, LoaderContextType, Response } from '../../models';
-import { DataTolls, ResponseTolls, TableDots } from './types';
+import { DataTolls, Puntos, ResponseTolls, TableDots } from './types';
 import {
   formatToCurrency,
   parseCurrencyStringToNumber,
@@ -32,8 +32,6 @@ export const useHelpers = () => {
   const { modalDelete, modalSuccess, modalInformation } =
     useModalConfirmation();
 
-  console.log('TABLE', dataDotsTable);
-
   const requiredField: string = 'Este campo es obligatorio.';
 
   const _getTolls = useApi({
@@ -61,9 +59,9 @@ export const useHelpers = () => {
     handleGetTolls();
   }, []);
 
-  useEffect(() => {
-    if (dataDotsTable.length > 0) setErrorDots('');
-  }, [dataDotsTable]);
+  // useEffect(() => {
+  //   if (dataDotsTable.length > 0) setErrorDots('');
+  // }, [dataDotsTable]);
 
   const handleGetTolls = async (): Promise<boolean> => {
     try {
@@ -146,7 +144,7 @@ export const useHelpers = () => {
 
   const handleAddDot = () => {
     const newDot: TableDots = {
-      casetas: pagoCasetas === '1' ? 'VIAPASS' : 'Efectivo',
+      casetas: pagoCasetas,
       nombreCaseta,
       costo: formatToCurrency(costo),
       _id: dataDotsTable.length + 1,
@@ -156,7 +154,7 @@ export const useHelpers = () => {
     setPagoCasetas('');
     setNombreCaseta('');
     setCosto(0);
-    setErrorDots('');
+    // setErrorDots('');
   };
 
   const handleRemoveDot = (id: number) => {
@@ -194,14 +192,14 @@ export const useHelpers = () => {
     onSubmit: async (values: FormValues) => {
       try {
         console.log('VALUES', values);
-        const arrayDots: any = [];
+        const arrayDots: any[] = [];
 
         dataDotsTable.map((item: any) => {
           arrayDots.push({
-            casetas: item.pagoCasetas,
+            casetas: item.casetas,
             nombreCaseta: item.nombreCaseta,
             costo: parseCurrencyStringToNumber(item.costo),
-            _id: item._id.toString(),
+            // _id: item._id.toString(),
           });
         });
 
@@ -215,10 +213,11 @@ export const useHelpers = () => {
           ).codigo.toString(),
           kms: values.kms,
           puntos: arrayDots,
-          totalPeajes: 100,
+          totalPeajes: arrayDots.reduce((total, costTotal) => {
+            return total + costTotal.costo;
+          }, 0),
         };
 
-        console.log('newValues', newValues);
         const response = await _createToll({
           body: newValues,
         });
@@ -240,8 +239,8 @@ export const useHelpers = () => {
     nombreCaseta,
     costo,
     dataDotsTable,
-    errorDots,
-    setErrorDots,
+    // errorDots,
+    // setErrorDots,
     setPagoCasetas,
     setNombreCaseta,
     setCosto,

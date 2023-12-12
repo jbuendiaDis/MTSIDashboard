@@ -30,7 +30,6 @@ import { useLoader } from '../../components/Loader';
 const Routes = () => {
   // const [stateSelected, setStateSelected] = useState(null);
   const [open, setOpen] = useState<boolean>(false);
-
   const { handleShowLoader }: LoaderContextType = useLoader();
   const { actionsState, actionsCountries }: any = useRootProvider();
   const { states, handleGetStates } = actionsState;
@@ -42,8 +41,6 @@ const Routes = () => {
     nombreCaseta,
     costo,
     dataDotsTable,
-    errorDots,
-    setErrorDots,
     setPagoCasetas,
     setNombreCaseta,
     setCosto,
@@ -131,11 +128,11 @@ const Routes = () => {
   const options: any = [
     {
       label: 'VIAPASS',
-      value: '1',
+      value: 'VIAPASS',
     },
     {
-      label: 'Efectivo',
-      value: '2',
+      label: 'EFEC',
+      value: 'EFEC',
     },
   ];
 
@@ -157,7 +154,7 @@ const Routes = () => {
               setPagoCasetas('');
               setNombreCaseta('');
               setCosto(0);
-              setErrorDots('');
+              // setErrorDots('');
               setDataDotsTable([]);
             }}
             startIcon={<Add />}
@@ -193,7 +190,7 @@ const Routes = () => {
         <DialogContent>
           <form onSubmit={formik.handleSubmit}>
             <Grid container spacing={2} sx={{ mt: 1 }}>
-              <Grid item xs={12} sm={3}>
+              <Grid item xs={12} sm={6} md={3} lg={3}>
                 <Autocomplete
                   id="state"
                   options={states}
@@ -216,7 +213,7 @@ const Routes = () => {
                   )}
                 />
               </Grid>
-              <Grid item xs={12} sm={3}>
+              <Grid item xs={12} sm={6} md={3} lg={3}>
                 <Autocomplete
                   id="localidadOrigen"
                   options={countries}
@@ -243,7 +240,7 @@ const Routes = () => {
                   )}
                 />
               </Grid>
-              <Grid item xs={12} sm={3}>
+              <Grid item xs={12} sm={6} md={3} lg={3}>
                 <Autocomplete
                   id="localidadDestino"
                   options={countries}
@@ -270,7 +267,7 @@ const Routes = () => {
                   )}
                 />
               </Grid>
-              <Grid item xs={12} sm={3}>
+              <Grid item xs={12} sm={6} md={3} lg={3}>
                 <TextField
                   fullWidth
                   label="Kilometraje"
@@ -284,7 +281,7 @@ const Routes = () => {
                   helperText={formik.touched.kms && formik.errors.kms}
                 />
               </Grid>
-              <Grid item xs={12} sm={3}>
+              <Grid item xs={12} sm={6} md={3} lg={3}>
                 <TextField
                   fullWidth
                   label="Tipo Unidad"
@@ -305,7 +302,7 @@ const Routes = () => {
               </Grid>
             </Grid>
 
-            <Grid container spacing={1} sx={{ mt: 2 }}>
+            <Grid container spacing={2} sx={{ mt: 2 }}>
               <Grid item xs={12}>
                 <Typography
                   sx={{
@@ -317,14 +314,14 @@ const Routes = () => {
                   Agregue Puntos:
                 </Typography>
               </Grid>
-              <Grid item xs={12} sm={2}>
+              <Grid item xs={12} sm={6} md={4} lg={4}>
                 <TextField
                   fullWidth
                   select
                   label="Pago de Casetas"
                   value={pagoCasetas}
                   onChange={(e: any) => setPagoCasetas(e.target.value)}
-                  error={errorDots !== '' ? true : false}
+                  // error={errorDots !== '' ? true : false}
                 >
                   {options.map((item: any) => (
                     <MenuItem key={item.value} value={item.value}>
@@ -333,16 +330,16 @@ const Routes = () => {
                   ))}
                 </TextField>
               </Grid>
-              <Grid item xs={12} sm={4}>
+              <Grid item xs={12} sm={6} md={4} lg={4}>
                 <TextField
                   fullWidth
                   label="Nombre de Caseta"
                   value={nombreCaseta}
                   onChange={(e: any) => setNombreCaseta(e.target.value)}
-                  error={errorDots !== '' ? true : false}
+                  // error={errorDots !== '' ? true : false}
                 />
               </Grid>
-              <Grid item xs={12} sm={2}>
+              <Grid item xs={12} sm={6} md={4} lg={2}>
                 <TextField
                   fullWidth
                   label="Costo de Caseta"
@@ -354,13 +351,15 @@ const Routes = () => {
                   }}
                   value={costo}
                   onChange={(e: any) => setCosto(e.target.value)}
-                  error={errorDots !== '' ? true : false}
+                  // error={errorDots !== '' ? true : false}
                 />
               </Grid>
               <Grid
                 item
                 xs={12}
-                sm={4}
+                sm={12}
+                md={12}
+                lg={2}
                 sx={{
                   display: 'flex',
                   justifyContent: 'end',
@@ -384,12 +383,12 @@ const Routes = () => {
                 </Grid>
               </Grid>
             </Grid>
-            <Typography
+            {/* <Typography
               component="span"
               sx={{ color: '#FF5630', fontSize: '13px', mt: 2, mb: 2 }}
             >
               {errorDots}
-            </Typography>
+            </Typography> */}
 
             <Grid component="div" sx={{ mt: 2 }}>
               <Table
@@ -414,10 +413,10 @@ const Routes = () => {
               <Button
                 variant="contained"
                 type="submit"
-                onClick={() => {
-                  if (dataDotsTable.length === 0)
-                    setErrorDots('Debe Ingresar por lo menos un Punto.');
-                }}
+                // onClick={() => {
+                //   if (dataDotsTable.length === 0)
+                //     setErrorDots('Debe Ingresar por lo menos un Punto.');
+                // }}
               >
                 Crear
               </Button>

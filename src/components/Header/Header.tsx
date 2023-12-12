@@ -27,7 +27,7 @@ const Header = ({ onOpenNav }: HeaderProps) => {
 
       <Stack direction="row" alignItems="center" spacing={1}>
         {/* <LanguagePopover /> */}
-        <Notifications />
+        {/* <Notifications /> */}
         <Account />
       </Stack>
     </>
