@@ -65,7 +65,7 @@ Props) {
 
       return response.data;
     } catch (error: any) {
-      if (get(error, 'response.status') === 401) {
+      if (get(error, 'response.status') === 400) {
         return auth.logout();
       }
 

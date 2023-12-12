@@ -18,6 +18,7 @@ import {
   Add,
   DeleteOutlineOutlined,
   ModeEditOutlineOutlined,
+  VisibilityOutlined,
 } from '@mui/icons-material';
 import { useHelpers } from './helpers';
 import { Column, LoaderContextType } from '../../models';
@@ -26,10 +27,12 @@ import { HeaderTitleModal } from '../../components/Modal/HeaderTitleModal';
 import { useRootProvider } from '../../components/RootProvider/hooks/useRootProvider';
 import { useEffect, useState } from 'react';
 import { useLoader } from '../../components/Loader';
+import { useModal } from '../../components/Modal';
+import { DetailDots } from './DetailDots';
 
 const Routes = () => {
-  // const [stateSelected, setStateSelected] = useState(null);
   const [open, setOpen] = useState<boolean>(false);
+  const { handleOpenModal, handleCloseModal } = useModal();
   const { handleShowLoader }: LoaderContextType = useLoader();
   const { actionsState, actionsCountries }: any = useRootProvider();
   const { states, handleGetStates } = actionsState;
@@ -41,6 +44,7 @@ const Routes = () => {
     nombreCaseta,
     costo,
     dataDotsTable,
+    dataEdit,
     setPagoCasetas,
     setNombreCaseta,
     setCosto,
@@ -58,6 +62,14 @@ const Routes = () => {
   }, []);
 
   useEffect(() => {
+    if (dataEdit) {
+      console.log('RENDER_EDIT');
+
+      setOpen(true);
+    }
+  }, [dataEdit]);
+
+  useEffect(() => {
     if (formik.values.state !== null) {
       handleGetCountrie(formik.values.state);
       formik.setValues({
@@ -67,11 +79,6 @@ const Routes = () => {
       });
     }
   }, [formik.values.state]);
-
-  // const handleToggleModal = (): void => {
-  //   handleCloseModal();
-  //   // setDataEdit(null);
-  // };
 
   const columns: Column[] = [
     { id: 'localidadOrigen', label: 'Localidad Origen', align: 'left' },
@@ -90,6 +97,11 @@ const Routes = () => {
           onClick: (rowData: DataTolls) => handleGetToll(rowData._id),
         },
         {
+          label: 'Detalle',
+          icon: <VisibilityOutlined sx={{ width: 20, height: 20 }} />,
+          onClick: (rowData: DataTolls) => hanldeDetailBills(rowData),
+        },
+        {
           label: 'Eliminar',
           icon: (
             <DeleteOutlineOutlined
@@ -103,7 +115,6 @@ const Routes = () => {
   ];
 
   const columnsDots: Column[] = [
-    { id: '_id', label: 'Id', align: 'left' },
     { id: 'casetas', label: 'Pago Caseta', align: 'left' },
     { id: 'nombreCaseta', label: 'Nombre Caseta', align: 'left' },
     { id: 'costo', label: 'Costo', align: 'left' },
@@ -125,6 +136,20 @@ const Routes = () => {
     },
   ];
 
+  const hanldeDetailBills = (data: DataTolls) => {
+    handleOpenModal({
+      fullWidth: true,
+      maxWidth: 'md',
+      title: (
+        <HeaderTitleModal
+          title="DETALLE"
+          handleToggleModal={() => handleCloseModal()}
+        />
+      ),
+      body: <DetailDots detailDotsData={data} />,
+    });
+  };
+
   const options: any = [
     {
       label: 'VIAPASS',
@@ -133,6 +158,17 @@ const Routes = () => {
     {
       label: 'EFEC',
       value: 'EFEC',
+    },
+  ];
+
+  const optionsVehicle = [
+    {
+      label: 'Automovil',
+      value: 'Automovil',
+    },
+    {
+      label: 'Otro',
+      value: 'Otro',
     },
   ];
 
@@ -285,7 +321,7 @@ const Routes = () => {
                 <TextField
                   fullWidth
                   label="Tipo Unidad"
-                  type="string"
+                  select
                   id="tipoUnidad"
                   name="tipoUnidad"
                   value={formik.values.tipoUnidad}
@@ -298,7 +334,13 @@ const Routes = () => {
                   helperText={
                     formik.touched.tipoUnidad && formik.errors.tipoUnidad
                   }
-                />
+                >
+                  {optionsVehicle.map((item) => (
+                    <MenuItem key={item.value} value={item.value}>
+                      {item.label}
+                    </MenuItem>
+                  ))}
+                </TextField>
               </Grid>
             </Grid>
 

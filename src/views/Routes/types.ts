@@ -4,17 +4,18 @@ export interface Puntos {
   costo: number;
   nombreCaseta: string;
   _id: string;
+  casetas: string;
 }
 
 export interface DataTolls {
-  casetas?: string;
+  casetas: string;
   idgasto: string;
   kms: number;
   puntos: Puntos[];
   totalPeajes: number;
-  localidadDestino?: string;
-  localidadOrigen?: string;
-  tipoUnidad?: string;
+  localidadDestino: string;
+  localidadOrigen: string;
+  tipoUnidad: string;
   __v?: number;
   _id: string;
 }

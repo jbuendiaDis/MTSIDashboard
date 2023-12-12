@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { useApi } from '../../hooks/useApi';
 import { useLoader } from '../../components/Loader';
 import { FormatDataState, LoaderContextType, Response } from '../../models';
-import { DataTolls, Puntos, ResponseTolls, TableDots } from './types';
+import { DataTolls, ResponseTolls, TableDots } from './types';
 import {
   formatToCurrency,
   parseCurrencyStringToNumber,
@@ -11,6 +11,7 @@ import {
 import { useModalConfirmation } from '../../hooks/useModalConfirmation';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
+import { get } from 'lodash';
 
 interface FormValues {
   tipoUnidad: string;
@@ -22,7 +23,6 @@ interface FormValues {
 
 export const useHelpers = () => {
   const [tollsData, setTollsData] = useState<DataTolls[]>([]);
-  const [errorDots, setErrorDots] = useState<string>('');
   const [dataEdit, setDataEdit] = useState<DataTolls[] | null>(null);
   const [pagoCasetas, setPagoCasetas] = useState<string>('');
   const [nombreCaseta, setNombreCaseta] = useState<string>('');
@@ -101,9 +101,16 @@ export const useHelpers = () => {
       const code: Response['code'] = response.code;
       const dataResponse: DataTolls[] = payload.data;
 
+      const formatDots = get(dataResponse, 'puntos', []).map((item: any) => {
+        return {
+          ...item,
+          costo: formatToCurrency(item.costo),
+        };
+      });
+
       if (code === 200) {
-        console.log('RES', dataResponse);
         setDataEdit(dataResponse);
+        setDataDotsTable(formatDots);
       }
       return true;
     } catch (error) {
@@ -239,6 +246,7 @@ export const useHelpers = () => {
     nombreCaseta,
     costo,
     dataDotsTable,
+    dataEdit,
     // errorDots,
     // setErrorDots,
     setPagoCasetas,
