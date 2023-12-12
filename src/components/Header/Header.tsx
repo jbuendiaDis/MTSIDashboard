@@ -3,7 +3,6 @@ import { Menu } from '@mui/icons-material';
 import { useResponsive } from '../../hooks/useResponsive';
 import { Account } from '../Account';
 import { HeaderStyles } from './HeaderStyles';
-import { Notifications } from '../Notifications';
 
 interface HeaderProps {
   onOpenNav: () => void;
@@ -12,6 +11,7 @@ interface HeaderProps {
 const Header = ({ onOpenNav }: HeaderProps) => {
   const style = HeaderStyles();
   const lgUp = useResponsive('up', 'lg');
+  const logoCompany = '/assets/logo.svg';
 
   const renderContent = (
     <>
@@ -20,6 +20,13 @@ const Header = ({ onOpenNav }: HeaderProps) => {
           <Menu />
         </IconButton>
       )}
+
+      <Box
+        component="img"
+        src={logoCompany}
+        alt="log"
+        sx={{ width: 135, height: 135 }}
+      />
 
       {/* <Searchbar /> */}
 

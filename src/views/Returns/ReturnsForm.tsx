@@ -21,10 +21,11 @@ const ReturnsForm = ({ toggleModal, dataEdit }: ReturnsFormProps) => {
         <Input
           fullWidth
           label="Rendimiento"
-          placeholder="00.0"
+          type="number"
+          placeholder="0.0"
           name="rendimiento"
           InputProps={{
-            startAdornment: <InputAdornment position="start">$</InputAdornment>,
+            endAdornment: <InputAdornment position="end">Lts</InputAdornment>,
           }}
         />
       </Grid>
@@ -39,7 +40,7 @@ const ReturnsForm = ({ toggleModal, dataEdit }: ReturnsFormProps) => {
           Cancelar
         </Button>
         <Button variant="contained" color="primary" type="submit">
-          {dataEdit ? 'Editar' : 'Crear'}
+          {dataEdit ? 'Guardar' : 'Crear'}
         </Button>
       </Stack>
     </Grid>

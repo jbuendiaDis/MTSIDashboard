@@ -5,6 +5,8 @@ import { Loader } from '../../components/Loader';
 import { Header } from '../../components/Header';
 import { Nav } from '../../components/Nav/Nav';
 import { Main } from '../Main';
+import { Splash } from '../../views/Splash';
+import { useAuth } from '../../components/Auth';
 
 interface Props {
   children: ReactNode;
@@ -12,9 +14,11 @@ interface Props {
 
 const BaseLayout = ({ children }: Props) => {
   const [openNav, setOpenNav] = useState<boolean>(false);
+  const { user } = useAuth();
 
   return (
     <>
+      {user?.isLogger && <Splash />}
       <Header onOpenNav={() => setOpenNav(!openNav)} />
       <Box
         sx={{

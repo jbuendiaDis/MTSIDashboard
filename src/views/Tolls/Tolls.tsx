@@ -112,7 +112,7 @@ const Tolls = () => {
                   name="nombre"
                 />
               </Grid>
-              <Grid item xs={12} sm={6}>
+              <Grid item xs={12} sm={12}>
                 <Input
                   fullWidth
                   type="number"
@@ -126,9 +126,9 @@ const Tolls = () => {
                   }}
                 />
               </Grid>
-              <Grid item xs={12} sm={6}>
+              {/* <Grid item xs={12} sm={6}>
                 <Input fullWidth type="number" label="Código" name="codigo" />
-              </Grid>
+              </Grid> */}
             </Grid>
             <Stack
               spacing={2}

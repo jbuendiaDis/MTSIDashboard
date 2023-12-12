@@ -18,9 +18,13 @@ import { Form, Formik } from 'formik';
 import { CustomerForm } from './CustomerForm';
 import { Column } from '../../models';
 import { HeaderTitleModal } from '../../components/Modal/HeaderTitleModal';
+import { useRootProvider } from '../../components/RootProvider/hooks/useRootProvider';
 
 export const Customers = () => {
   const { handleShowLoader }: LoaderContextType = useLoader();
+  const { handleOpenModal, handleCloseModal }: ModalContextType = useModal();
+  const { actionsState }: any = useRootProvider();
+  const { states, handleGetStates } = actionsState;
   const {
     dataEdit,
     initialValuesForm,
@@ -31,13 +35,13 @@ export const Customers = () => {
     handleOpenModalDelete,
     handleSubmit,
   } = useHelpers();
-  const { handleOpenModal, handleCloseModal }: ModalContextType = useModal();
 
   useEffect(() => {
     handleShowLoader(true);
     handleGetCustomers();
     handleGetBusinessName();
     setDataEdit(null);
+    handleGetStates();
   }, []);
 
   useEffect(() => {
@@ -129,6 +133,7 @@ export const Customers = () => {
             <CustomerForm
               handleToggleModal={handleToggleModal}
               dataEdit={dataEdit}
+              states={states}
             />
           </Form>
         </Formik>

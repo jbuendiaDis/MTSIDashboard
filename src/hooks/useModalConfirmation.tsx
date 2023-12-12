@@ -1,9 +1,6 @@
 import { Button, Grid, Stack, Typography } from '@mui/material';
 import { useModal } from '../components/Modal';
 import { ModalContextType } from '../models';
-import successIcon from '../assets/check_green.svg';
-import infoIcon from '../assets/alert.svg';
-import alertIcon from '../assets/alert-red.svg';
 
 interface ModalSuccessProps {
   message?: string;
@@ -13,6 +10,9 @@ interface ModalSuccessProps {
 
 export const useModalConfirmation = () => {
   const { handleOpenModal, handleCloseModal }: ModalContextType = useModal();
+  const alertIcon = '/assets/alert-red.svg';
+  const infoIcon = '/assets/alert.svg';
+  const successIcon = '/assets/check_green.svg';
 
   const modalSuccess = ({ message, callbackConfirm }: ModalSuccessProps) => {
     handleOpenModal({

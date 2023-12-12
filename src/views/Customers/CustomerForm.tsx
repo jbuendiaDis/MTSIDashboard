@@ -1,13 +1,16 @@
 import { Button, Grid, Stack, Theme, Typography } from '@mui/material';
 import Input from '../../components/Input/Input';
 import { PaylaodCustomers } from './types';
+import { AutoCompleteComponent } from '../../components/Input/AutoCompleteComponent';
+import { DataStates } from '../../models';
 
 interface Props {
   handleToggleModal: () => void;
   dataEdit: PaylaodCustomers['data'] | null;
+  states: DataStates['data'];
 }
 
-const CustomerForm = ({ handleToggleModal, dataEdit }: Props) => {
+const CustomerForm = ({ handleToggleModal, dataEdit, states }: Props) => {
   return (
     <>
       <Grid container spacing={2}>
@@ -21,6 +24,15 @@ const CustomerForm = ({ handleToggleModal, dataEdit }: Props) => {
           >
             Dirección del Cliente:
           </Typography>
+        </Grid>
+        <Grid xs={12} sm={4} md={4} item>
+          <AutoCompleteComponent
+            fullWidth
+            label="Estado"
+            options={states}
+            labelField="label"
+            name="state"
+          />
         </Grid>
         <Grid xs={12} sm={4} md={4} item>
           <Input fullWidth label="Calle" name="calle" />
@@ -46,12 +58,12 @@ const CustomerForm = ({ handleToggleModal, dataEdit }: Props) => {
               color: (theme: Theme) => theme.palette.grey[500],
             }}
           >
-            Otros Datos:
+            Datos Fiscales:
           </Typography>
         </Grid>
-        <Grid xs={12} sm={4} md={4} item>
+        {/* <Grid xs={12} sm={4} md={4} item>
           <Input fullWidth label="Código Cliente" name="codigoCliente" />
-        </Grid>
+        </Grid> */}
         <Grid xs={12} sm={4} md={4} item>
           <Input fullWidth label="RFC" name="rfc" />
         </Grid>

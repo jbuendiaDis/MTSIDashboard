@@ -18,7 +18,6 @@ import {
   Tooltip,
   Divider,
   CardHeader,
-  CardMedia,
   CardContent,
   CardActions,
   styled,
@@ -232,120 +231,19 @@ const Card = ({
           )}
         </CardActions>
         <Collapse in={expanded} timeout="auto" unmountOnExit>
-          <CardContent>{data.notas}</CardContent>
-        </Collapse>
-
-        {/* <Grid container>
-          <Grid item xs={10} sx={{ display: 'flex', justifyContent: 'center' }}>
-            <Avatar>{data.nombre?.charAt(0).toUpperCase()}</Avatar>
-          </Grid>
-          <Grid item xs={2} sx={{}}>
-            <Tooltip title="Acciones">
-              <IconButton
-                onClick={(event: any) => setOpen(event.currentTarget)}
-              >
-                <MoreVert />
-              </IconButton>
-            </Tooltip>
-          </Grid>
-        </Grid>
-        <Typography
-          sx={{
-            mt: 2,
-            mb: 1,
-            fontSize: '15px',
-            color: (theme: Theme) => theme.palette.grey[500],
-          }}
-        >
-          Información General:
-        </Typography>
-        <Grid container>
-          <Grid item xs={12} sx={{ display: 'flex' }}>
-            <Typography sx={{ fontSize: '14px', fontWeight: 'bold' }}>
-              Nombre:
-            </Typography>
-            &nbsp;
-            <Typography sx={{ fontSize: '14px' }}>{data.nombre}</Typography>
-          </Grid>
-          <Grid item xs={12} sx={{ display: 'flex' }}>
-            <Typography sx={{ fontSize: '14px', fontWeight: 'bold' }}>
-              Género:
-            </Typography>
-            &nbsp;
-            <Typography sx={{ fontSize: '14px' }}>{data.genero}</Typography>
-          </Grid>
-          <Grid item xs={12} sx={{ display: 'flex' }}>
-            <Typography sx={{ fontSize: '14px', fontWeight: 'bold' }}>
-              Puesto:
-            </Typography>
-            &nbsp;
-            <Typography sx={{ fontSize: '14px' }}>{data.puesto}</Typography>
-          </Grid>
-          <Grid item xs={12} sx={{ display: 'flex' }}>
-            <Typography sx={{ fontSize: '14px', fontWeight: 'bold' }}>
-              Dirección:
-            </Typography>
-            &nbsp;
-            <Typography sx={{ fontSize: '14px' }}>{data.direccion}</Typography>
-          </Grid>
-        </Grid>
-
-        <Divider sx={{ mt: 2 }} />
-
-        <Grid container>
-          <Grid item xs={12}>
+          <CardContent>
             <Typography
               sx={{
-                mt: 2,
                 mb: 1,
                 fontSize: '15px',
                 color: (theme: Theme) => theme.palette.grey[500],
               }}
             >
-              Medios de contacto:
+              Notas:
             </Typography>
-          </Grid>
-          <Grid item xs={12}>
-            <Stack spacing={1} direction="row">
-              <Typography sx={{ fontSize: '14px', fontWeight: 'bold' }}>
-                Tel Movil:
-              </Typography>
-              <Typography sx={{ fontSize: '14px' }}>
-                {data.telMovil ? data.telMovil : '-'}
-              </Typography>
-            </Stack>
-          </Grid>
-          <Grid item xs={12}>
-            <Stack spacing={1} direction="row">
-              <Typography sx={{ fontSize: '14px', fontWeight: 'bold' }}>
-                Tel Oficina:
-              </Typography>
-              <Typography sx={{ fontSize: '14px' }}>
-                {data.telOficina ? data.telOficina : '-'}
-              </Typography>
-            </Stack>
-          </Grid>
-          <Grid item xs={12}>
-            <Stack spacing={1} direction="row">
-              <Typography sx={{ fontSize: '14px', fontWeight: 'bold' }}>
-                WhatsApp:
-              </Typography>
-              <Typography sx={{ fontSize: '14px' }}>
-                {data.whatsapp ? data.whatsapp : '-'}
-              </Typography>
-            </Stack>
-          </Grid>
-          <Grid item xs={12}>
-            <Stack spacing={1} direction="row">
-              <Typography sx={{ fontSize: '14px', fontWeight: 'bold' }}>
-                Email:
-              </Typography>
-              <Typography sx={{ fontSize: '14px' }}>
-                {data.email ? data.email : '-'}
-              </Typography>
-            </Stack>
-          </Grid>
-        </Grid> */}
+            {data.notas}
+          </CardContent>
+        </Collapse>
       </MuiCard>
       <Popover
         open={!!open}

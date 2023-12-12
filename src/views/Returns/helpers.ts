@@ -7,6 +7,7 @@ import { DataReturns, PayloadDataReturns, ResponseReturns } from './types';
 import * as Yup from 'yup';
 import { useModalConfirmation } from '../../hooks/useModalConfirmation';
 import { useModal } from '../../components/Modal';
+import { get } from 'lodash';
 
 export const useHelpers = () => {
   const { handleShowLoader }: LoaderContextType = useLoader();
@@ -71,14 +72,22 @@ export const useHelpers = () => {
 
   const handleDeleteReturns = async (id: string): Promise<boolean> => {
     try {
-      const response = await _deleteReturn({
+      const response: ResponseReturns = await _deleteReturn({
         urlParam: id,
       });
+      const code: Response['code'] = get(response, 'response.code');
+      const message: Response['message'] = get(
+        response,
+        'response.message',
+        ''
+      );
 
-      console.log('DELTE', response);
-      const message: string = 'Se ha eliminado correctamente';
-      modalSuccess({ message });
-      handleGetReturns();
+      if (code === 200) {
+        modalSuccess({ message });
+        handleGetReturns();
+      } else {
+        modalInformation({ message });
+      }
 
       return true;
     } catch (error) {
@@ -86,10 +95,10 @@ export const useHelpers = () => {
     }
   };
 
-  const initialValues: any = {
+  const initialValues: DataReturns = {
     marca: dataEdit ? dataEdit?.marca : '',
     modelo: dataEdit ? dataEdit?.modelo : '',
-    rendimiento: dataEdit ? dataEdit?.rendimiento : null,
+    rendimiento: dataEdit ? dataEdit?.rendimiento : '',
     _id: dataEdit ? dataEdit?._id : '',
   };
 
@@ -122,6 +131,7 @@ export const useHelpers = () => {
           handleCloseModal();
           modalSuccess({ message });
           handleGetReturns();
+          setDataEdit(null);
         } else {
           handleCloseModal();
           const message: string = 'Ha ocurrido algo inesperado.';

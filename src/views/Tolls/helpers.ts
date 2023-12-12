@@ -99,7 +99,7 @@ export const useHelpers = () => {
     nombre: Yup.string().required(requiredField),
     costo: Yup.number().nullable().required(requiredField),
     state: Yup.object().nullable().required(requiredField),
-    codigo: Yup.number().nullable().required(requiredField),
+    // codigo: Yup.number().nullable().required(requiredField),
     _id: Yup.string(),
   });
 
@@ -114,7 +114,7 @@ export const useHelpers = () => {
     try {
       const newValues = {
         nombre: values.nombre,
-        codigo: values.codigo,
+        // codigo: values.codigo,
         costo: values.costo,
         estado: values.state ? values.state.codigo : undefined,
       };
@@ -130,10 +130,10 @@ export const useHelpers = () => {
           'response.message',
           ''
         );
-
         if (code === 200) {
           modalSuccess({ message });
           handleGetAllCountries();
+          setDataEdit(null);
         } else {
           modalInformation({ message });
         }

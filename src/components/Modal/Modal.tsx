@@ -26,7 +26,7 @@ const Modal = () => {
     <Dialog
       fullWidth={fullWidth}
       open={show}
-      onClose={() => {}}
+      // onClose={() => {}}
       maxWidth={maxWidth}
       sx={{
         zIndex: (theme) => `${theme.zIndex.drawer + 2} !important`,

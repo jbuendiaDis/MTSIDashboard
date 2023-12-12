@@ -39,7 +39,7 @@ const AuthProvider = ({ children }: Props) => {
 
         setItem('session', session.user);
         setItem('token', session.token);
-        setUser(session.user);
+        setUser({ ...session.user, isLogger: true });
       }
 
       return true;
