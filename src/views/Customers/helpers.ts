@@ -151,9 +151,8 @@ export const useHelpers = () => {
 
   const handleSubmit = async (values: PaylaodCustomers['data']) => {
     try {
-      console.log('VALUES', values);
       const newValues = {
-        state: values.state?.codigo,
+        estadoId: values.state?.codigo,
         calle: values.calle,
         colonia: values.colonia,
         formaPago: values.formaPago,
@@ -166,8 +165,6 @@ export const useHelpers = () => {
         telefono: values.telefono,
         usoCFDI: values.usoCFDI.descripcion,
       };
-
-      console.log('newValues', newValues);
 
       if (dataEdit) {
         const response: Payload = await _updateCustomer({
@@ -208,9 +205,8 @@ export const useHelpers = () => {
   };
 
   const initialValuesForm: PaylaodCustomers['data'] = {
-    state: null,
+    state: dataEdit ? dataEdit.state : null,
     calle: dataEdit ? dataEdit.calle : '',
-    // codigoCliente: dataEdit ? dataEdit.codigoCliente : '',
     colonia: dataEdit ? dataEdit.colonia : '',
     formaPago: dataEdit ? dataEdit.formaPago : '',
     metodoPago: dataEdit ? dataEdit.metodoPago : '',

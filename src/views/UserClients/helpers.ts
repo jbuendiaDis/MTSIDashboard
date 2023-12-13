@@ -12,6 +12,7 @@ import { DataCustomer, PaylaodCustomers, Payload } from '../Customers/types';
 import { get } from 'lodash';
 
 interface ValuesForm {
+  // state?: null;
   direccion?: string;
   email: string;
   genero: string;
@@ -45,7 +46,8 @@ export const useHelpers = ({ setOpenDrawer }: HelpersProps) => {
   >([]);
   const [dataEdit, setDataEdit] = useState<ValuesForm | null>(null);
   const requiredValue: string = 'Este campo es obligatorio.';
-  const noMatchPassword = 'No coinciden las contraseñas.';
+  const noMatchPassword: string = 'No coinciden las contraseñas.';
+  const requiredField: string = 'Este campo es obligatorio.';
 
   useEffect(() => {
     if (dataEdit !== null) {
@@ -139,6 +141,7 @@ export const useHelpers = ({ setOpenDrawer }: HelpersProps) => {
     direccion: '',
     email: '',
     genero: '',
+    // state: null,
     idCliente: '',
     nombre: '',
     nombreCliente: null,
@@ -154,11 +157,9 @@ export const useHelpers = ({ setOpenDrawer }: HelpersProps) => {
   };
 
   const validationSchema = Yup.object().shape({
-    nombreCliente: Yup.object()
-      .nullable()
-      .required('Este campo es obligatorio.'),
-    nombre: Yup.string().required('Este campo es obligatorio.'),
-    genero: Yup.string().required('Este campo es obligatorio.'),
+    nombreCliente: Yup.object().nullable().required(requiredField),
+    nombre: Yup.string().required(requiredField),
+    genero: Yup.string().required(requiredField),
     puesto: Yup.string(),
     password: Yup.string()
       .min(8, 'La contraseña debe tener al menos 8 caracteres')
@@ -180,6 +181,7 @@ export const useHelpers = ({ setOpenDrawer }: HelpersProps) => {
     email: Yup.string()
       .email('Escriba un email válido')
       .required('Este campo es obligatorio'),
+    // state: Yup.object().nullable().required(requiredField),
     telOficina: Yup.string().matches(/^[0-9]+$/, 'Ingrese un número válido'),
     telMovil: Yup.string().matches(/^[0-9]+$/, 'Ingrese un número válido'),
     whatsapp: Yup.string().matches(/^[0-9]+$/, 'Ingrese un número válido'),
@@ -188,11 +190,9 @@ export const useHelpers = ({ setOpenDrawer }: HelpersProps) => {
   });
 
   const validationSchemaDataEdit = Yup.object().shape({
-    nombreCliente: Yup.object()
-      .nullable()
-      .required('Este campo es obligatorio.'),
-    nombre: Yup.string().required('Este campo es obligatorio.'),
-    genero: Yup.string().required('Este campo es obligatorio.'),
+    nombreCliente: Yup.object().nullable().required(requiredField),
+    nombre: Yup.string().required(requiredField),
+    genero: Yup.string().required(requiredField),
     puesto: Yup.string(),
     email: Yup.string()
       .email('Escriba un email válido')
@@ -211,7 +211,6 @@ export const useHelpers = ({ setOpenDrawer }: HelpersProps) => {
     onSubmit: async (values: ValuesForm) => {
       console.log('VALUES', values);
       if (dataEdit !== null) {
-        console.log('???', values.nombreCliente);
         const newDataEdit = {
           idCliente: user?.id,
           nombreCliente:

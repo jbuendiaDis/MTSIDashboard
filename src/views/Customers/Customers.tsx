@@ -115,11 +115,18 @@ export const Customers = () => {
         (item) => item.descripcion === dataResponse.regimenFiscal
       );
 
+      const filterState = states.find(
+        (item: any) => item.codigo === dataResponse.estadoId
+      );
+
       const newValuesEdit = {
         ...dataResponse,
         regimenFiscal: filterRegimenFiscal,
         usoCFDI: filterCfdi,
+        state: filterState,
       };
+
+      console.log('>>>', newValuesEdit);
 
       if (code === 200) {
         setDataEdit(newValuesEdit);

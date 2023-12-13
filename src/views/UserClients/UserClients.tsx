@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/ban-types */
 import {
   Typography,
@@ -7,15 +8,18 @@ import {
   InputAdornment,
   IconButton,
   Autocomplete,
+  MenuItem,
 } from '@mui/material';
 import { useHelpers } from './helpers';
 import { Card } from '../../components/Card/Card';
 import { Add, Visibility, VisibilityOff } from '@mui/icons-material';
 import { Drawer } from '../../components/Drawer';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Stack } from '@mui/system';
 import { PopInformation } from '../../components/PopInformation';
 import { UserClientsStyles } from './USerClientsStyles';
+import { Options } from './types';
+import { useRootProvider } from '../../components/RootProvider/hooks/useRootProvider';
 
 const UserClients = () => {
   const style = UserClientsStyles;
@@ -23,6 +27,8 @@ const UserClients = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [showConfirmPassword, setShowConfirmPassword] =
     useState<boolean>(false);
+  const { actionsState }: any = useRootProvider();
+  const { states, handleGetStates } = actionsState;
   const {
     formik,
     dataEdit,
@@ -33,6 +39,21 @@ const UserClients = () => {
   } = useHelpers({
     setOpenDrawer,
   });
+
+  useEffect(() => {
+    handleGetStates();
+  }, []);
+
+  const options: Options[] = [
+    {
+      label: 'Masculino',
+      value: 'Masculino',
+    },
+    {
+      label: 'Femenino',
+      value: 'Femenino',
+    },
+  ];
 
   return (
     <Grid>
@@ -118,8 +139,8 @@ const UserClients = () => {
             <Grid item xs={12} sm={6} md={6}>
               <TextField
                 fullWidth
-                label="Gerero"
-                type="text"
+                label="Genero"
+                select
                 id="genero"
                 name="genero"
                 value={formik.values.genero}
@@ -127,7 +148,13 @@ const UserClients = () => {
                 onBlur={formik.handleBlur}
                 error={formik.touched.genero && Boolean(formik.errors.genero)}
                 helperText={formik.touched.genero && formik.errors.genero}
-              />
+              >
+                {options.map((item) => (
+                  <MenuItem key={item.label} value={item.value}>
+                    {item.label}
+                  </MenuItem>
+                ))}
+              </TextField>
             </Grid>
             <Grid item xs={12} sm={6} md={6}>
               <TextField
@@ -157,6 +184,27 @@ const UserClients = () => {
                 helperText={formik.touched.email && formik.errors.email}
               />
             </Grid>
+            {/* <Grid item xs={12} sm={6} md={6}>
+              <Autocomplete
+                id="state"
+                options={states}
+                getOptionLabel={(option: any) => option.label}
+                value={formik.values.state}
+                onChange={(_event, selected) => {
+                  formik.setFieldValue('state', selected);
+                }}
+                onBlur={formik.handleBlur}
+                renderInput={(params) => (
+                  <TextField
+                    name="state"
+                    {...params}
+                    label="Estado"
+                    error={formik.touched.state && Boolean(formik.errors.state)}
+                    helperText={formik.touched.state && formik.errors.state}
+                  />
+                )}
+              />
+            </Grid> */}
             <Grid item xs={12} sx={{ mt: 1 }}>
               <Typography sx={style.infoText}>Medios de contacto:</Typography>
             </Grid>

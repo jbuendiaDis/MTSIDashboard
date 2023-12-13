@@ -16,6 +16,7 @@ export interface DataCustomer {
   telefono: string | number;
   usoCFDI: string | any;
   _id: string;
+  estadoId?: number;
   // __v?: number | undefined | string;
 }
 

@@ -74,8 +74,6 @@ const Nav = ({ openNav, onCloseNav }: NavProps) => {
       sx={{
         flexShrink: { lg: 0 },
         width: { lg: NAV.WIDTH },
-        background:
-          'linear-gradient(180deg, #253883 30%, rgba(36, 56, 131, 0.5) 100%)',
       }}
     >
       {upLg ? (
@@ -87,6 +85,8 @@ const Nav = ({ openNav, onCloseNav }: NavProps) => {
           PaperProps={{
             sx: {
               width: NAV.WIDTH,
+              background:
+                'linear-gradient(180deg, #253883 30%, rgba(36, 56, 131, 0.5) 100%)',
             },
           }}
         >

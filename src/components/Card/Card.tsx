@@ -162,6 +162,13 @@ const Card = ({
                 {data.direccion}
               </Typography>
             </Grid>
+            {/* <Grid item xs={12} sx={{ display: 'flex' }}>
+              <Typography sx={{ fontSize: '14px', fontWeight: 'bold' }}>
+                Cliente:
+              </Typography>
+              &nbsp;
+              <Typography sx={{ fontSize: '14px' }}>{data.cliente}</Typography>
+            </Grid> */}
           </Grid>
           <Divider sx={{ mt: 2, mb: 2 }} />
           <Grid container>

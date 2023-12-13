@@ -23,3 +23,8 @@ export interface ResponseUserClient {
   payload: dataUserClient;
   response: Response;
 }
+
+export interface Options {
+  label: string;
+  value: string;
+}
