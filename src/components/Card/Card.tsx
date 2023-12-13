@@ -39,6 +39,7 @@ interface CardProps {
   hanldeGetUserClients: () => void;
   setOpenDrawer: (value: boolean) => void;
   setDataEdit: (data: any) => void;
+  customersData: any[];
 }
 
 interface ExpandMoreProps extends IconButtonProps {
@@ -50,6 +51,7 @@ const Card = ({
   hanldeGetUserClients,
   setOpenDrawer,
   setDataEdit,
+  customersData,
 }: CardProps) => {
   const [expanded, setExpanded] = useState<boolean>(false);
   const [open, setOpen] = useState<null>(null);
@@ -76,6 +78,8 @@ const Card = ({
       callbackConfirm: () => handleDeleteClient(data._id),
     });
   };
+
+  console.log('data', customersData);
 
   const handleDeleteClient = async (id: string): Promise<boolean> => {
     try {
@@ -106,6 +110,17 @@ const Card = ({
       });
       const code: Response['code'] = response.code;
       const dataResponseEdit: dataUserClient['data'] = payload.data;
+
+      // const filterCustomerClient = customersData.find(
+      //   (item) => item.razonSocial === dataResponseEdit.nombreCliente
+      // );
+      // console.log('---', dataResponseEdit);
+
+      // console.log('filter', filterCustomerClient);
+      // const newDataEdit = {
+      //   ...dataResponseEdit,
+      //   nombreCliente: filterCustomerClient,
+      // };
 
       if (code === 200) {
         setDataEdit(dataResponseEdit);

@@ -128,7 +128,6 @@ export const useHelpers = ({ setOpenDrawer }: HelpersProps) => {
       const dataResponse: dataUserClient['data'] = payload.data;
 
       if (code === 200) {
-        console.log('RES', dataResponse);
         setUserClientsData(dataResponse);
       }
       return true;
@@ -227,23 +226,25 @@ export const useHelpers = ({ setOpenDrawer }: HelpersProps) => {
           direccion: values.direccion,
           notas: values.notas,
         };
-        const response: ResponseUserClient = await _updateClient({
-          urlParam: values._id,
-          body: newDataEdit,
-        });
-        const code: Response['code'] = response.response.code;
-        const message: Response['message'] = response.response.message;
-        if (code === 200) {
-          setOpenDrawer(false);
-          modalSuccess({ message });
-          hanldeGetUserClients();
-        } else {
-          modalInformation({ message });
-        }
+
+        console.log('edit', newDataEdit);
+        // const response: ResponseUserClient = await _updateClient({
+        //   urlParam: values._id,
+        //   body: newDataEdit,
+        // });
+        // const code: Response['code'] = response.response.code;
+        // const message: Response['message'] = response.response.message;
+        // if (code === 200) {
+        //   setOpenDrawer(false);
+        //   modalSuccess({ message });
+        //   hanldeGetUserClients();
+        // } else {
+        //   modalInformation({ message });
+        // }
       } else {
         const newData = {
-          idCliente: user?.id,
-          nombreCliente: get(values, 'nombreCliente._id', ''),
+          idCliente: get(values, 'nombreCliente._id'),
+          nombreCliente: get(values, 'nombreCliente.razonSocial', ''),
           nombre: values.nombre,
           genero: values.genero,
           puesto: values.puesto,
@@ -255,6 +256,7 @@ export const useHelpers = ({ setOpenDrawer }: HelpersProps) => {
           direccion: values.direccion,
           notas: values.notas,
         };
+
         const response: ResponseUserClient = await _createClient({
           body: newData,
         });

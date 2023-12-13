@@ -14,12 +14,12 @@ import { useHelpers } from './helpers';
 import { Card } from '../../components/Card/Card';
 import { Add, Visibility, VisibilityOff } from '@mui/icons-material';
 import { Drawer } from '../../components/Drawer';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Stack } from '@mui/system';
 import { PopInformation } from '../../components/PopInformation';
 import { UserClientsStyles } from './USerClientsStyles';
 import { Options } from './types';
-import { useRootProvider } from '../../components/RootProvider/hooks/useRootProvider';
+// import { useRootProvider } from '../../components/RootProvider/hooks/useRootProvider';
 
 const UserClients = () => {
   const style = UserClientsStyles;
@@ -27,8 +27,8 @@ const UserClients = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [showConfirmPassword, setShowConfirmPassword] =
     useState<boolean>(false);
-  const { actionsState }: any = useRootProvider();
-  const { states, handleGetStates } = actionsState;
+  // const { actionsState }: any = useRootProvider();
+  // const { states, handleGetStates } = actionsState;
   const {
     formik,
     dataEdit,
@@ -40,9 +40,9 @@ const UserClients = () => {
     setOpenDrawer,
   });
 
-  useEffect(() => {
-    handleGetStates();
-  }, []);
+  // useEffect(() => {
+  //   handleGetStates();
+  // }, []);
 
   const options: Options[] = [
     {
@@ -98,6 +98,7 @@ const UserClients = () => {
               hanldeGetUserClients={hanldeGetUserClients}
               setOpenDrawer={setOpenDrawer}
               setDataEdit={setDataEdit}
+              customersData={customersData}
             />
           </Grid>
         ))}
