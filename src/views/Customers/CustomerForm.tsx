@@ -3,14 +3,23 @@ import Input from '../../components/Input/Input';
 import { PaylaodCustomers } from './types';
 import { AutoCompleteComponent } from '../../components/Input/AutoCompleteComponent';
 import { DataStates } from '../../models';
+import Select from '../../components/Input/Select';
 
 interface Props {
   handleToggleModal: () => void;
   dataEdit: PaylaodCustomers['data'] | null;
   states: DataStates['data'];
+  dataCfdi: any[];
+  dataRegimenFiscal: any[];
 }
 
-const CustomerForm = ({ handleToggleModal, dataEdit, states }: Props) => {
+const CustomerForm = ({
+  handleToggleModal,
+  dataEdit,
+  states,
+  dataCfdi,
+  dataRegimenFiscal,
+}: Props) => {
   return (
     <>
       <Grid container spacing={2}>
@@ -64,11 +73,24 @@ const CustomerForm = ({ handleToggleModal, dataEdit, states }: Props) => {
         {/* <Grid xs={12} sm={4} md={4} item>
           <Input fullWidth label="Código Cliente" name="codigoCliente" />
         </Grid> */}
-        <Grid xs={12} sm={4} md={4} item>
-          <Input fullWidth label="RFC" name="rfc" />
+        <Grid xs={12} sm={4} md={6} item>
+          <AutoCompleteComponent
+            label="Seleccione un regimen fiscal"
+            name="regimenFiscal"
+            options={dataRegimenFiscal}
+            labelField="descripcion"
+          />
+        </Grid>
+        <Grid xs={12} sm={4} md={6} item>
+          <AutoCompleteComponent
+            label="Seleccione uso de CFDI"
+            name="usoCFDI"
+            options={dataCfdi}
+            labelField="descripcion"
+          />
         </Grid>
         <Grid xs={12} sm={4} md={4} item>
-          <Input fullWidth label="Regimen Fiscal" name="regimenFiscal" />
+          <Input fullWidth label="RFC" name="rfc" />
         </Grid>
         <Grid xs={12} sm={4} md={4} item>
           <Input fullWidth label="Razón Social" name="razonSocial" />
@@ -78,9 +100,6 @@ const CustomerForm = ({ handleToggleModal, dataEdit, states }: Props) => {
         </Grid>
         <Grid xs={12} sm={4} md={4} item>
           <Input fullWidth label="Forma de Pago" name="formaPago" />
-        </Grid>
-        <Grid xs={12} sm={4} md={4} item>
-          <Input fullWidth label="CFDI" name="usoCFDI" />
         </Grid>
       </Grid>
       <Stack

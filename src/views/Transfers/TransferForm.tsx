@@ -1,13 +1,19 @@
 import { Button, Grid, Stack } from '@mui/material';
 import Input from '../../components/Input/Input';
-import { Transfer } from './types';
+import { Options, Transfer } from './types';
+import Select from '../../components/Input/Select';
 
 interface TransferFormProps {
   toggleCloseModal: () => void;
   dataEdit: Transfer;
+  optionsTraslados: Options[];
 }
 
-const TransferForm = ({ toggleCloseModal, dataEdit }: TransferFormProps) => {
+const TransferForm = ({
+  toggleCloseModal,
+  dataEdit,
+  optionsTraslados,
+}: TransferFormProps) => {
   return (
     <>
       <Grid container spacing={2} sx={{ mt: 1 }}>
@@ -18,7 +24,14 @@ const TransferForm = ({ toggleCloseModal, dataEdit }: TransferFormProps) => {
           <Input fullWidth label="Sueldo" name="sueldo" />
         </Grid>
         <Grid xs={12} sm={6} item>
-          <Input fullWidth label="Tipo de Traslado" name="tipoTraslado" />
+          <Select
+            name="tipoTraslado"
+            label="Tipo de Traslado"
+            options={optionsTraslados}
+            getOptionLabel={(option) => option.label}
+            getOptionValue={(option) => option.value}
+          />
+          {/* <Input fullWidth label="Tipo de Traslado" name="tipoTraslado" /> */}
         </Grid>
       </Grid>
       <Stack

@@ -1,9 +1,15 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { get } from 'lodash';
 import { useApi } from '../../hooks/useApi';
-import { PaylaodCustomers, Payload } from './types';
+import {
+  DataCatalogs,
+  PaylaodCustomers,
+  Payload,
+  PayloadCatalogs,
+} from './types';
 import { useLoader } from '../../components/Loader';
 import { LoaderContextType, ModalContextType } from '../../models';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Response } from '../../models/responseApi';
 import { useModalConfirmation } from '../../hooks/useModalConfirmation';
 import { useModal } from '../../components/Modal';
@@ -15,10 +21,24 @@ export const useHelpers = () => {
   const [customersData, setCustomersTable] = useState<
     PaylaodCustomers['data'][]
   >([]);
+  const [dataCfdi, setDataCfdi] = useState<DataCatalogs['data']>([]);
+  const [dataRegimenFiscal, setdataRegimenFiscal] = useState<
+    DataCatalogs['data']
+  >([]);
   const { handleCloseModal }: ModalContextType = useModal();
   const { handleShowLoader }: LoaderContextType = useLoader();
   const { modalInformation, modalSuccess, modalDelete } =
     useModalConfirmation();
+
+  const _getCatalogsCfdi = useApi({
+    endpoint: '/catalogs/children/6577fa0ba3b49e34400ca6b8',
+    method: 'get',
+  });
+
+  const _getCatalogsRegimenFiscal = useApi({
+    endpoint: '/catalogs/children/6577f9f5a3b49e34400ca6b6',
+    method: 'get',
+  });
 
   const _getCustomers = useApi({
     endpoint: '/clientes',
@@ -40,10 +60,43 @@ export const useHelpers = () => {
     method: 'delete',
   });
 
-  const getBusinessName = useApi({
-    endpoint: '/clientes/razonSocial/dai',
-    method: 'get',
-  });
+  useEffect(() => {
+    handleGetCatalogs();
+    handleGetCatalogsRegimenFiscal();
+  }, []);
+
+  const handleGetCatalogs = async (): Promise<boolean> => {
+    try {
+      const { payload, response }: PayloadCatalogs = await _getCatalogsCfdi();
+      const code: Response['code'] = response.code;
+
+      const dataResponse: DataCatalogs['data'] = payload.data;
+
+      if (code === 200) {
+        setDataCfdi(dataResponse);
+      }
+      return true;
+    } catch (error) {
+      return false;
+    }
+  };
+
+  const handleGetCatalogsRegimenFiscal = async (): Promise<boolean> => {
+    try {
+      const { payload, response }: PayloadCatalogs =
+        await _getCatalogsRegimenFiscal();
+      const code: Response['code'] = response.code;
+      const dataResponse: DataCatalogs['data'] = payload.data;
+
+      if (code === 200) {
+        setdataRegimenFiscal(dataResponse);
+      }
+
+      return true;
+    } catch (error) {
+      return false;
+    }
+  };
 
   const handleGetCustomers = async (): Promise<boolean> => {
     try {
@@ -65,7 +118,7 @@ export const useHelpers = () => {
 
   const handleOpenModalDelete = (data: PaylaodCustomers['data']) => {
     const message: string = '¿Seguro que desea eliminar código cliente:';
-    const dataValue = `${data?.codigoCliente}`;
+    const dataValue = `${data?.razonSocial}`;
     modalDelete({
       message,
       dataValue,
@@ -96,32 +149,25 @@ export const useHelpers = () => {
     }
   };
 
-  const handleGetBusinessName = async (): Promise<boolean> => {
-    try {
-      const response = await getBusinessName();
-      console.log('RESPONSE', response);
-      return true;
-    } catch (error) {
-      return false;
-    }
-  };
-
   const handleSubmit = async (values: PaylaodCustomers['data']) => {
     try {
+      console.log('VALUES', values);
       const newValues = {
+        state: values.state?.codigo,
         calle: values.calle,
-        codigoCliente: values.codigoCliente,
         colonia: values.colonia,
         formaPago: values.formaPago,
         metodoPago: values.metodoPago,
         numeroExterior: values.numeroExterior,
         numeroInterior: values.numeroInterior,
         razonSocial: values.razonSocial,
-        regimenFiscal: values.regimenFiscal,
+        regimenFiscal: values.regimenFiscal.descripcion,
         rfc: values.rfc,
         telefono: values.telefono,
-        usoCFDI: values.usoCFDI,
+        usoCFDI: values.usoCFDI.descripcion,
       };
+
+      console.log('newValues', newValues);
 
       if (dataEdit) {
         const response: Payload = await _updateCustomer({
@@ -136,6 +182,7 @@ export const useHelpers = () => {
           handleCloseModal();
           handleGetCustomers();
           modalSuccess({ message });
+          setDataEdit(null);
         } else {
           modalInformation({ message });
         }
@@ -161,8 +208,9 @@ export const useHelpers = () => {
   };
 
   const initialValuesForm: PaylaodCustomers['data'] = {
+    state: null,
     calle: dataEdit ? dataEdit.calle : '',
-    codigoCliente: dataEdit ? dataEdit.codigoCliente : '',
+    // codigoCliente: dataEdit ? dataEdit.codigoCliente : '',
     colonia: dataEdit ? dataEdit.colonia : '',
     formaPago: dataEdit ? dataEdit.formaPago : '',
     metodoPago: dataEdit ? dataEdit.metodoPago : '',
@@ -180,9 +228,10 @@ export const useHelpers = () => {
     dataEdit,
     initialValuesForm,
     customersData,
+    dataCfdi,
+    dataRegimenFiscal,
     setDataEdit,
     handleGetCustomers,
-    handleGetBusinessName,
     handleOpenModalDelete,
     handleSubmit,
   };

@@ -45,6 +45,9 @@ const Routes = () => {
     costo,
     dataDotsTable,
     dataEdit,
+    dataDestinoLocation,
+    allDataTolls,
+    dataUnidades,
     setPagoCasetas,
     setNombreCaseta,
     setCosto,
@@ -53,32 +56,39 @@ const Routes = () => {
     handleAddDot,
     handleRemoveDot,
     setDataDotsTable,
+    handleGetCountrieDestino,
   } = useHelpers();
 
   useEffect(() => {
     handleShowLoader(true);
     handleGetStates();
-    // handleGetAllCountries();
   }, []);
 
   useEffect(() => {
     if (dataEdit) {
-      console.log('RENDER_EDIT');
-
       setOpen(true);
     }
   }, [dataEdit]);
 
   useEffect(() => {
-    if (formik.values.state !== null) {
-      handleGetCountrie(formik.values.state);
+    if (formik.values.stateOrigen !== null) {
+      handleGetCountrie(formik.values.stateOrigen);
       formik.setValues({
         ...formik.values,
         localidadOrigen: null,
+      });
+    }
+  }, [formik.values.stateOrigen]);
+
+  useEffect(() => {
+    if (formik.values.stateDestino !== null) {
+      handleGetCountrieDestino(formik.values.stateDestino);
+      formik.setValues({
+        ...formik.values,
         localidadDestino: null,
       });
     }
-  }, [formik.values.state]);
+  }, [formik.values.stateDestino]);
 
   const columns: Column[] = [
     { id: 'localidadOrigen', label: 'Localidad Origen', align: 'left' },
@@ -220,7 +230,7 @@ const Routes = () => {
               setNombreCaseta('');
               setCosto(0);
             }}
-            title="CREAR"
+            title="CREAR RUTA"
           />
         </DialogTitle>
         <DialogContent>
@@ -228,23 +238,26 @@ const Routes = () => {
             <Grid container spacing={2} sx={{ mt: 1 }}>
               <Grid item xs={12} sm={6} md={3} lg={3}>
                 <Autocomplete
-                  id="state"
+                  id="stateOrigen"
                   options={states}
                   getOptionLabel={(option: any) => option.label}
-                  value={formik.values.state}
+                  value={formik.values.stateOrigen}
                   onChange={(_event, selected) => {
-                    formik.setFieldValue('state', selected);
+                    formik.setFieldValue('stateOrigen', selected);
                   }}
                   onBlur={formik.handleBlur}
                   renderInput={(params) => (
                     <TextField
-                      name="state"
+                      name="stateOrigen"
                       {...params}
-                      label="Seleccione un estado"
+                      label="Estado origen"
                       error={
-                        formik.touched.state && Boolean(formik.errors.state)
+                        formik.touched.stateOrigen &&
+                        Boolean(formik.errors.stateOrigen)
                       }
-                      helperText={formik.touched.state && formik.errors.state}
+                      helperText={
+                        formik.touched.stateOrigen && formik.errors.stateOrigen
+                      }
                     />
                   )}
                 />
@@ -263,7 +276,7 @@ const Routes = () => {
                     <TextField
                       name="localidadOrigen"
                       {...params}
-                      label="Seleccione un origen"
+                      label="Localidad origen"
                       error={
                         formik.touched.localidadOrigen &&
                         Boolean(formik.errors.localidadOrigen)
@@ -278,8 +291,35 @@ const Routes = () => {
               </Grid>
               <Grid item xs={12} sm={6} md={3} lg={3}>
                 <Autocomplete
+                  id="stateDestino"
+                  options={states}
+                  getOptionLabel={(option: any) => option.label}
+                  value={formik.values.stateDestino}
+                  onChange={(_event, selected) => {
+                    formik.setFieldValue('stateDestino', selected);
+                  }}
+                  onBlur={formik.handleBlur}
+                  renderInput={(params) => (
+                    <TextField
+                      name="stateDestino"
+                      {...params}
+                      label="Estado destino"
+                      error={
+                        formik.touched.stateDestino &&
+                        Boolean(formik.errors.stateDestino)
+                      }
+                      helperText={
+                        formik.touched.stateDestino &&
+                        formik.errors.stateDestino
+                      }
+                    />
+                  )}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6} md={3} lg={3}>
+                <Autocomplete
                   id="localidadDestino"
-                  options={countries}
+                  options={dataDestinoLocation}
                   getOptionLabel={(option: any) => option.nombre}
                   value={formik.values.localidadDestino}
                   onChange={(_event, selected) => {
@@ -290,7 +330,7 @@ const Routes = () => {
                     <TextField
                       name="localidadDestino"
                       {...params}
-                      label="Seleccione un destino"
+                      label="Localidad destino"
                       error={
                         formik.touched.localidadDestino &&
                         Boolean(formik.errors.localidadDestino)
@@ -315,6 +355,11 @@ const Routes = () => {
                   onBlur={formik.handleBlur}
                   error={formik.touched.kms && Boolean(formik.errors.kms)}
                   helperText={formik.touched.kms && formik.errors.kms}
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">kms</InputAdornment>
+                    ),
+                  }}
                 />
               </Grid>
               <Grid item xs={12} sm={6} md={3} lg={3}>
@@ -335,15 +380,14 @@ const Routes = () => {
                     formik.touched.tipoUnidad && formik.errors.tipoUnidad
                   }
                 >
-                  {optionsVehicle.map((item) => (
-                    <MenuItem key={item.value} value={item.value}>
-                      {item.label}
+                  {dataUnidades.map((item) => (
+                    <MenuItem key={item.descripcion} value={item.descripcion}>
+                      {item.descripcion}
                     </MenuItem>
                   ))}
                 </TextField>
               </Grid>
             </Grid>
-
             <Grid container spacing={2} sx={{ mt: 2 }}>
               <Grid item xs={12}>
                 <Typography
@@ -353,7 +397,7 @@ const Routes = () => {
                     color: (theme: Theme) => theme.palette.grey[500],
                   }}
                 >
-                  Agregue Puntos:
+                  Agregue Rutas:
                 </Typography>
               </Grid>
               <Grid item xs={12} sm={6} md={4} lg={4}>
@@ -373,15 +417,34 @@ const Routes = () => {
                 </TextField>
               </Grid>
               <Grid item xs={12} sm={6} md={4} lg={4}>
-                <TextField
-                  fullWidth
-                  label="Nombre de Caseta"
+                <Autocomplete
+                  options={allDataTolls}
+                  getOptionLabel={(option) => option.nombre || ''}
+                  // isOptionEqualToValue={(option, value) =>
+                  //   option._id === value?._id
+                  // }
+                  onChange={(_event, value) => setNombreCaseta(value)}
+                  renderInput={(params) => (
+                    <TextField {...params} label="Seleccione una Caseta" />
+                  )}
+                />
+                {/* <Autocomplete
+                  // id="localidadDestino"
+                  options={allDataTolls}
+                  getOptionLabel={(option: any) => option.nombre}
                   value={nombreCaseta}
                   onChange={(e: any) => setNombreCaseta(e.target.value)}
-                  // error={errorDots !== '' ? true : false}
-                />
+                  // onBlur={formik.handleBlur}
+                  renderInput={(params) => (
+                    <TextField
+                      name="localidadDestino"
+                      {...params}
+                      label="Seleccione Caseta"
+                    />
+                  )}
+                /> */}
               </Grid>
-              <Grid item xs={12} sm={6} md={4} lg={2}>
+              {/* <Grid item xs={12} sm={6} md={4} lg={2}>
                 <TextField
                   fullWidth
                   label="Costo de Caseta"
@@ -395,7 +458,7 @@ const Routes = () => {
                   onChange={(e: any) => setCosto(e.target.value)}
                   // error={errorDots !== '' ? true : false}
                 />
-              </Grid>
+              </Grid> */}
               <Grid
                 item
                 xs={12}
@@ -415,9 +478,7 @@ const Routes = () => {
                     type="button"
                     onClick={handleAddDot}
                     disabled={
-                      pagoCasetas !== '' && nombreCaseta !== '' && costo !== 0
-                        ? false
-                        : true
+                      pagoCasetas !== '' && nombreCaseta !== '' ? false : true
                     }
                   >
                     Agregar Punto

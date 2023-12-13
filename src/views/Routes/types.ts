@@ -35,3 +35,20 @@ export interface TableDots {
   costo: string | number;
   _id: number;
 }
+
+export interface DataUnidades {
+  descripcion: string;
+  fechaCreacion: string;
+  idPadre: string;
+  __v: number;
+  _id: string;
+}
+
+export interface PayloadUnidades {
+  data: DataUnidades[];
+}
+
+export interface ResponseUnidades {
+  payload: PayloadUnidades;
+  response: Response;
+}

@@ -1,4 +1,11 @@
-import { AppBar, Box, IconButton, Stack, Toolbar } from '@mui/material';
+import {
+  AppBar,
+  Box,
+  IconButton,
+  Stack,
+  Toolbar,
+  Typography,
+} from '@mui/material';
 import { Menu } from '@mui/icons-material';
 import { useResponsive } from '../../hooks/useResponsive';
 import { Account } from '../Account';
@@ -21,12 +28,38 @@ const Header = ({ onOpenNav }: HeaderProps) => {
         </IconButton>
       )}
 
-      <Box
-        component="img"
-        src={logoCompany}
-        alt="log"
-        sx={{ width: 135, height: 135 }}
-      />
+      <Stack spacing={2} direction="row" alignItems="center">
+        <Box
+          component="img"
+          src={logoCompany}
+          alt="log"
+          sx={{ width: { xs: 100, sm: 125 }, height: 'auto' }}
+        />
+        {lgUp && (
+          <Box sx={{ flexDirection: 'column' }}>
+            <Typography
+              sx={{
+                color: '#fff',
+                fontSize: '13px',
+                letterSpacing: '1px',
+                fontWeight: 600,
+              }}
+            >
+              Multi Traslados y Servicios
+            </Typography>
+            <Typography
+              sx={{
+                color: '#fff',
+                fontSize: '11px',
+                letterSpacing: '1px',
+                fontWeight: 400,
+              }}
+            >
+              Traslado Automotriz Nacional e Internacional
+            </Typography>
+          </Box>
+        )}
+      </Stack>
 
       {/* <Searchbar /> */}
 

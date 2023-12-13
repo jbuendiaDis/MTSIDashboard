@@ -15,3 +15,8 @@ export interface ResponseTransfer {
   payload: PayloadData;
   response: Response;
 }
+
+export interface Options {
+  label: string;
+  value: string;
+}

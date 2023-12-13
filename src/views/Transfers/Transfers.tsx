@@ -25,6 +25,7 @@ const Transfers = () => {
     initialValues,
     transfersData,
     validationSchema,
+    optionsTraslados,
     setDataEdit,
     handleOpenModalDelete,
     handleGetTransfers,
@@ -93,6 +94,7 @@ const Transfers = () => {
             <TransferForm
               toggleCloseModal={handleToggleModal}
               dataEdit={dataEdit}
+              optionsTraslados={optionsTraslados}
             />
           </Form>
         </Formik>

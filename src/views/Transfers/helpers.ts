@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useLoader } from '../../components/Loader';
 import { useApi } from '../../hooks/useApi';
 import { LoaderContextType, Response } from '../../models';
-import { ResponseTransfer, PayloadData, Transfer } from './types';
+import { ResponseTransfer, PayloadData, Transfer, Options } from './types';
 import * as Yup from 'yup';
 import { get } from 'lodash';
 import { useModalConfirmation } from '../../hooks/useModalConfirmation';
@@ -166,11 +166,31 @@ export const useHelpers = () => {
     }
   };
 
+  const optionsTraslados: Options[] = [
+    {
+      label: 'TCC-TA',
+      value: 'TCC-TA',
+    },
+    {
+      label: 'TCC53',
+      value: 'TCC53',
+    },
+    {
+      label: 'TM2M',
+      value: 'TM2M',
+    },
+    {
+      label: 'TIE-USA',
+      value: 'TIE-USA',
+    },
+  ];
+
   return {
     dataEdit,
     transfersData,
     validationSchema,
     initialValues,
+    optionsTraslados,
     setDataEdit,
     handleOpenModalDelete,
     handleGetTransfers,

@@ -29,9 +29,10 @@ export const Customers = () => {
     dataEdit,
     initialValuesForm,
     customersData,
+    dataCfdi,
+    dataRegimenFiscal,
     setDataEdit,
     handleGetCustomers,
-    handleGetBusinessName,
     handleOpenModalDelete,
     handleSubmit,
   } = useHelpers();
@@ -39,7 +40,6 @@ export const Customers = () => {
   useEffect(() => {
     handleShowLoader(true);
     handleGetCustomers();
-    handleGetBusinessName();
     setDataEdit(null);
     handleGetStates();
   }, []);
@@ -62,7 +62,7 @@ export const Customers = () => {
     { id: 'numeroExterior', label: 'No. Exterior', align: 'left' },
     { id: 'numeroInterior', label: 'No. Interior', align: 'left' },
     { id: 'razonSocial', label: 'Razón Social', align: 'left' },
-    { id: 'regimenFiscal', label: 'REgime Fiscal', align: 'left' },
+    { id: 'regimenFiscal', label: 'Regimen Fiscal', align: 'left' },
     { id: 'rfc', label: 'RFC', align: 'left' },
     { id: 'telefono', label: 'Teléfono', align: 'left' },
     { id: 'usoCFDI', label: 'CFDI', align: 'left' },
@@ -107,8 +107,22 @@ export const Customers = () => {
       const code: Response['code'] = response.code;
       const dataResponse: PaylaodCustomers['data'] = payload.data;
 
+      const filterCfdi = dataCfdi.find(
+        (item) => item.descripcion === dataResponse.usoCFDI
+      );
+
+      const filterRegimenFiscal = dataRegimenFiscal.find(
+        (item) => item.descripcion === dataResponse.regimenFiscal
+      );
+
+      const newValuesEdit = {
+        ...dataResponse,
+        regimenFiscal: filterRegimenFiscal,
+        usoCFDI: filterCfdi,
+      };
+
       if (code === 200) {
-        setDataEdit(dataResponse);
+        setDataEdit(newValuesEdit);
       }
 
       return true;
@@ -134,6 +148,8 @@ export const Customers = () => {
               handleToggleModal={handleToggleModal}
               dataEdit={dataEdit}
               states={states}
+              dataCfdi={dataCfdi}
+              dataRegimenFiscal={dataRegimenFiscal}
             />
           </Form>
         </Formik>
