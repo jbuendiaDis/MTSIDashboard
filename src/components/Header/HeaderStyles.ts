@@ -24,7 +24,7 @@ export const HeaderStyles = () => {
       height: HEADER.H_DESKTOP,
     }),
     backgroundImage:
-      'linear-gradient(to right, rgba(231, 62, 59, 0.80), rgba(255, 122, 104, 0.90))',
+    'linear-gradient(148deg, rgba(0,25,130,0.7371323529411764) 100%, rgba(255,255,255,0) 100%);',
   };
 
   return { appBar };

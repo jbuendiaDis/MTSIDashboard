@@ -53,7 +53,7 @@ const Nav = ({ openNav, onCloseNav }: NavProps) => {
           display: 'flex',
           flexDirection: 'column',
           background:
-            'linear-gradient(180deg, #253883 30%, rgba(36, 56, 131, 0.5) 100%)',
+            'linear-gradient(148deg, rgba(0,25,130,0.7371323529411764) 63%, rgba(200,0,0,0.6082808123249299) 100%); ',
         },
       }}
     >
