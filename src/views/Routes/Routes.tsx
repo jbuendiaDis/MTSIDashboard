@@ -34,9 +34,12 @@ const Routes = () => {
   const [open, setOpen] = useState<boolean>(false);
   const { handleOpenModal, handleCloseModal } = useModal();
   const { handleShowLoader }: LoaderContextType = useLoader();
-  const { actionsState, actionsCountries }: any = useRootProvider();
+  const { actionsState, actionsCountries, actionsCatalogs }: any =
+    useRootProvider();
   const { states, handleGetStates } = actionsState;
-  const { countries, handleGetCountrie } = actionsCountries;
+  const { countries, handleGetCountrie, countriesByState } = actionsCountries;
+  const { catalogs, handleGetCatalogs, handleGetUnitType, unitTypes } =
+    actionsCatalogs;
   const {
     tollsData,
     formik,
@@ -47,7 +50,6 @@ const Routes = () => {
     dataEdit,
     dataDestinoLocation,
     allDataTolls,
-    dataUnidades,
     setPagoCasetas,
     setNombreCaseta,
     setCosto,
@@ -62,7 +64,12 @@ const Routes = () => {
   useEffect(() => {
     handleShowLoader(true);
     handleGetStates();
+    handleGetCatalogs();
   }, []);
+
+  useEffect(() => {
+    if (catalogs.length > 0) handleGetUnitType(catalogs[2]?._id);
+  }, [catalogs]);
 
   useEffect(() => {
     if (dataEdit) {
@@ -171,16 +178,7 @@ const Routes = () => {
     },
   ];
 
-  const optionsVehicle = [
-    {
-      label: 'Automovil',
-      value: 'Automovil',
-    },
-    {
-      label: 'Otro',
-      value: 'Otro',
-    },
-  ];
+  console.log('states', states);
 
   return (
     <div>
@@ -265,7 +263,7 @@ const Routes = () => {
               <Grid item xs={12} sm={6} md={3} lg={3}>
                 <Autocomplete
                   id="localidadOrigen"
-                  options={countries}
+                  options={countriesByState}
                   getOptionLabel={(option: any) => option.nombre}
                   value={formik.values.localidadOrigen}
                   onChange={(_event, selected) => {
@@ -380,7 +378,7 @@ const Routes = () => {
                     formik.touched.tipoUnidad && formik.errors.tipoUnidad
                   }
                 >
-                  {dataUnidades.map((item) => (
+                  {unitTypes.map((item: any) => (
                     <MenuItem key={item.descripcion} value={item.descripcion}>
                       {item.descripcion}
                     </MenuItem>
@@ -400,11 +398,11 @@ const Routes = () => {
                   Agregue Rutas:
                 </Typography>
               </Grid>
-              <Grid item xs={12} sm={6} md={4} lg={4}>
+              <Grid item xs={12} sm={6} md={3} lg={2}>
                 <TextField
                   fullWidth
                   select
-                  label="Pago de Casetas"
+                  label="Pago de Caseta"
                   value={pagoCasetas}
                   onChange={(e: any) => setPagoCasetas(e.target.value)}
                   // error={errorDots !== '' ? true : false}
@@ -416,7 +414,20 @@ const Routes = () => {
                   ))}
                 </TextField>
               </Grid>
-              <Grid item xs={12} sm={6} md={4} lg={4}>
+              <Grid item xs={12} sm={6} md={4} lg={3}>
+                <Autocomplete
+                  options={states}
+                  getOptionLabel={(option: any) => option.label || ''}
+                  // isOptionEqualToValue={(option, value) =>
+                  //   option._id === value?._id
+                  // }
+                  onChange={(_event, value) => setNombreCaseta(value)}
+                  renderInput={(params) => (
+                    <TextField {...params} label="Seleccione un estado" />
+                  )}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6} md={4} lg={3}>
                 <Autocomplete
                   options={allDataTolls}
                   getOptionLabel={(option) => option.nombre || ''}
@@ -428,37 +439,8 @@ const Routes = () => {
                     <TextField {...params} label="Seleccione una Caseta" />
                   )}
                 />
-                {/* <Autocomplete
-                  // id="localidadDestino"
-                  options={allDataTolls}
-                  getOptionLabel={(option: any) => option.nombre}
-                  value={nombreCaseta}
-                  onChange={(e: any) => setNombreCaseta(e.target.value)}
-                  // onBlur={formik.handleBlur}
-                  renderInput={(params) => (
-                    <TextField
-                      name="localidadDestino"
-                      {...params}
-                      label="Seleccione Caseta"
-                    />
-                  )}
-                /> */}
               </Grid>
-              {/* <Grid item xs={12} sm={6} md={4} lg={2}>
-                <TextField
-                  fullWidth
-                  label="Costo de Caseta"
-                  type="number"
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="start">$</InputAdornment>
-                    ),
-                  }}
-                  value={costo}
-                  onChange={(e: any) => setCosto(e.target.value)}
-                  // error={errorDots !== '' ? true : false}
-                />
-              </Grid> */}
+
               <Grid
                 item
                 xs={12}
@@ -486,12 +468,6 @@ const Routes = () => {
                 </Grid>
               </Grid>
             </Grid>
-            {/* <Typography
-              component="span"
-              sx={{ color: '#FF5630', fontSize: '13px', mt: 2, mb: 2 }}
-            >
-              {errorDots}
-            </Typography> */}
 
             <Grid component="div" sx={{ mt: 2 }}>
               <Table

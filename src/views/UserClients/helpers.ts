@@ -51,9 +51,10 @@ export const useHelpers = ({ setOpenDrawer }: HelpersProps) => {
 
   useEffect(() => {
     if (dataEdit !== null) {
-      const filterCustomerName = customersData.filter(
-        (item) => item._id === dataEdit.nombreCliente
-      )[0];
+      const filterCustomerName = customersData.find(
+        (item) => item.razonSocial === dataEdit.nombreCliente
+      );
+
       setOpenDrawer(true);
       formik.setValues({
         direccion: dataEdit ? dataEdit.direccion : '',
@@ -74,8 +75,6 @@ export const useHelpers = ({ setOpenDrawer }: HelpersProps) => {
       });
     }
   }, [dataEdit]);
-
-  console.log('dataEdit', dataEdit);
 
   const _getCustomers = useApi({
     endpoint: '/clientes',
@@ -211,11 +210,8 @@ export const useHelpers = ({ setOpenDrawer }: HelpersProps) => {
       console.log('VALUES', values);
       if (dataEdit !== null) {
         const newDataEdit = {
-          idCliente: user?.id,
-          nombreCliente:
-            typeof values?.nombreCliente === 'string'
-              ? ''
-              : values?.nombreCliente?._id,
+          idCliente: get(values, 'nombreCliente._id'),
+          nombreCliente: get(values, 'nombreCliente.razonSocial', ''),
           nombre: values.nombre,
           genero: values.genero,
           puesto: values.puesto,
@@ -227,20 +223,19 @@ export const useHelpers = ({ setOpenDrawer }: HelpersProps) => {
           notas: values.notas,
         };
 
-        console.log('edit', newDataEdit);
-        // const response: ResponseUserClient = await _updateClient({
-        //   urlParam: values._id,
-        //   body: newDataEdit,
-        // });
-        // const code: Response['code'] = response.response.code;
-        // const message: Response['message'] = response.response.message;
-        // if (code === 200) {
-        //   setOpenDrawer(false);
-        //   modalSuccess({ message });
-        //   hanldeGetUserClients();
-        // } else {
-        //   modalInformation({ message });
-        // }
+        const response: ResponseUserClient = await _updateClient({
+          urlParam: values._id,
+          body: newDataEdit,
+        });
+        const code: Response['code'] = response.response.code;
+        const message: Response['message'] = response.response.message;
+        if (code === 200) {
+          setOpenDrawer(false);
+          modalSuccess({ message });
+          hanldeGetUserClients();
+        } else {
+          modalInformation({ message });
+        }
       } else {
         const newData = {
           idCliente: get(values, 'nombreCliente._id'),

@@ -4,12 +4,18 @@ export interface Values {
   customers: [];
   states: [];
   countries: [];
+  countriesByState: [];
+  catalogs: [];
+  unitTypes: [];
 }
 
 export const initialState: Values = {
   customers: [],
   states: [],
   countries: [],
+  countriesByState: [],
+  catalogs: [],
+  unitTypes: [],
   // countries: [],
   // userAdmin: {},
   // users: [],

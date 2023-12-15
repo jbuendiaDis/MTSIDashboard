@@ -10,14 +10,7 @@ import {
   Response,
   ResponseCountries,
 } from '../../models';
-import {
-  DataTolls,
-  DataUnidades,
-  PayloadUnidades,
-  ResponseTolls,
-  ResponseUnidades,
-  TableDots,
-} from './types';
+import { DataTolls, ResponseTolls, TableDots } from './types';
 import {
   formatToCurrency,
   parseCurrencyStringToNumber,
@@ -46,17 +39,11 @@ export const useHelpers = () => {
   const [dataDotsTable, setDataDotsTable] = useState<any[]>([]);
   const [dataDestinoLocation, setDataDestinoLocation] = useState<any[]>([]);
   const [allDataTolls, setAllDataTolls] = useState<any[]>([]);
-  const [dataUnidades, setdataUnidades] = useState<PayloadUnidades['data']>([]);
   const { handleShowLoader }: LoaderContextType = useLoader();
   const { modalDelete, modalSuccess, modalInformation } =
     useModalConfirmation();
 
   const requiredField: string = 'Este campo es obligatorio.';
-
-  const _getAllUnidad = useApi({
-    endpoint: '/catalogs/children/65790e5ed80af3d60dbb535d',
-    method: 'get',
-  });
 
   const _getTolls = useApi({
     endpoint: '/peajes',
@@ -92,23 +79,7 @@ export const useHelpers = () => {
     handleShowLoader(true);
     handleGetTolls();
     handleGetAllCountries();
-    handleGetAllUnidad();
   }, []);
-
-  const handleGetAllUnidad = async (): Promise<boolean> => {
-    try {
-      const { payload, response }: ResponseUnidades = await _getAllUnidad();
-      const code: Response['code'] = response.code;
-      const dataResponse: PayloadUnidades['data'] = payload.data;
-
-      if (code === 200) {
-        setdataUnidades(dataResponse);
-      }
-      return true;
-    } catch (error) {
-      return false;
-    }
-  };
 
   const handleGetCountrieDestino = async (
     data: FormatDataState
@@ -303,42 +274,42 @@ export const useHelpers = () => {
     onSubmit: async (values: FormValues) => {
       try {
         console.log('VALUES', values);
-        const arrayDots: any[] = [];
+        // const arrayDots: any[] = [];
 
-        dataDotsTable.map((item: any) => {
-          arrayDots.push({
-            casetas: item.casetas,
-            nombreCaseta: item.nombreCaseta,
-            costo: parseCurrencyStringToNumber(item.costo),
-            // _id: item._id.toString(),
-          });
-        });
+        // dataDotsTable.map((item: any) => {
+        //   arrayDots.push({
+        //     casetas: item.casetas,
+        //     nombreCaseta: item.nombreCaseta,
+        //     costo: parseCurrencyStringToNumber(item.costo),
+        //     // _id: item._id.toString(),
+        //   });
+        // });
 
-        const newValues: any = {
-          estadoOrigen: values.stateOrigen!.codigo,
-          estadoDestino: values.stateDestino!.codigo,
-          tipoUnidad: values.tipoUnidad,
-          localidadOrigen: (
-            values.localidadOrigen as FormatDataState
-          ).codigo.toString(),
-          localidadDestino: (
-            values.localidadDestino as FormatDataState
-          ).codigo.toString(),
-          kms: values.kms,
-          puntos: arrayDots,
-          totalPeajes: arrayDots.reduce((total, costTotal) => {
-            return total + costTotal.costo;
-          }, 0),
-        };
+        // const newValues: any = {
+        //   estadoOrigen: values.stateOrigen!.codigo,
+        //   estadoDestino: values.stateDestino!.codigo,
+        //   tipoUnidad: values.tipoUnidad,
+        //   localidadOrigen: (
+        //     values.localidadOrigen as FormatDataState
+        //   ).codigo.toString(),
+        //   localidadDestino: (
+        //     values.localidadDestino as FormatDataState
+        //   ).codigo.toString(),
+        //   kms: values.kms,
+        //   puntos: arrayDots,
+        //   totalPeajes: arrayDots.reduce((total, costTotal) => {
+        //     return total + costTotal.costo;
+        //   }, 0),
+        // };
 
-        console.log('newValues', newValues);
+        // console.log('newValues', newValues);
 
-        const response = await _createToll({
-          body: newValues,
-        });
-        handleGetTolls();
+        // const response = await _createToll({
+        //   body: newValues,
+        // });
+        // handleGetTolls();
 
-        console.log('POST', response);
+        // console.log('POST', response);
 
         return true;
       } catch (error) {
@@ -357,7 +328,6 @@ export const useHelpers = () => {
     dataEdit,
     dataDestinoLocation,
     allDataTolls,
-    dataUnidades,
     setPagoCasetas,
     setNombreCaseta,
     setCosto,

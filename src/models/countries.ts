@@ -11,15 +11,11 @@ export interface PayloadCountries {
 
 export interface CountriesData {
   codigo: number;
-  coordenadas: [
-    {
-      0: number;
-      1: number;
-    }
-  ];
+  coordenadas: [number, number] | any;
   costo?: string | number;
   estado: number;
   fechaCreacion: string | Date;
+  fechaActualizacion: string | Date;
   nombre: string;
   __v: number;
   _id: string;

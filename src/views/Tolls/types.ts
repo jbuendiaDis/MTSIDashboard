@@ -1,4 +1,4 @@
-import { Response } from '../../models';
+import { CountriesData, Response } from '../../models';
 
 interface State {
   codigo: number;
@@ -6,10 +6,10 @@ interface State {
   _id: string;
 }
 export interface FormValues {
-  nombre: string;
-  costo: string | null;
+  unitType: string;
   state: State | undefined;
-  codigo: string | undefined;
+  nombre: CountriesData | undefined;
+  costo: string | number;
 }
 
 export interface DataToll {

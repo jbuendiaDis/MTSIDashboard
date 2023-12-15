@@ -6,3 +6,4 @@ export * from './responseApi';
 export * from './table';
 export * from './states';
 export * from './countries';
+export * from './catalogs';
