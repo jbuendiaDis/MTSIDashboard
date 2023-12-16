@@ -34,8 +34,8 @@ const Tolls = () => {
     handleSubmit,
     handleOpenModalDelete,
     handleGetToll,
-    // handleGetCountrie,
     setDataEdit,
+    setDataTemp,
   } = useHelpers();
 
   useEffect(() => {
@@ -44,6 +44,7 @@ const Tolls = () => {
     handleGetAllCountries();
     handleGetCatalogs();
     setDataEdit(null);
+    setDataTemp(null);
   }, []);
 
   useEffect(() => {
@@ -56,6 +57,7 @@ const Tolls = () => {
 
   const columns: Column[] = [
     { id: 'nombre', label: 'Nombre', align: 'left' },
+    { id: 'tipoUnidad', label: 'Tipo de Unidad', align: 'left' },
     { id: 'costo', label: 'Costo', align: 'left' },
     { id: 'fechaCreacion', label: 'Fecha de creación', align: 'left' },
     {
@@ -106,6 +108,7 @@ const Tolls = () => {
             handleToggleModal={handleToggleModal}
             unitTypes={unitTypes}
             states={states}
+            dataEdit={dataEdit}
           />
         </Formik>
       ),

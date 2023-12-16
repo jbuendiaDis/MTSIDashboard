@@ -7,19 +7,15 @@ interface State {
 }
 export interface FormValues {
   unitType: string;
-  state: State | undefined;
-  nombre: CountriesData | undefined;
+  state: State | null;
+  nombre: CountriesData | null;
   costo: string | number;
+  codigo?: number;
 }
 
 export interface DataToll {
   codigo: number;
-  coordenadas: [
-    {
-      0: number;
-      1: number;
-    }
-  ];
+  coordenadas: [number, number];
   costo?: string | number;
   estado: number;
   fechaCreacion: string | Date;

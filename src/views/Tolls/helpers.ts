@@ -9,14 +9,12 @@ import { useRootProvider } from '../../components/RootProvider/hooks/useRootProv
 import { get } from 'lodash';
 
 export const useHelpers = () => {
-  const [dataEdit, setDataEdit] = useState<any | null>(null);
+  const [dataEdit, setDataEdit] = useState<FormValues | null>(null);
   const [dataTemp, setDataTemp] = useState<any | null>(null);
-  const { actionsCountries, actionsState, actionsCatalogs }: any =
-    useRootProvider();
+  const { actionsCountries, actionsState }: any = useRootProvider();
   const { handleGetAllCountries, handleGetCountrie, countriesByState } =
     actionsCountries;
   const { states } = actionsState;
-  const { unitTypes } = actionsCatalogs;
   const { modalDelete, modalSuccess, modalInformation } =
     useModalConfirmation();
 
@@ -48,34 +46,30 @@ export const useHelpers = () => {
   });
 
   useEffect(() => {
-    if (countriesByState.length > 0) {
-      console.log('RENDER', dataTemp);
-      // console.log('unitTypes', unitTypes);
-      console.log('caseta', countriesByState);
+    if (dataTemp !== null && countriesByState.length > 0) {
       const filterState = states.find(
-        (item: any) => item.codigo === dataTemp?.estado
+        (item: any) => item.codigo === dataTemp.estado
       );
-      const filterCountrie = countriesByState.filter(
-        (item: any) => item.nombre === dataTemp?.nombre
+      const filterCountrie = countriesByState.find(
+        (item: any) => item.codigo === dataTemp.codigo
       );
 
-      console.log('filter', filterCountrie);
-
-      const newDataEdit = {
+      const newDataEdit: FormValues = {
         state: filterState,
-        // nombre: filterCountrie,
-        // costo: dataTemp?.costo,
-        unitType: 'Automoviles',
+        nombre: filterCountrie,
+        costo: dataTemp.costo,
+        unitType: dataTemp.tipoUnidad,
+        codigo: dataTemp.codigo,
       };
 
+      console.log('newDataEdit', newDataEdit, dataTemp);
       setDataEdit(newDataEdit);
-
-      console.log('newDataEdit', newDataEdit);
+      setDataTemp(null);
     }
-  }, [countriesByState]);
+  }, [dataTemp, countriesByState]);
 
   const handleOpenModalDelete = (data: DataToll): void => {
-    const message: string = '¿Seguro que desea eliminar esta caseta:';
+    const message: string = '¿Seguro que desea eliminar este peaje:';
     const dataValue = `${data.nombre}`;
     modalDelete({
       message,
@@ -115,21 +109,10 @@ export const useHelpers = () => {
       const codeResponse: Response['code'] = response.code;
 
       if (codeResponse === 200) {
-        handleGetCountrie(dataResponse);
+        handleGetCountrie(dataResponse.estado);
         setDataTemp(dataResponse);
       }
-      // const filterState: any = states
-      //   .filter((item: any) => item.codigo !== null) // Filtrar elementos null
-      //   .find((item: any) => item.codigo === dataResponse.estado);
 
-      // const newData = {
-      //   state: filterState,
-      //   nombre: dataResponse.nombre,
-      //   costo: dataResponse.costo,
-      //   codigo: dataResponse.codigo,
-      // };
-
-      // if (codeResponse === 200) setDataEdit(newData);
       return true;
     } catch (error) {
       return false;
@@ -146,62 +129,58 @@ export const useHelpers = () => {
 
   const initialValues: FormValues = {
     unitType: dataEdit ? dataEdit?.unitType : '',
-    state: dataEdit ? dataEdit?.state : undefined,
-    nombre: dataEdit ? dataEdit?.nombre : undefined,
-    costo: '',
+    state: dataEdit ? dataEdit?.state : null,
+    nombre: dataEdit ? dataEdit?.nombre : null,
+    costo: dataEdit ? dataEdit?.costo : '',
+    codigo: dataEdit ? dataEdit?.codigo : 0,
   };
-
-  console.log('values', initialValues);
 
   const handleSubmit = async (values: FormValues): Promise<boolean> => {
     try {
-      console.log('VALUES', values);
       const newValues = {
         tipoUnidad: values.unitType,
         nombre: values.nombre?.nombre,
         costo: values.costo,
         estado: values.state?.codigo,
-        codigo: values.state?.codigo,
       };
+      if (dataEdit) {
+        const response: ResponseTolls = await _updateCountrie({
+          urlParam: values.codigo,
+          body: newValues,
+        });
+        const code: Response['code'] = get(response, 'response.code');
+        const message: Response['message'] = get(
+          response,
+          'response.message',
+          ''
+        );
 
-      console.log('newValues', newValues);
+        if (code === 200) {
+          modalSuccess({ message });
+          handleGetAllCountries();
+        } else {
+          modalInformation({ message });
+        }
+      } else {
+        const response: ResponseTolls = await _createCountrie({
+          body: newValues,
+        });
 
-      // if (dataEdit) {
-      // const response: ResponseTolls = await _updateCountrie({
-      //   urlParam: values.codigo,
-      //   body: newValues,
-      // });
-      // const code: Response['code'] = get(response, 'response.code');
-      // const message: Response['message'] = get(
-      //   response,
-      //   'response.message',
-      //   ''
-      // );
-      // if (code === 200) {
-      //   modalSuccess({ message });
-      //   handleGetAllCountries();
-      //   setDataEdit(null);
-      // } else {
-      //   modalInformation({ message });
-      // }
-      // } else {
-      // const response: ResponseTolls = await _createCountrie({
-      //   body: newValues,
-      // });
-      // const code: Response['code'] = get(response, 'response.code');
-      // const message: Response['message'] = get(
-      //   response,
-      //   'response.message',
-      //   ''
-      // );
+        const code: Response['code'] = get(response, 'response.code');
+        const message: Response['message'] = get(
+          response,
+          'response.message',
+          ''
+        );
 
-      // if (code === 200) {
-      //   modalSuccess({ message });
-      //   handleGetAllCountries();
-      // } else {
-      //   modalInformation({ message });
-      // }
-      // }
+        if (code === 200) {
+          modalSuccess({ message });
+          handleGetAllCountries();
+        } else {
+          modalInformation({ message });
+        }
+      }
+
       return true;
     } catch (error) {
       return false;
@@ -216,5 +195,6 @@ export const useHelpers = () => {
     handleOpenModalDelete,
     handleGetToll,
     setDataEdit,
+    setDataTemp,
   };
 };

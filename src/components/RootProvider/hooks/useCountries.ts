@@ -1,3 +1,4 @@
+import { get } from 'lodash';
 import { useApi } from '../../../hooks/useApi';
 import {
   CountriesData,
@@ -55,20 +56,16 @@ export const useCountries = ({ rootState, rootDispatch }: any) => {
     }
   };
 
-  const handleGetCountrie = async (data: FormatDataState): Promise<boolean> => {
+  const handleGetCountrie = async (state: number): Promise<boolean> => {
     try {
-      console.log('ROOT', data);
-      const { payload, response }: ResponseCountries =
-        await _getCountriesByState({
-          urlParam: data.codigo,
-        });
-      const code: Response['code'] = response.code;
-      const dataResponse: PayloadCountries['data'] = payload.data;
+      const response: ResponseCountries = await _getCountriesByState({
+        urlParam: state,
+      });
+      const code: Response['code'] = get(response, 'response.code');
+      const payload: PayloadCountries['data'] = get(response, 'payload.data');
 
-      if (code === 200) {
-        const payload: PayloadCountries['data'] = dataResponse;
-        rootDispatch({ type: 'countriesByState', payload });
-      }
+      if (code === 200) rootDispatch({ type: 'countriesByState', payload });
+
       return true;
     } catch (error) {
       return false;

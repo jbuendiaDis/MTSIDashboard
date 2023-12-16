@@ -7,28 +7,32 @@ import Input from '../../components/Input/Input';
 import { useEffect } from 'react';
 import { useRootProvider } from '../../components/RootProvider/hooks/useRootProvider';
 import { DataCatalogs } from '../../models';
+import { get } from 'lodash';
+import { FormValues } from './types';
 
 interface FormTollsProps {
   handleToggleModal: () => void;
   unitTypes: DataCatalogs[];
   states: any[];
+  dataEdit: FormValues | null;
 }
 
 const FormTolls = ({
   handleToggleModal,
   unitTypes,
   states,
+  dataEdit,
 }: FormTollsProps) => {
   const { values, setValues } = useFormikContext<FormikValues>();
   const { actionsCountries }: any = useRootProvider();
   const { countriesByState, handleGetCountrie } = actionsCountries;
 
   useEffect(() => {
-    if (values.state !== null) {
-      handleGetCountrie(values.state);
+    if (values.state !== null && dataEdit === null) {
+      handleGetCountrie(values.state?.codigo);
       setValues({
         ...values,
-        nombre: undefined,
+        nombre: null,
       });
     }
   }, [values.state]);
@@ -91,8 +95,7 @@ const FormTolls = ({
           Cancelar
         </Button>
         <Button variant="contained" type="submit">
-          {/* {dataEdit ? 'Guardar' : 'Crear'} */}
-          Crear
+          {dataEdit ? 'Guardar' : 'Crear'}
         </Button>
       </Stack>
     </Form>
