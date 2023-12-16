@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+import { useEffect } from 'react';
 import { Table } from '../../components/Table';
-import { Button, InputAdornment, Grid } from '@mui/material';
+import { Button } from '@mui/material';
 import {
   Add,
   DeleteOutlineOutlined,
@@ -9,23 +10,23 @@ import {
 import { useHelpers } from './helpers';
 import { Column, LoaderContextType } from '../../models';
 import { useModal } from '../../components/Modal';
-import { Form, Formik } from 'formik';
-import Input from '../../components/Input/Input';
-import { Stack } from '@mui/system';
+import { Formik } from 'formik';
 import { DataToll } from './types';
-import { AutoCompleteComponent } from '../../components/Input/AutoCompleteComponent';
 import { useRootProvider } from '../../components/RootProvider/hooks/useRootProvider';
-import { useEffect } from 'react';
 import { useLoader } from '../../components/Loader';
 import { Helmet } from 'react-helmet-async';
 import { HeaderTitleModal } from '../../components/Modal/HeaderTitleModal';
+import { FormTolls } from './FormTolls';
 
 const Tolls = () => {
   const { handleShowLoader }: LoaderContextType = useLoader();
   const { handleOpenModal, handleCloseModal } = useModal();
-  const { actionsState, actionsCountries }: any = useRootProvider();
+  const { actionsState, actionsCountries, actionsCatalogs }: any =
+    useRootProvider();
   const { states, handleGetStates } = actionsState;
   const { countries, handleGetAllCountries } = actionsCountries;
+  const { catalogs, handleGetCatalogs, handleGetUnitType, unitTypes } =
+    actionsCatalogs;
   const {
     dataEdit,
     initialValues,
@@ -33,6 +34,7 @@ const Tolls = () => {
     handleSubmit,
     handleOpenModalDelete,
     handleGetToll,
+    // handleGetCountrie,
     setDataEdit,
   } = useHelpers();
 
@@ -40,7 +42,13 @@ const Tolls = () => {
     handleShowLoader(true);
     handleGetStates();
     handleGetAllCountries();
+    handleGetCatalogs();
+    setDataEdit(null);
   }, []);
+
+  useEffect(() => {
+    if (catalogs.length > 0) handleGetUnitType(catalogs[2]?._id);
+  }, [catalogs]);
 
   useEffect(() => {
     if (dataEdit) handleModal();
@@ -48,8 +56,8 @@ const Tolls = () => {
 
   const columns: Column[] = [
     { id: 'nombre', label: 'Nombre', align: 'left' },
-    { id: 'fechaCreacion', label: 'Fecha de creación', align: 'left' },
     { id: 'costo', label: 'Costo', align: 'left' },
+    { id: 'fechaCreacion', label: 'Fecha de creación', align: 'left' },
     {
       id: 'actions',
       label: 'Acciones',
@@ -58,7 +66,7 @@ const Tolls = () => {
         {
           label: 'Editar',
           icon: <ModeEditOutlineOutlined sx={{ width: 20, height: 20 }} />,
-          onClick: (rowData: DataToll) => handleGetToll(rowData.codigo, states),
+          onClick: (rowData: DataToll) => handleGetToll(rowData.codigo),
         },
         {
           label: 'Eliminar',
@@ -94,61 +102,11 @@ const Tolls = () => {
           validationSchema={validationSchema}
           onSubmit={handleSubmit}
         >
-          <Form>
-            <Grid container spacing={2} sx={{ mt: 1 }}>
-              <Grid item xs={12}>
-                <AutoCompleteComponent
-                  label="Seleccione un estado"
-                  name="state"
-                  options={states}
-                  labelField="label"
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <Input
-                  fullWidth
-                  type="text"
-                  label="Nombre Caseta"
-                  name="nombre"
-                />
-              </Grid>
-              <Grid item xs={12} sm={12}>
-                <Input
-                  fullWidth
-                  type="number"
-                  label="Costo"
-                  placeholder="0.00"
-                  name="costo"
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="start">$</InputAdornment>
-                    ),
-                  }}
-                />
-              </Grid>
-              {/* <Grid item xs={12} sm={6}>
-                <Input fullWidth type="number" label="Código" name="codigo" />
-              </Grid> */}
-            </Grid>
-            <Stack
-              spacing={2}
-              direction="row"
-              mt={3}
-              sx={{ display: 'flex', justifyContent: 'center' }}
-            >
-              <Button
-                variant="outlined"
-                color="inherit"
-                type="button"
-                onClick={handleToggleModal}
-              >
-                Cancelar
-              </Button>
-              <Button variant="contained" type="submit">
-                {dataEdit ? 'Guardar' : 'Crear'}
-              </Button>
-            </Stack>
-          </Form>
+          <FormTolls
+            handleToggleModal={handleToggleModal}
+            unitTypes={unitTypes}
+            states={states}
+          />
         </Formik>
       ),
     });

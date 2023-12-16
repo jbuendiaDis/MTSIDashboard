@@ -33,13 +33,13 @@ import {
   dataUserClient,
 } from '../../views/UserClients/types';
 import { Response } from '../../models';
+import { get } from 'lodash';
 
 interface CardProps {
   data: any;
   hanldeGetUserClients: () => void;
   setOpenDrawer: (value: boolean) => void;
   setDataEdit: (data: any) => void;
-  customersData: any[];
 }
 
 interface ExpandMoreProps extends IconButtonProps {
@@ -51,7 +51,6 @@ const Card = ({
   hanldeGetUserClients,
   setOpenDrawer,
   setDataEdit,
-  customersData,
 }: CardProps) => {
   const [expanded, setExpanded] = useState<boolean>(false);
   const [open, setOpen] = useState<null>(null);
@@ -78,8 +77,6 @@ const Card = ({
       callbackConfirm: () => handleDeleteClient(data._id),
     });
   };
-
-  console.log('data', customersData);
 
   const handleDeleteClient = async (id: string): Promise<boolean> => {
     try {
@@ -110,17 +107,6 @@ const Card = ({
       });
       const code: Response['code'] = response.code;
       const dataResponseEdit: dataUserClient['data'] = payload.data;
-
-      // const filterCustomerClient = customersData.find(
-      //   (item) => item.razonSocial === dataResponseEdit.nombreCliente
-      // );
-      // console.log('---', dataResponseEdit);
-
-      // console.log('filter', filterCustomerClient);
-      // const newDataEdit = {
-      //   ...dataResponseEdit,
-      //   nombreCliente: filterCustomerClient,
-      // };
 
       if (code === 200) {
         setDataEdit(dataResponseEdit);
@@ -177,13 +163,15 @@ const Card = ({
                 {data.direccion}
               </Typography>
             </Grid>
-            {/* <Grid item xs={12} sx={{ display: 'flex' }}>
+            <Grid item xs={12} sx={{ display: 'flex' }}>
               <Typography sx={{ fontSize: '14px', fontWeight: 'bold' }}>
                 Cliente:
               </Typography>
               &nbsp;
-              <Typography sx={{ fontSize: '14px' }}>{data.cliente}</Typography>
-            </Grid> */}
+              <Typography sx={{ fontSize: '14px' }}>
+                {data.nombreCliente}
+              </Typography>
+            </Grid>
           </Grid>
           <Divider sx={{ mt: 2, mb: 2 }} />
           <Grid container>

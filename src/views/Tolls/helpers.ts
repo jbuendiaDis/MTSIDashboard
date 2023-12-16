@@ -1,21 +1,31 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useApi } from '../../hooks/useApi';
 import { Response } from '../../models';
 import { DataToll, FormValues, ResponseTolls } from './types';
 import * as Yup from 'yup';
 import { useModalConfirmation } from '../../hooks/useModalConfirmation';
-import { get } from 'lodash';
 import { useRootProvider } from '../../components/RootProvider/hooks/useRootProvider';
+import { get } from 'lodash';
 
 export const useHelpers = () => {
   const [dataEdit, setDataEdit] = useState<any | null>(null);
-  const { actionsCountries }: any = useRootProvider();
-  const { handleGetAllCountries } = actionsCountries;
+  const [dataTemp, setDataTemp] = useState<any | null>(null);
+  const { actionsCountries, actionsState, actionsCatalogs }: any =
+    useRootProvider();
+  const { handleGetAllCountries, handleGetCountrie, countriesByState } =
+    actionsCountries;
+  const { states } = actionsState;
+  const { unitTypes } = actionsCatalogs;
   const { modalDelete, modalSuccess, modalInformation } =
     useModalConfirmation();
 
   const requiredField: string = 'Este campo es obligatorio.';
+
+  const _getCountriesByState = useApi({
+    endpoint: '/countries/by-estado',
+    method: 'get',
+  });
 
   const _getCountrieById = useApi({
     endpoint: '/countries',
@@ -36,6 +46,33 @@ export const useHelpers = () => {
     endpoint: '/countries',
     method: 'put',
   });
+
+  useEffect(() => {
+    if (countriesByState.length > 0) {
+      console.log('RENDER', dataTemp);
+      // console.log('unitTypes', unitTypes);
+      console.log('caseta', countriesByState);
+      const filterState = states.find(
+        (item: any) => item.codigo === dataTemp?.estado
+      );
+      const filterCountrie = countriesByState.filter(
+        (item: any) => item.nombre === dataTemp?.nombre
+      );
+
+      console.log('filter', filterCountrie);
+
+      const newDataEdit = {
+        state: filterState,
+        // nombre: filterCountrie,
+        // costo: dataTemp?.costo,
+        unitType: 'Automoviles',
+      };
+
+      setDataEdit(newDataEdit);
+
+      console.log('newDataEdit', newDataEdit);
+    }
+  }, [countriesByState]);
 
   const handleOpenModalDelete = (data: DataToll): void => {
     const message: string = '¿Seguro que desea eliminar esta caseta:';
@@ -67,7 +104,7 @@ export const useHelpers = () => {
     }
   };
 
-  const handleGetToll = async (code: number, states: any): Promise<boolean> => {
+  const handleGetToll = async (code: number): Promise<boolean> => {
     try {
       const { payload, response }: ResponseTolls = await _getCountrieById({
         urlParam: code,
@@ -77,18 +114,22 @@ export const useHelpers = () => {
         : payload.data;
       const codeResponse: Response['code'] = response.code;
 
-      const filterState: any = states
-        .filter((item: any) => item.codigo !== null) // Filtrar elementos null
-        .find((item: any) => item.codigo === dataResponse.estado);
+      if (codeResponse === 200) {
+        handleGetCountrie(dataResponse);
+        setDataTemp(dataResponse);
+      }
+      // const filterState: any = states
+      //   .filter((item: any) => item.codigo !== null) // Filtrar elementos null
+      //   .find((item: any) => item.codigo === dataResponse.estado);
 
-      const newData = {
-        state: filterState,
-        nombre: dataResponse.nombre,
-        costo: dataResponse.costo,
-        codigo: dataResponse.codigo,
-      };
+      // const newData = {
+      //   state: filterState,
+      //   nombre: dataResponse.nombre,
+      //   costo: dataResponse.costo,
+      //   codigo: dataResponse.codigo,
+      // };
 
-      if (codeResponse === 200) setDataEdit(newData);
+      // if (codeResponse === 200) setDataEdit(newData);
       return true;
     } catch (error) {
       return false;
@@ -96,65 +137,71 @@ export const useHelpers = () => {
   };
 
   const validationSchema = Yup.object().shape({
-    nombre: Yup.string().required(requiredField),
-    costo: Yup.number().nullable().required(requiredField),
     state: Yup.object().nullable().required(requiredField),
-    // codigo: Yup.number().nullable().required(requiredField),
+    unitType: Yup.string().required(requiredField),
+    nombre: Yup.object().nullable().required(requiredField),
+    costo: Yup.number().required(requiredField),
     _id: Yup.string(),
   });
 
   const initialValues: FormValues = {
-    nombre: dataEdit ? dataEdit?.nombre : '',
-    costo: dataEdit ? dataEdit?.costo : '',
-    state: dataEdit ? dataEdit.state : undefined,
-    codigo: dataEdit ? dataEdit?.codigo : '',
+    unitType: dataEdit ? dataEdit?.unitType : '',
+    state: dataEdit ? dataEdit?.state : undefined,
+    nombre: dataEdit ? dataEdit?.nombre : undefined,
+    costo: '',
   };
+
+  console.log('values', initialValues);
 
   const handleSubmit = async (values: FormValues): Promise<boolean> => {
     try {
+      console.log('VALUES', values);
       const newValues = {
-        nombre: values.nombre,
-        // codigo: values.codigo,
+        tipoUnidad: values.unitType,
+        nombre: values.nombre?.nombre,
         costo: values.costo,
-        estado: values.state ? values.state.codigo : undefined,
+        estado: values.state?.codigo,
+        codigo: values.state?.codigo,
       };
 
-      if (dataEdit) {
-        const response: ResponseTolls = await _updateCountrie({
-          urlParam: values.codigo,
-          body: newValues,
-        });
-        const code: Response['code'] = get(response, 'response.code');
-        const message: Response['message'] = get(
-          response,
-          'response.message',
-          ''
-        );
-        if (code === 200) {
-          modalSuccess({ message });
-          handleGetAllCountries();
-          setDataEdit(null);
-        } else {
-          modalInformation({ message });
-        }
-      } else {
-        const response: ResponseTolls = await _createCountrie({
-          body: newValues,
-        });
-        const code: Response['code'] = get(response, 'response.code');
-        const message: Response['message'] = get(
-          response,
-          'response.message',
-          ''
-        );
+      console.log('newValues', newValues);
 
-        if (code === 200) {
-          modalSuccess({ message });
-          handleGetAllCountries();
-        } else {
-          modalInformation({ message });
-        }
-      }
+      // if (dataEdit) {
+      // const response: ResponseTolls = await _updateCountrie({
+      //   urlParam: values.codigo,
+      //   body: newValues,
+      // });
+      // const code: Response['code'] = get(response, 'response.code');
+      // const message: Response['message'] = get(
+      //   response,
+      //   'response.message',
+      //   ''
+      // );
+      // if (code === 200) {
+      //   modalSuccess({ message });
+      //   handleGetAllCountries();
+      //   setDataEdit(null);
+      // } else {
+      //   modalInformation({ message });
+      // }
+      // } else {
+      // const response: ResponseTolls = await _createCountrie({
+      //   body: newValues,
+      // });
+      // const code: Response['code'] = get(response, 'response.code');
+      // const message: Response['message'] = get(
+      //   response,
+      //   'response.message',
+      //   ''
+      // );
+
+      // if (code === 200) {
+      //   modalSuccess({ message });
+      //   handleGetAllCountries();
+      // } else {
+      //   modalInformation({ message });
+      // }
+      // }
       return true;
     } catch (error) {
       return false;
