@@ -4,7 +4,7 @@ import { Grid, InputAdornment, Button, Stack } from '@mui/material';
 import Select from '../../components/Input/Select';
 import { AutoCompleteComponent } from '../../components/Input/AutoCompleteComponent';
 import Input from '../../components/Input/Input';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useRootProvider } from '../../components/RootProvider/hooks/useRootProvider';
 import { DataCatalogs } from '../../models';
 import { FormValues } from './types';
@@ -28,7 +28,6 @@ const FormTolls = ({
 
   useEffect(() => {
     if (values.state !== null && dataEdit === null) {
-      console.log('dataEdit', dataEdit);
       handleGetCountrie(values.state?.codigo);
       setValues({
         ...values,
@@ -38,17 +37,24 @@ const FormTolls = ({
   }, [values.state]);
 
   useEffect(() => {
-    if (values.state !== dataEdit?.state) {
-      console.log('dataEdit', dataEdit);
-      handleGetCountrie(values.state?.codigo);
-      setValues({
-        ...values,
-        nombre: null,
-      });
+    if (dataEdit !== null) {
+      if (values.state !== dataEdit?.state) {
+        handleGetCountrie(values.state?.codigo);
+        setValues({
+          ...values,
+          nombre: null,
+        });
+      } else if (values.nombre !== dataEdit?.nombre) {
+        handleGetCountrie(values.state?.codigo);
+        setValues({
+          ...values,
+          nombre: null,
+        });
+      }
     }
-  }, [values.state]);
+  }, [values.state, dataEdit]);
 
-  console.log('???', dataEdit);
+  console.log('???', dataEdit?.state);
 
   return (
     <Form>

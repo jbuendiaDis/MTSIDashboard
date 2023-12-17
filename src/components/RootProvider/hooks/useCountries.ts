@@ -64,6 +64,8 @@ export const useCountries = ({ rootState, rootDispatch }: any) => {
       const code: Response['code'] = get(response, 'response.code');
       const payload: PayloadCountries['data'] = get(response, 'payload.data');
 
+      console.log('ROOT', payload);
+
       if (code === 200) rootDispatch({ type: 'countriesByState', payload });
 
       return true;

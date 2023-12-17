@@ -13,7 +13,7 @@ export const AccountStyles = ({ open }: AccountStylesProps) => {
     ...(open
       ? {
           background: (theme: Theme) =>
-            `linear-gradient(135deg, ${theme.palette.primary.light} 0%, ${theme.palette.primary.main} 100%)`,
+            `linear-gradient(135deg, ${theme.palette.error.light} 0%, ${theme.palette.error.main} 100%)`,
         }
       : null),
   };

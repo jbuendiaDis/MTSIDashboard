@@ -57,7 +57,6 @@ export const useHelpers = () => {
         codigo: dataTemp.codigo,
       };
 
-      console.log('newDataEdit', newDataEdit, dataTemp);
       setDataEdit(newDataEdit);
       setDataTemp(null);
     }

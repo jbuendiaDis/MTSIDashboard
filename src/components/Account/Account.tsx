@@ -42,13 +42,7 @@ const Account = () => {
   return (
     <>
       <IconButton onClick={handleOpen} sx={style.iconButton}>
-        <Avatar
-          //   src={account.photoURL}
-          //   alt={account.displayName}
-          sx={style.avatar}
-        >
-          {user?.name.charAt(0).toUpperCase()}
-        </Avatar>
+        <Avatar sx={style.avatar}>{user?.name.charAt(0).toUpperCase()}</Avatar>
       </IconButton>
 
       <Popover
