@@ -7,7 +7,6 @@ import Input from '../../components/Input/Input';
 import { useEffect } from 'react';
 import { useRootProvider } from '../../components/RootProvider/hooks/useRootProvider';
 import { DataCatalogs } from '../../models';
-import { get } from 'lodash';
 import { FormValues } from './types';
 
 interface FormTollsProps {
@@ -29,6 +28,7 @@ const FormTolls = ({
 
   useEffect(() => {
     if (values.state !== null && dataEdit === null) {
+      console.log('dataEdit', dataEdit);
       handleGetCountrie(values.state?.codigo);
       setValues({
         ...values,
@@ -36,6 +36,19 @@ const FormTolls = ({
       });
     }
   }, [values.state]);
+
+  useEffect(() => {
+    if (values.state !== dataEdit?.state) {
+      console.log('dataEdit', dataEdit);
+      handleGetCountrie(values.state?.codigo);
+      setValues({
+        ...values,
+        nombre: null,
+      });
+    }
+  }, [values.state]);
+
+  console.log('???', dataEdit);
 
   return (
     <Form>

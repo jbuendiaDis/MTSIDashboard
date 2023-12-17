@@ -45,13 +45,16 @@ const Routes = () => {
     formik,
     pagoCasetas,
     nombreCaseta,
+    nameState,
     costo,
     dataDotsTable,
     dataEdit,
     dataDestinoLocation,
     allDataTolls,
+    options,
     setPagoCasetas,
     setNombreCaseta,
+    setNameState,
     setCosto,
     handleOpenModalDelete,
     handleGetToll,
@@ -79,7 +82,7 @@ const Routes = () => {
 
   useEffect(() => {
     if (formik.values.stateOrigen !== null) {
-      handleGetCountrie(formik.values.stateOrigen);
+      handleGetCountrie(formik.values.stateOrigen.codigo);
       formik.setValues({
         ...formik.values,
         localidadOrigen: null,
@@ -89,13 +92,19 @@ const Routes = () => {
 
   useEffect(() => {
     if (formik.values.stateDestino !== null) {
-      handleGetCountrieDestino(formik.values.stateDestino);
+      handleGetCountrieDestino(formik.values.stateDestino.codigo);
       formik.setValues({
         ...formik.values,
         localidadDestino: null,
       });
     }
   }, [formik.values.stateDestino]);
+
+  useEffect(() => {
+    if (formik.values.tipoUnidad !== '' && nombreCaseta !== null) {
+      console.log('NEW_API', formik.values.tipoUnidad, nombreCaseta);
+    }
+  }, [formik.values.tipoUnidad, nombreCaseta]);
 
   const columns: Column[] = [
     { id: 'localidadOrigen', label: 'Localidad Origen', align: 'left' },
@@ -167,18 +176,16 @@ const Routes = () => {
     });
   };
 
-  const options: any = [
-    {
-      label: 'VIAPASS',
-      value: 'VIAPASS',
-    },
-    {
-      label: 'EFEC',
-      value: 'EFEC',
-    },
-  ];
+  console.log('nameState', nameState);
 
-  console.log('states', states);
+  const handleCloseDialog = () => {
+    formik.resetForm();
+    setOpen(false);
+    setPagoCasetas('');
+    setNombreCaseta('');
+    setNameState(null);
+    setCosto(0);
+  };
 
   return (
     <div>
@@ -222,12 +229,7 @@ const Routes = () => {
       >
         <DialogTitle>
           <HeaderTitleModal
-            handleToggleModal={() => {
-              setOpen(false);
-              setPagoCasetas('');
-              setNombreCaseta('');
-              setCosto(0);
-            }}
+            handleToggleModal={handleCloseDialog}
             title="CREAR RUTA"
           />
         </DialogTitle>
@@ -421,7 +423,7 @@ const Routes = () => {
                   // isOptionEqualToValue={(option, value) =>
                   //   option._id === value?._id
                   // }
-                  onChange={(_event, value) => setNombreCaseta(value)}
+                  onChange={(_event, value) => setNameState(value)}
                   renderInput={(params) => (
                     <TextField {...params} label="Seleccione un estado" />
                   )}
@@ -460,7 +462,11 @@ const Routes = () => {
                     type="button"
                     onClick={handleAddDot}
                     disabled={
-                      pagoCasetas !== '' && nombreCaseta !== '' ? false : true
+                      pagoCasetas !== '' &&
+                      nombreCaseta !== '' &&
+                      nameState !== null
+                        ? false
+                        : true
                     }
                   >
                     Agregar Punto
@@ -480,12 +486,7 @@ const Routes = () => {
               <Button
                 variant="outlined"
                 color="inherit"
-                onClick={() => {
-                  setOpen(false);
-                  setPagoCasetas('');
-                  setNombreCaseta('');
-                  setCosto(0);
-                }}
+                onClick={handleCloseDialog}
               >
                 Cancelar
               </Button>

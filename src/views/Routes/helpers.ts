@@ -35,6 +35,7 @@ export const useHelpers = () => {
   const [dataEdit, setDataEdit] = useState<DataTolls[] | null>(null);
   const [pagoCasetas, setPagoCasetas] = useState<string>('');
   const [nombreCaseta, setNombreCaseta] = useState<any | null>(null);
+  const [nameState, setNameState] = useState<any | null>(null);
   const [costo, setCosto] = useState<number>(0);
   const [dataDotsTable, setDataDotsTable] = useState<any[]>([]);
   const [dataDestinoLocation, setDataDestinoLocation] = useState<any[]>([]);
@@ -81,13 +82,11 @@ export const useHelpers = () => {
     handleGetAllCountries();
   }, []);
 
-  const handleGetCountrieDestino = async (
-    data: FormatDataState
-  ): Promise<boolean> => {
+  const handleGetCountrieDestino = async (state: number): Promise<boolean> => {
     try {
       const { payload, response }: ResponseCountries =
         await _getCountriesByState({
-          urlParam: data.codigo,
+          urlParam: state,
         });
       const code: Response['code'] = response.code;
       const dataResponse: PayloadCountries['data'] = payload.data;
@@ -318,18 +317,32 @@ export const useHelpers = () => {
     },
   });
 
+  const options: any = [
+    {
+      label: 'VIAPASS',
+      value: 'VIAPASS',
+    },
+    {
+      label: 'EFEC',
+      value: 'EFEC',
+    },
+  ];
+
   return {
     tollsData,
     formik,
     pagoCasetas,
     nombreCaseta,
+    nameState,
     costo,
     dataDotsTable,
     dataEdit,
     dataDestinoLocation,
     allDataTolls,
+    options,
     setPagoCasetas,
     setNombreCaseta,
+    setNameState,
     setCosto,
     handleOpenModalDelete,
     handleGetToll,
