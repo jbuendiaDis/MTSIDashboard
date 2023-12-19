@@ -21,7 +21,7 @@ export const useHelpers = () => {
   const requiredField: string = 'Este campo es obligatorio.';
 
   const _getCountrieById = useApi({
-    endpoint: '/countries',
+    endpoint: '/countries/by-estado',
     method: 'get',
   });
 
