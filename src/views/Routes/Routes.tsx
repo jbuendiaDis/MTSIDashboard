@@ -29,6 +29,7 @@ import { useEffect, useState } from 'react';
 import { useLoader } from '../../components/Loader';
 import { useModal } from '../../components/Modal';
 import { DetailDots } from './DetailDots';
+import { get } from 'lodash';
 
 const Routes = () => {
   const [open, setOpen] = useState<boolean>(false);
@@ -48,17 +49,17 @@ const Routes = () => {
   const {
     tollsData,
     formik,
-    pagoCasetas,
-    nombreCaseta,
+    // pagoCasetas,
+    // nombreCaseta,
     nameState,
     dataDotsTable,
     dataEdit,
     dataDestinoLocation,
     options,
-    setPagoCasetas,
-    setNombreCaseta,
-    setNameState,
-    setCosto,
+    // setPagoCasetas,
+    // setNombreCaseta,
+    // setNameState,
+    // setCosto,
     handleOpenModalDelete,
     handleGetToll,
     handleAddDot,
@@ -103,11 +104,32 @@ const Routes = () => {
 
   useEffect(() => {
     const unit: string = formik.values.tipoUnidad;
-    const stateCode: number = nameState?.codigo;
+    const stateCode: number | undefined = get(
+      formik.values,
+      'stateCaseta.codigo'
+    );
     if (unit && stateCode) {
       handleGetCountriesByStateUnitType(stateCode, unit);
     }
-  }, [formik.values.tipoUnidad, nameState]);
+  }, [formik.values.tipoUnidad, formik.values.stateCaseta]);
+
+  useEffect(() => {
+    if (formik.values.tipoUnidad) {
+      formik.setValues({
+        ...formik.values,
+        nombreCaseta: null,
+      });
+    }
+  }, [formik.values.tipoUnidad]);
+
+  useEffect(() => {
+    if (formik.values.stateCaseta) {
+      formik.setValues({
+        ...formik.values,
+        nombreCaseta: null,
+      });
+    }
+  }, [formik.values.stateCaseta]);
 
   const columns: Column[] = [
     { id: 'nombreOrigen', label: 'Nombre Origen', align: 'left' },
@@ -182,10 +204,10 @@ const Routes = () => {
   const handleCloseDialog = () => {
     formik.resetForm();
     setOpen(false);
-    setPagoCasetas('');
-    setNombreCaseta('');
-    setNameState(null);
-    setCosto(0);
+    // setPagoCasetas('');
+    // setNombreCaseta('');
+    // setNameState(null);
+    // setCosto(0);
   };
 
   console.log('countriesByStateUnitType', countriesByStateUnitType);
@@ -205,9 +227,9 @@ const Routes = () => {
             onClick={() => {
               setOpen(!open);
               formik.resetForm();
-              setPagoCasetas('');
-              setNombreCaseta('');
-              setCosto(0);
+              // setPagoCasetas('');
+              // setNombreCaseta('');
+              // setCosto(0);
               // setErrorDots('');
               setDataDotsTable([]);
             }}
@@ -407,6 +429,21 @@ const Routes = () => {
                 <TextField
                   fullWidth
                   select
+                  label="Pago de caseta"
+                  id="pagoCasetas"
+                  name="pagoCasetas"
+                  value={formik.values.pagoCasetas}
+                  onChange={formik.handleChange}
+                >
+                  {options.map((item: any) => (
+                    <MenuItem key={item.value} value={item.value}>
+                      {item.label}
+                    </MenuItem>
+                  ))}
+                </TextField>
+                {/* <TextField
+                  fullWidth
+                  select
                   label="Pago de Caseta"
                   value={pagoCasetas}
                   onChange={(e: any) => setPagoCasetas(e.target.value)}
@@ -417,10 +454,27 @@ const Routes = () => {
                       {item.label}
                     </MenuItem>
                   ))}
-                </TextField>
+                </TextField> */}
               </Grid>
               <Grid item xs={12} sm={6} md={4} lg={3}>
                 <Autocomplete
+                  id="stateCaseta"
+                  options={states}
+                  getOptionLabel={(option: any) => option.label || ''}
+                  value={formik.values.stateCaseta}
+                  onChange={(_event, selected) => {
+                    formik.setFieldValue('stateCaseta', selected);
+                  }}
+                  onBlur={formik.handleBlur}
+                  renderInput={(params) => (
+                    <TextField
+                      name="stateCaseta"
+                      {...params}
+                      label="Seleccion un estado"
+                    />
+                  )}
+                />
+                {/* <Autocomplete
                   options={states}
                   getOptionLabel={(option: any) => option.label || ''}
                   // isOptionEqualToValue={(option, value) =>
@@ -430,17 +484,34 @@ const Routes = () => {
                   renderInput={(params) => (
                     <TextField {...params} label="Seleccione un estado" />
                   )}
-                />
+                /> */}
               </Grid>
               <Grid item xs={12} sm={6} md={4} lg={3}>
                 <Autocomplete
+                  id="nombreCaseta"
+                  options={countriesByStateUnitType}
+                  getOptionLabel={(option: any) => option.nombre || ''}
+                  value={formik.values.nombreCaseta}
+                  onChange={(_event, selected) => {
+                    formik.setFieldValue('nombreCaseta', selected);
+                  }}
+                  onBlur={formik.handleBlur}
+                  renderInput={(params) => (
+                    <TextField
+                      name="nombreCaseta"
+                      {...params}
+                      label="Seleccion una caseta"
+                    />
+                  )}
+                />
+                {/* <Autocomplete
                   options={countriesByStateUnitType}
                   getOptionLabel={(option: any) => option.nombre || ''}
                   onChange={(_event, value) => setNombreCaseta(value)}
                   renderInput={(params) => (
                     <TextField {...params} label="Seleccione una Caseta" />
                   )}
-                />
+                /> */}
               </Grid>
 
               <Grid
@@ -462,12 +533,19 @@ const Routes = () => {
                     type="button"
                     onClick={handleAddDot}
                     disabled={
-                      pagoCasetas !== '' &&
-                      nombreCaseta !== '' &&
-                      nameState !== null
+                      formik.values.pagoCasetas !== '' &&
+                      formik.values.stateCaseta !== null &&
+                      formik.values.nombreCaseta !== null
                         ? false
                         : true
                     }
+                    // disabled={
+                    //   pagoCasetas !== '' &&
+                    //   nombreCaseta !== '' &&
+                    //   nameState !== null
+                    //     ? false
+                    //     : true
+                    // }
                   >
                     Agregar Punto
                   </Button>

@@ -26,6 +26,10 @@ interface FormValues {
   kms: null | string | number;
   stateOrigen: null | FormatDataState;
   stateDestino: null | FormatDataState;
+
+  pagoCasetas: string;
+  stateCaseta: null;
+  nombreCaseta: null;
 }
 
 interface HelpersProps {
@@ -38,7 +42,6 @@ export const useHelpers = ({ setOpen }: HelpersProps) => {
   const [pagoCasetas, setPagoCasetas] = useState<string>('');
   const [nombreCaseta, setNombreCaseta] = useState<any | null>(null);
   const [nameState, setNameState] = useState<any | null>(null);
-  const [costo, setCosto] = useState<number>(0);
   const [dataDotsTable, setDataDotsTable] = useState<any[]>([]);
   const [dataDestinoLocation, setDataDestinoLocation] = useState<any[]>([]);
   const [allDataTolls, setAllDataTolls] = useState<any[]>([]);
@@ -225,18 +228,16 @@ export const useHelpers = ({ setOpen }: HelpersProps) => {
 
   const handleAddDot = () => {
     const newDot: TableDots = {
-      casetas: pagoCasetas,
-      nombreCaseta: nombreCaseta.nombre,
-      costo: formatToCurrency(nombreCaseta.costo),
+      casetas: formik.values.pagoCasetas,
+      nombreCaseta: get(formik.values, 'pagoCasetas.nombre', ''),
+      costo: formatToCurrency(get(formik.values, 'pagoCasetas.costo', 0)),
       _id: dataDotsTable.length + 1,
     };
-
     console.log('ADD', newDot);
-
-    setDataDotsTable((prevDots) => [...prevDots, newDot]);
-    setPagoCasetas('');
-    setNombreCaseta(null);
-    setNameState(null);
+    // setDataDotsTable((prevDots) => [...prevDots, newDot]);
+    // setPagoCasetas('');
+    // setNombreCaseta(null);
+    // setNameState(null);
     // setCosto(0);
     // setErrorDots('');
   };
@@ -259,6 +260,10 @@ export const useHelpers = ({ setOpen }: HelpersProps) => {
     kms: '',
     stateOrigen: null,
     stateDestino: null,
+
+    pagoCasetas: '',
+    stateCaseta: null,
+    nombreCaseta: null,
   };
 
   const validationSchema = Yup.object().shape({
@@ -270,6 +275,10 @@ export const useHelpers = ({ setOpen }: HelpersProps) => {
       .required(requiredField),
     stateOrigen: Yup.object().nullable().required(requiredField),
     stateDestino: Yup.object().nullable().required(requiredField),
+
+    pagoCasetas: Yup.string(),
+    stateCaseta: Yup.object().nullable(),
+    nombreCaseta: Yup.object().nullable(),
   });
 
   const formik = useFormik({
@@ -310,24 +319,24 @@ export const useHelpers = ({ setOpen }: HelpersProps) => {
 
         console.log('newValues', newValues);
 
-        const response: ResponseUnidades = await _createToll({
-          body: newValues,
-        });
-        const code: Response['code'] = get(response, 'response.code');
-        const message: Response['message'] = get(
-          response,
-          'response.message',
-          ''
-        );
+        // const response: ResponseUnidades = await _createToll({
+        //   body: newValues,
+        // });
+        // const code: Response['code'] = get(response, 'response.code');
+        // const message: Response['message'] = get(
+        //   response,
+        //   'response.message',
+        //   ''
+        // );
 
-        if (code === 200) {
-          modalSuccess({ message });
-          handleGetTolls();
-          formik.resetForm();
-          setOpen(false);
-        } else {
-          modalInformation({ message });
-        }
+        // if (code === 200) {
+        //   modalSuccess({ message });
+        //   handleGetTolls();
+        //   formik.resetForm();
+        //   setOpen(false);
+        // } else {
+        //   modalInformation({ message });
+        // }
 
         return true;
       } catch (error) {
@@ -350,19 +359,19 @@ export const useHelpers = ({ setOpen }: HelpersProps) => {
   return {
     tollsData,
     formik,
-    pagoCasetas,
-    nombreCaseta,
+    // pagoCasetas,
+    // nombreCaseta,
     nameState,
-    costo,
+    // costo,
     dataDotsTable,
     dataEdit,
     dataDestinoLocation,
     allDataTolls,
     options,
-    setPagoCasetas,
-    setNombreCaseta,
-    setNameState,
-    setCosto,
+    // setPagoCasetas,
+    // setNombreCaseta,
+    // setNameState,
+    // setCosto,
     handleOpenModalDelete,
     handleGetToll,
     handleAddDot,
