@@ -3,14 +3,13 @@ import { useEffect, useState } from 'react';
 import { useApi } from '../../hooks/useApi';
 import { useLoader } from '../../components/Loader';
 import {
-  CountriesData,
   FormatDataState,
   LoaderContextType,
   PayloadCountries,
   Response,
   ResponseCountries,
 } from '../../models';
-import { DataTolls, ResponseTolls, TableDots } from './types';
+import { DataTolls, ResponseTolls, ResponseUnidades, TableDots } from './types';
 import {
   formatToCurrency,
   parseCurrencyStringToNumber,
@@ -19,7 +18,6 @@ import { useModalConfirmation } from '../../hooks/useModalConfirmation';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { get } from 'lodash';
-import { format, parseISO } from 'date-fns';
 
 interface FormValues {
   tipoUnidad: string;
@@ -30,7 +28,11 @@ interface FormValues {
   stateDestino: null | FormatDataState;
 }
 
-export const useHelpers = () => {
+interface HelpersProps {
+  setOpen: (value: boolean) => void;
+}
+
+export const useHelpers = ({ setOpen }: HelpersProps) => {
   const [tollsData, setTollsData] = useState<DataTolls[]>([]);
   const [dataEdit, setDataEdit] = useState<DataTolls[] | null>(null);
   const [pagoCasetas, setPagoCasetas] = useState<string>('');
@@ -219,6 +221,8 @@ export const useHelpers = () => {
     }
   };
 
+  console.log('CLEAN', nameState, nombreCaseta);
+
   const handleAddDot = () => {
     const newDot: TableDots = {
       casetas: pagoCasetas,
@@ -232,6 +236,7 @@ export const useHelpers = () => {
     setDataDotsTable((prevDots) => [...prevDots, newDot]);
     setPagoCasetas('');
     setNombreCaseta(null);
+    setNameState(null);
     // setCosto(0);
     // setErrorDots('');
   };
@@ -273,42 +278,56 @@ export const useHelpers = () => {
     onSubmit: async (values: FormValues) => {
       try {
         console.log('VALUES', values);
-        // const arrayDots: any[] = [];
+        const arrayDots: any[] = [];
 
-        // dataDotsTable.map((item: any) => {
-        //   arrayDots.push({
-        //     casetas: item.casetas,
-        //     nombreCaseta: item.nombreCaseta,
-        //     costo: parseCurrencyStringToNumber(item.costo),
-        //     // _id: item._id.toString(),
-        //   });
-        // });
+        dataDotsTable.map((item: any) => {
+          arrayDots.push({
+            casetas: item.casetas,
+            nombreCaseta: item.nombreCaseta,
+            costo: parseCurrencyStringToNumber(item.costo),
+            // _id: item._id.toString(),
+          });
+        });
 
-        // const newValues: any = {
-        //   estadoOrigen: values.stateOrigen!.codigo,
-        //   estadoDestino: values.stateDestino!.codigo,
-        //   tipoUnidad: values.tipoUnidad,
-        //   localidadOrigen: (
-        //     values.localidadOrigen as FormatDataState
-        //   ).codigo.toString(),
-        //   localidadDestino: (
-        //     values.localidadDestino as FormatDataState
-        //   ).codigo.toString(),
-        //   kms: values.kms,
-        //   puntos: arrayDots,
-        //   totalPeajes: arrayDots.reduce((total, costTotal) => {
-        //     return total + costTotal.costo;
-        //   }, 0),
-        // };
+        console.log('array', arrayDots);
 
-        // console.log('newValues', newValues);
+        const newValues: any = {
+          estadoOrigen: values.stateOrigen!.codigo,
+          estadoDestino: values.stateDestino!.codigo,
+          tipoUnidad: values.tipoUnidad,
+          localidadOrigen: (
+            values.localidadOrigen as FormatDataState
+          ).codigo.toString(),
+          localidadDestino: (
+            values.localidadDestino as FormatDataState
+          ).codigo.toString(),
+          kms: values.kms,
+          puntos: arrayDots,
+          totalPeajes: arrayDots.reduce((total, costTotal) => {
+            return total + costTotal.costo;
+          }, 0),
+        };
 
-        // const response = await _createToll({
-        //   body: newValues,
-        // });
-        // handleGetTolls();
+        console.log('newValues', newValues);
 
-        // console.log('POST', response);
+        const response: ResponseUnidades = await _createToll({
+          body: newValues,
+        });
+        const code: Response['code'] = get(response, 'response.code');
+        const message: Response['message'] = get(
+          response,
+          'response.message',
+          ''
+        );
+
+        if (code === 200) {
+          modalSuccess({ message });
+          handleGetTolls();
+          formik.resetForm();
+          setOpen(false);
+        } else {
+          modalInformation({ message });
+        }
 
         return true;
       } catch (error) {

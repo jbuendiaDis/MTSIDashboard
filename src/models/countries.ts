@@ -14,9 +14,11 @@ export interface CountriesData {
   coordenadas: [number, number] | any;
   costo?: string | number;
   estado: number;
-  fechaCreacion: string | Date;
-  fechaActualizacion: string | Date;
+  estadoNombre: string;
   nombre: string;
+  fechaCreacion: string | Date;
+  fechaActualizacion?: string | Date;
+  tipoUnidad: string;
   __v: number;
   _id: string;
 }

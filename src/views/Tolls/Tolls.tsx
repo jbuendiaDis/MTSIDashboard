@@ -56,7 +56,8 @@ const Tolls = () => {
   }, [dataEdit]);
 
   const columns: Column[] = [
-    { id: 'nombre', label: 'Nombre', align: 'left' },
+    { id: 'estadoNombre', label: 'Estado', align: 'left' },
+    { id: 'nombre', label: 'Nombre Caseta/Peaje', align: 'left' },
     { id: 'tipoUnidad', label: 'Tipo de Unidad', align: 'left' },
     { id: 'costo', label: 'Costo', align: 'left' },
     { id: 'fechaCreacion', label: 'Fecha de creación', align: 'left' },

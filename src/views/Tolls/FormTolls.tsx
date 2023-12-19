@@ -4,7 +4,7 @@ import { Grid, InputAdornment, Button, Stack } from '@mui/material';
 import Select from '../../components/Input/Select';
 import { AutoCompleteComponent } from '../../components/Input/AutoCompleteComponent';
 import Input from '../../components/Input/Input';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useRootProvider } from '../../components/RootProvider/hooks/useRootProvider';
 import { DataCatalogs } from '../../models';
 import { FormValues } from './types';
@@ -53,8 +53,6 @@ const FormTolls = ({
       }
     }
   }, [values.state, dataEdit]);
-
-  console.log('???', dataEdit?.state);
 
   return (
     <Form>

@@ -5,6 +5,7 @@ export interface Values {
   states: [];
   countries: [];
   countriesByState: [];
+  countriesByStateUnitType: [];
   catalogs: [];
   unitTypes: [];
 }
@@ -14,6 +15,7 @@ export const initialState: Values = {
   states: [],
   countries: [],
   countriesByState: [],
+  countriesByStateUnitType: [],
   catalogs: [],
   unitTypes: [],
   // countries: [],

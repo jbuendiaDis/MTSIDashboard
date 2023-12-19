@@ -37,7 +37,12 @@ const Routes = () => {
   const { actionsState, actionsCountries, actionsCatalogs }: any =
     useRootProvider();
   const { states, handleGetStates } = actionsState;
-  const { countries, handleGetCountrie, countriesByState } = actionsCountries;
+  const {
+    countriesByStateUnitType,
+    handleGetCountrie,
+    countriesByState,
+    handleGetCountriesByStateUnitType,
+  } = actionsCountries;
   const { catalogs, handleGetCatalogs, handleGetUnitType, unitTypes } =
     actionsCatalogs;
   const {
@@ -46,11 +51,9 @@ const Routes = () => {
     pagoCasetas,
     nombreCaseta,
     nameState,
-    costo,
     dataDotsTable,
     dataEdit,
     dataDestinoLocation,
-    allDataTolls,
     options,
     setPagoCasetas,
     setNombreCaseta,
@@ -62,7 +65,7 @@ const Routes = () => {
     handleRemoveDot,
     setDataDotsTable,
     handleGetCountrieDestino,
-  } = useHelpers();
+  } = useHelpers({ setOpen });
 
   useEffect(() => {
     handleShowLoader(true);
@@ -75,9 +78,7 @@ const Routes = () => {
   }, [catalogs]);
 
   useEffect(() => {
-    if (dataEdit) {
-      setOpen(true);
-    }
+    if (dataEdit) setOpen(true);
   }, [dataEdit]);
 
   useEffect(() => {
@@ -101,14 +102,16 @@ const Routes = () => {
   }, [formik.values.stateDestino]);
 
   useEffect(() => {
-    if (formik.values.tipoUnidad !== '' && nombreCaseta !== null) {
-      console.log('NEW_API', formik.values.tipoUnidad, nombreCaseta);
+    const unit: string = formik.values.tipoUnidad;
+    const stateCode: number = nameState?.codigo;
+    if (unit && stateCode) {
+      handleGetCountriesByStateUnitType(stateCode, unit);
     }
-  }, [formik.values.tipoUnidad, nombreCaseta]);
+  }, [formik.values.tipoUnidad, nameState]);
 
   const columns: Column[] = [
-    { id: 'localidadOrigen', label: 'Localidad Origen', align: 'left' },
-    { id: 'localidadDestino', label: 'Localidad Destino', align: 'left' },
+    { id: 'nombreOrigen', label: 'Nombre Origen', align: 'left' },
+    { id: 'nombreDestino', label: 'Nombre Destino', align: 'left' },
     { id: 'totalKilometers', label: 'Kilometros', align: 'left' },
     { id: 'costTotalPeajes', label: 'Total Peajes', align: 'left' },
     { id: 'tipoUnidad', label: 'Tipo Unidad', align: 'left' },
@@ -117,11 +120,11 @@ const Routes = () => {
       label: 'Acciones',
       align: 'center',
       actions: [
-        {
-          label: 'Editar',
-          icon: <ModeEditOutlineOutlined sx={{ width: 20, height: 20 }} />,
-          onClick: (rowData: DataTolls) => handleGetToll(rowData._id),
-        },
+        // {
+        //   label: 'Editar',
+        //   icon: <ModeEditOutlineOutlined sx={{ width: 20, height: 20 }} />,
+        //   onClick: (rowData: DataTolls) => handleGetToll(rowData._id),
+        // },
         {
           label: 'Detalle',
           icon: <VisibilityOutlined sx={{ width: 20, height: 20 }} />,
@@ -176,8 +179,6 @@ const Routes = () => {
     });
   };
 
-  console.log('nameState', nameState);
-
   const handleCloseDialog = () => {
     formik.resetForm();
     setOpen(false);
@@ -186,6 +187,8 @@ const Routes = () => {
     setNameState(null);
     setCosto(0);
   };
+
+  console.log('countriesByStateUnitType', countriesByStateUnitType);
 
   return (
     <div>
@@ -431,11 +434,8 @@ const Routes = () => {
               </Grid>
               <Grid item xs={12} sm={6} md={4} lg={3}>
                 <Autocomplete
-                  options={allDataTolls}
-                  getOptionLabel={(option) => option.nombre || ''}
-                  // isOptionEqualToValue={(option, value) =>
-                  //   option._id === value?._id
-                  // }
+                  options={countriesByStateUnitType}
+                  getOptionLabel={(option: any) => option.nombre || ''}
                   onChange={(_event, value) => setNombreCaseta(value)}
                   renderInput={(params) => (
                     <TextField {...params} label="Seleccione una Caseta" />
