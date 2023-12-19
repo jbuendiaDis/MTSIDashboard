@@ -9,6 +9,7 @@ import { Bills } from '../views/Bills';
 import { Returns } from '../views/Returns';
 import { UserClients } from '../views/UserClients/UserClients';
 import { Routes as RoutesPage } from '../views/Routes';
+import { Quotes } from '../views/Quotes';
 
 const PrivateRoutes = () => {
   return (
@@ -22,6 +23,7 @@ const PrivateRoutes = () => {
         <Route path="/bills" element={<Bills />} />
         <Route path="/returns" element={<Returns />} />
         <Route path="/user-clients" element={<UserClients />} />
+        <Route path="/quotes" element={<Quotes />} />
         <Route path="/example-components" element={<Home />} />
         <Route path="*" element={<Navigate to="/users" replace />} />
       </Routes>

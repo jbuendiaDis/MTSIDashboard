@@ -1,14 +1,82 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { InputAdornment, Grid, Stack, Button } from '@mui/material';
 import Input from '../../components/Input/Input';
+import { Form, FormikValues, useFormikContext } from 'formik';
+import { AutoCompleteComponent } from '../../components/Input/AutoCompleteComponent';
+import { useRootProvider } from '../../components/RootProvider/hooks/useRootProvider';
+import { useEffect } from 'react';
 
 interface BillFormProps {
   handleToggleModal: () => void;
+  states: any[];
+  dataEdit: any;
 }
 
-const BillForm = ({ handleToggleModal }: BillFormProps) => {
+const BillForm = ({ handleToggleModal, states, dataEdit }: BillFormProps) => {
+  const { values, setValues } = useFormikContext<FormikValues>();
+  const { actionsCountries }: any = useRootProvider();
+  const {
+    countriesByState,
+    countriesByStateSecond,
+    handleGetCountrie,
+    handleGetCountrieSecond,
+  } = actionsCountries;
+
+  useEffect(() => {
+    if (values.originState !== null) {
+      handleGetCountrie(values.originState?.codigo);
+      setValues({
+        ...values,
+        originLocality: null,
+      });
+    }
+  }, [values.originState]);
+
+  useEffect(() => {
+    if (values.destinationState !== null) {
+      handleGetCountrieSecond(values.destinationState?.codigo);
+      setValues({
+        ...values,
+        destinationLocality: null,
+      });
+    }
+  }, [values.destinationState]);
+
   return (
-    <>
+    <Form>
       <Grid container spacing={2}>
+        <Grid item xs={12} sm={6}>
+          <AutoCompleteComponent
+            label="Seleccione un estado origen"
+            name="originState"
+            options={states}
+            labelField="label"
+          />
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <AutoCompleteComponent
+            label="Localidad origen"
+            name="originLocality"
+            options={countriesByState}
+            labelField="nombre"
+          />
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <AutoCompleteComponent
+            label="Seleccione un estado destino"
+            name="destinationState"
+            options={states}
+            labelField="label"
+          />
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <AutoCompleteComponent
+            label="Localidad destino"
+            name="destinationLocality"
+            options={countriesByStateSecond}
+            labelField="nombre"
+          />
+        </Grid>
         <Grid item xs={12} sm={6}>
           <Input
             fullWidth
@@ -75,10 +143,10 @@ const BillForm = ({ handleToggleModal }: BillFormProps) => {
           Cancelar
         </Button>
         <Button variant="contained" type="submit">
-          Crear
+          {dataEdit ? 'Guardar' : 'Crear'}
         </Button>
       </Stack>
-    </>
+    </Form>
   );
 };
 

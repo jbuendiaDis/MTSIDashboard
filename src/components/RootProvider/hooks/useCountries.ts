@@ -10,7 +10,12 @@ import { formatToCurrency } from '../../../utils/amountFormater';
 import { format, parseISO } from 'date-fns';
 
 export const useCountries = ({ rootState, rootDispatch }: any) => {
-  const { countries, countriesByState, countriesByStateUnitType } = rootState;
+  const {
+    countries,
+    countriesByState,
+    countriesByStateSecond,
+    countriesByStateUnitType,
+  } = rootState;
 
   const _getAllCountries = useApi({
     endpoint: '/countries/all',
@@ -76,6 +81,23 @@ export const useCountries = ({ rootState, rootDispatch }: any) => {
     }
   };
 
+  const handleGetCountrieSecond = async (state: number): Promise<boolean> => {
+    try {
+      const response: ResponseCountries = await _getCountriesByState({
+        urlParam: state,
+      });
+      const code: Response['code'] = get(response, 'response.code');
+      const payload: PayloadCountries['data'] = get(response, 'payload.data');
+
+      if (code === 200)
+        rootDispatch({ type: 'countriesByStateSecond', payload });
+
+      return true;
+    } catch (error) {
+      return false;
+    }
+  };
+
   const handleGetCountriesByStateUnitType = async (
     state: number,
     unit: string
@@ -100,9 +122,11 @@ export const useCountries = ({ rootState, rootDispatch }: any) => {
   return {
     countries,
     countriesByState,
+    countriesByStateSecond,
     countriesByStateUnitType,
     handleGetAllCountries,
     handleGetCountrie,
+    handleGetCountrieSecond,
     handleGetCountriesByStateUnitType,
   };
 };

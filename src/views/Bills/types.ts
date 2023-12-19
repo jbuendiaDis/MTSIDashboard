@@ -1,6 +1,16 @@
 import { Response } from '../../models/responseApi';
 
+interface State {
+  codigo: number;
+  label: string;
+  _id: string;
+}
+
 export interface FormValues {
+  originState: State | null;
+  destinationState: State | null;
+  originLocality: any;
+  destinationLocality: any;
   comidas: number | string;
   hoteles: number | string;
   pasajeOrigen: number | string;
@@ -64,23 +74,25 @@ export interface TollExpensesData {
   };
 }
 
+export interface DataTollExpenses {
+  comidas: number;
+  hoteles: number;
+  pasajeOrigen: number;
+  pasajeDestino: number;
+  destino: string;
+  estadoDestino: string;
+  estadoOrigen: string;
+  idCliente: string;
+  localidadDestino: string;
+  localidadOrigen: string;
+  origen: string;
+  peajes: Tolls[];
+  __v?: number;
+  _id: string;
+}
+
 export interface PayloadTollExpenses {
-  data: {
-    comidas: number;
-    hoteles: number;
-    pasajeOrigen: number;
-    pasajeDestino: number;
-    destino: string;
-    estadoDestino: string;
-    estadoOrigen: string;
-    idCliente: string;
-    localidadDestino: string;
-    localidadOrigen: string;
-    origen: string;
-    peajes: Tolls[];
-    __v?: number;
-    _id: string;
-  }[];
+  data: DataTollExpenses[];
 }
 
 export interface ResponseTollExpenses {

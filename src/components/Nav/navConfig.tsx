@@ -9,8 +9,8 @@ import {
   TrendingUpOutlined,
   Diversity3Outlined,
   WarehouseOutlined,
+  RequestQuoteOutlined,
 } from '@mui/icons-material';
-
 export interface Menu {
   title: string;
   path: string;
@@ -57,5 +57,10 @@ export const navConfig: Menu[] = [
     title: 'Rendimientos',
     path: '/returns',
     icon: <TrendingUpOutlined />,
+  },
+  {
+    title: 'Cotizaciones',
+    path: '/quotes',
+    icon: <RequestQuoteOutlined />,
   },
 ];

@@ -1,8 +1,9 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useLoader } from '../../components/Loader';
 import { useApi } from '../../hooks/useApi';
 import { LoaderContextType, Response } from '../../models';
 import {
+  DataTollExpenses,
   FormValues,
   PayloadTollExpenses,
   ResponseTollExpenses,
@@ -13,14 +14,24 @@ import { useModalConfirmation } from '../../hooks/useModalConfirmation';
 import { useAuth } from '../../components/Auth';
 import { get } from 'lodash';
 import * as Yup from 'yup';
+import { useRootProvider } from '../../components/RootProvider/hooks/useRootProvider';
 
 export const useHelpers = () => {
   const { user } = useAuth();
   const { handleShowLoader }: LoaderContextType = useLoader();
   const { modalDelete, modalInformation, modalSuccess } =
     useModalConfirmation();
+  const { actionsCountries, actionsState }: any = useRootProvider();
+  const { states } = actionsState;
+  const {
+    countriesByState,
+    countriesByStateSecond,
+    handleGetCountrie,
+    handleGetCountrieSecond,
+  } = actionsCountries;
   const [billsDataTable, setBillsDataTable] = useState<any[]>([]);
   const [dataEdit, setDataEdit] = useState<any | null>(null);
+  const [dataTemp, setDataTemp] = useState<DataTollExpenses | null>(null);
 
   const _getAllTollExpenses = useApi({
     endpoint: '/gastosPeajes',
@@ -47,14 +58,47 @@ export const useHelpers = () => {
     method: 'put',
   });
 
+  console.log('locations', countriesByState, countriesByStateSecond);
+
+  useEffect(() => {
+    if (
+      dataTemp !== null &&
+      countriesByState.length > 0 &&
+      countriesByStateSecond.length > 0
+    ) {
+      console.log('RENDER', dataTemp, countriesByState);
+      const filterOriginState = states.find(
+        (item: any) => item.codigo === parseInt(dataTemp.estadoOrigen)
+      );
+      const filterDestinationState = states.find(
+        (item: any) => item.codigo === parseInt(dataTemp.estadoDestino)
+      );
+      // const filterOriginLocality = countriesByState.find(
+      //   (item: any) => item.codigo === dataTemp.codigo
+      // );
+
+      console.log('filter', filterOriginState, filterDestinationState);
+      // const filterCountrie = countriesByState.find(
+      //   (item: any) => item.codigo === dataTemp.codigo
+      // );
+      // const newDataEdit: FormValues = {
+      //   state: filterState,
+      //   nombre: filterCountrie,
+      //   costo: dataTemp.costo,
+      //   unitType: dataTemp.tipoUnidad,
+      //   codigo: dataTemp.codigo,
+      // };
+      // setDataEdit(newDataEdit);
+      // setDataTemp(null);
+    }
+  }, [dataTemp, countriesByState, countriesByStateSecond]);
+
   const handleGetAllBills = async (): Promise<boolean> => {
     try {
       const { payload, response }: ResponseTollExpenses =
         await _getAllTollExpenses();
       const code: Response['code'] = response.code;
       const dataResponse: PayloadTollExpenses['data'] = payload.data;
-
-      console.log('dataResponse__', dataResponse);
 
       if (code === 200) {
         const formaterData = dataResponse.map((item) => {
@@ -84,8 +128,6 @@ export const useHelpers = () => {
           };
         });
 
-        console.log('FORMAT', formaterData);
-
         setBillsDataTable(formaterData);
         handleShowLoader(false);
       }
@@ -102,10 +144,17 @@ export const useHelpers = () => {
         urlParam: id,
       });
       const code: Response['code'] = response.code;
-      const dataResponse = payload.data;
+      const dataResponse: DataTollExpenses = Array.isArray(payload.data)
+        ? payload.data[0]
+        : payload.data;
+
+      const originState: number = parseInt(dataResponse.estadoOrigen);
+      const destinationState: number = parseInt(dataResponse.estadoDestino);
 
       if (code === 200) {
-        setDataEdit(dataResponse);
+        handleGetCountrie(originState);
+        handleGetCountrieSecond(destinationState);
+        setDataTemp(dataResponse);
       }
       return true;
     } catch (error) {
@@ -115,8 +164,9 @@ export const useHelpers = () => {
 
   const handleOpenDeleteModal = (data: TollExpensesData['data']) => {
     const message: string = '¿Seguro que desea eliminar este dato:';
-    const dataValue = `${data?.origen} - ${data.destino}`;
-    console.log('data-delete', data);
+    const dataValue = `${data?.origen ? data?.origen : '-'} - ${
+      data?.destino ? data?.destino : '-'
+    }`;
     modalDelete({
       message,
       dataValue,
@@ -145,6 +195,10 @@ export const useHelpers = () => {
   };
 
   const validationSchema = Yup.object().shape({
+    originState: Yup.object().nullable().required(),
+    destinationState: Yup.object().nullable().required(),
+    originLocality: Yup.object().nullable().required(),
+    destinationLocality: Yup.object().nullable().required(),
     comidas: Yup.number().nullable(),
     hoteles: Yup.number().nullable(),
     pasajeDestino: Yup.number().nullable(),
@@ -152,6 +206,10 @@ export const useHelpers = () => {
   });
 
   const initialValues: FormValues = {
+    originState: null,
+    destinationState: null,
+    originLocality: null,
+    destinationLocality: null,
     comidas: '',
     hoteles: '',
     pasajeDestino: '',
@@ -162,9 +220,20 @@ export const useHelpers = () => {
     try {
       console.log('VALUES', values);
       const newValues = {
-        ...values,
         idCliente: user?.id,
+        estadoOrigen: values.originState.codigo,
+        localidadOrigen: values.originLocality.codigo,
+        estadoDestino: values.destinationState.codigo,
+        localidadDestino: values.destinationLocality.codigo,
+        origen: values.originState.label,
+        destino: values.destinationState.label,
+        pasajeOrigen: values.pasajeOrigen,
+        pasajeDestino: values.pasajeDestino,
+        comidas: values.comidas,
+        hoteles: values.hoteles,
       };
+
+      console.log('newValues', newValues);
 
       const response: ResponseTollExpenses = await _createBill({
         body: newValues,
@@ -184,8 +253,6 @@ export const useHelpers = () => {
     }
   };
 
-  console.log('DATA_EDIT', dataEdit);
-
   return {
     dataEdit,
     initialValues,
@@ -194,6 +261,7 @@ export const useHelpers = () => {
     handleGetBill,
     handleOpenDeleteModal,
     handleSubmit,
+    setDataEdit,
     validationSchema,
   };
 };

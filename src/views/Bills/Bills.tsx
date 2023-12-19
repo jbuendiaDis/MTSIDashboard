@@ -18,28 +18,38 @@ import { TollExpensesData } from './types';
 import { DetailBills } from './DetailBills';
 import { BillForm } from './BillForm';
 import { HeaderTitleModal } from '../../components/Modal/HeaderTitleModal';
+import { useRootProvider } from '../../components/RootProvider/hooks/useRootProvider';
 
 const Bills = () => {
   const { handleOpenModal, handleCloseModal }: ModalContextType = useModal();
   const { handleShowLoader }: LoaderContextType = useLoader();
+  const { actionsState }: any = useRootProvider();
+  const { states, handleGetStates } = actionsState;
   const {
+    dataEdit,
     initialValues,
     billsDataTable,
     handleGetAllBills,
     handleGetBill,
     handleOpenDeleteModal,
     handleSubmit,
+    setDataEdit,
     validationSchema,
   } = useHelpers();
 
   useEffect(() => {
     handleShowLoader(true);
     handleGetAllBills();
+    handleGetStates();
   }, []);
+
+  useEffect(() => {
+    if (dataEdit) handleModal();
+  }, [dataEdit]);
 
   const handleToggleModal = (): void => {
     handleCloseModal();
-    // setDataEdit(null);
+    setDataEdit(null);
   };
 
   const columns: Column[] = [
@@ -90,7 +100,7 @@ const Bills = () => {
       title: (
         <HeaderTitleModal
           handleToggleModal={() => handleCloseModal()}
-          title={'DETALLE DE GASTOS'}
+          title="DETALLE DE GASTOS"
         />
       ),
       body: <DetailBills detailBillsData={data} />,
@@ -104,7 +114,7 @@ const Bills = () => {
       title: (
         <HeaderTitleModal
           handleToggleModal={handleToggleModal}
-          title={'CREAR GASTO'}
+          title={dataEdit ? 'EDITAR GASTO' : 'CREAR GASTO'}
         />
       ),
       body: (
@@ -114,9 +124,11 @@ const Bills = () => {
             validationSchema={validationSchema}
             onSubmit={handleSubmit}
           >
-            <Form>
-              <BillForm handleToggleModal={handleToggleModal} />
-            </Form>
+            <BillForm
+              handleToggleModal={handleToggleModal}
+              states={states}
+              dataEdit={dataEdit}
+            />
           </Formik>
         </Box>
       ),

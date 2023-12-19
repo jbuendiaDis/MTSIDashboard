@@ -5,6 +5,7 @@ export interface Values {
   states: [];
   countries: [];
   countriesByState: [];
+  countriesByStateSecond: [];
   countriesByStateUnitType: [];
   catalogs: [];
   unitTypes: [];
@@ -15,6 +16,7 @@ export const initialState: Values = {
   states: [],
   countries: [],
   countriesByState: [],
+  countriesByStateSecond: [],
   countriesByStateUnitType: [],
   catalogs: [],
   unitTypes: [],

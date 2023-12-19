@@ -49,17 +49,10 @@ const Routes = () => {
   const {
     tollsData,
     formik,
-    // pagoCasetas,
-    // nombreCaseta,
-    nameState,
     dataDotsTable,
     dataEdit,
     dataDestinoLocation,
     options,
-    // setPagoCasetas,
-    // setNombreCaseta,
-    // setNameState,
-    // setCosto,
     handleOpenModalDelete,
     handleGetToll,
     handleAddDot,
@@ -204,10 +197,6 @@ const Routes = () => {
   const handleCloseDialog = () => {
     formik.resetForm();
     setOpen(false);
-    // setPagoCasetas('');
-    // setNombreCaseta('');
-    // setNameState(null);
-    // setCosto(0);
   };
 
   console.log('countriesByStateUnitType', countriesByStateUnitType);
@@ -227,10 +216,6 @@ const Routes = () => {
             onClick={() => {
               setOpen(!open);
               formik.resetForm();
-              // setPagoCasetas('');
-              // setNombreCaseta('');
-              // setCosto(0);
-              // setErrorDots('');
               setDataDotsTable([]);
             }}
             startIcon={<Add />}
@@ -441,20 +426,6 @@ const Routes = () => {
                     </MenuItem>
                   ))}
                 </TextField>
-                {/* <TextField
-                  fullWidth
-                  select
-                  label="Pago de Caseta"
-                  value={pagoCasetas}
-                  onChange={(e: any) => setPagoCasetas(e.target.value)}
-                  // error={errorDots !== '' ? true : false}
-                >
-                  {options.map((item: any) => (
-                    <MenuItem key={item.value} value={item.value}>
-                      {item.label}
-                    </MenuItem>
-                  ))}
-                </TextField> */}
               </Grid>
               <Grid item xs={12} sm={6} md={4} lg={3}>
                 <Autocomplete
@@ -474,17 +445,6 @@ const Routes = () => {
                     />
                   )}
                 />
-                {/* <Autocomplete
-                  options={states}
-                  getOptionLabel={(option: any) => option.label || ''}
-                  // isOptionEqualToValue={(option, value) =>
-                  //   option._id === value?._id
-                  // }
-                  onChange={(_event, value) => setNameState(value)}
-                  renderInput={(params) => (
-                    <TextField {...params} label="Seleccione un estado" />
-                  )}
-                /> */}
               </Grid>
               <Grid item xs={12} sm={6} md={4} lg={3}>
                 <Autocomplete
@@ -504,14 +464,6 @@ const Routes = () => {
                     />
                   )}
                 />
-                {/* <Autocomplete
-                  options={countriesByStateUnitType}
-                  getOptionLabel={(option: any) => option.nombre || ''}
-                  onChange={(_event, value) => setNombreCaseta(value)}
-                  renderInput={(params) => (
-                    <TextField {...params} label="Seleccione una Caseta" />
-                  )}
-                /> */}
               </Grid>
 
               <Grid
@@ -539,13 +491,6 @@ const Routes = () => {
                         ? false
                         : true
                     }
-                    // disabled={
-                    //   pagoCasetas !== '' &&
-                    //   nombreCaseta !== '' &&
-                    //   nameState !== null
-                    //     ? false
-                    //     : true
-                    // }
                   >
                     Agregar Punto
                   </Button>

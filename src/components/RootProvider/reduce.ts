@@ -28,6 +28,11 @@ export const reducer = (state: Values, action: ActionValues) => {
         ...state,
         countriesByState: _.get(action, ['payload'], []),
       };
+    case 'countriesByStateSecond':
+      return {
+        ...state,
+        countriesByStateSecond: _.get(action, ['payload'], []),
+      };
     case 'countriesByStateUnitType':
       return {
         ...state,

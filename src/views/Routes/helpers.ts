@@ -39,12 +39,8 @@ interface HelpersProps {
 export const useHelpers = ({ setOpen }: HelpersProps) => {
   const [tollsData, setTollsData] = useState<DataTolls[]>([]);
   const [dataEdit, setDataEdit] = useState<DataTolls[] | null>(null);
-  const [pagoCasetas, setPagoCasetas] = useState<string>('');
-  const [nombreCaseta, setNombreCaseta] = useState<any | null>(null);
-  const [nameState, setNameState] = useState<any | null>(null);
   const [dataDotsTable, setDataDotsTable] = useState<any[]>([]);
   const [dataDestinoLocation, setDataDestinoLocation] = useState<any[]>([]);
-  const [allDataTolls, setAllDataTolls] = useState<any[]>([]);
   const { handleShowLoader }: LoaderContextType = useLoader();
   const { modalDelete, modalSuccess, modalInformation } =
     useModalConfirmation();
@@ -76,15 +72,9 @@ export const useHelpers = ({ setOpen }: HelpersProps) => {
     method: 'get',
   });
 
-  const _getAllCountries = useApi({
-    endpoint: '/countries',
-    method: 'get',
-  });
-
   useEffect(() => {
     handleShowLoader(true);
     handleGetTolls();
-    handleGetAllCountries();
   }, []);
 
   const handleGetCountrieDestino = async (state: number): Promise<boolean> => {
@@ -99,38 +89,6 @@ export const useHelpers = ({ setOpen }: HelpersProps) => {
       if (code === 200) {
         const payload: PayloadCountries['data'] = dataResponse;
         setDataDestinoLocation(payload);
-      }
-      return true;
-    } catch (error) {
-      return false;
-    }
-  };
-
-  const handleGetAllCountries = async (): Promise<boolean> => {
-    try {
-      const { payload, response }: ResponseCountries = await _getAllCountries();
-      const code: Response['code'] = response.code;
-      const dataResponse: PayloadCountries['data'] = payload.data;
-
-      if (code === 200) {
-        // const payload: CountriesData[] = dataResponse.map((item) => {
-        //   const costoNumber =
-        //     typeof item.costo === 'number'
-        //       ? item.costo
-        //       : parseFloat(item.costo || '0');
-
-        //   return {
-        //     ...item,
-        //     costo: item.costo
-        //       ? formatToCurrency(costoNumber)
-        //       : formatToCurrency(0),
-        //     fechaCreacion:
-        //       typeof item.fechaCreacion === 'string'
-        //         ? format(parseISO(item.fechaCreacion), 'dd/MM/yyyy')
-        //         : format(item.fechaCreacion, 'dd/MM/yyyy'),
-        //   };
-        // });
-        setAllDataTolls(dataResponse);
       }
       return true;
     } catch (error) {
@@ -224,22 +182,21 @@ export const useHelpers = ({ setOpen }: HelpersProps) => {
     }
   };
 
-  console.log('CLEAN', nameState, nombreCaseta);
-
   const handleAddDot = () => {
     const newDot: TableDots = {
       casetas: formik.values.pagoCasetas,
-      nombreCaseta: get(formik.values, 'pagoCasetas.nombre', ''),
-      costo: formatToCurrency(get(formik.values, 'pagoCasetas.costo', 0)),
+      nombreCaseta: get(formik.values, 'nombreCaseta.nombre', ''),
+      costo: formatToCurrency(get(formik.values, 'nombreCaseta.costo', 0)),
       _id: dataDotsTable.length + 1,
     };
-    console.log('ADD', newDot);
-    // setDataDotsTable((prevDots) => [...prevDots, newDot]);
-    // setPagoCasetas('');
-    // setNombreCaseta(null);
-    // setNameState(null);
-    // setCosto(0);
-    // setErrorDots('');
+    setDataDotsTable((prevDots) => [...prevDots, newDot]);
+
+    formik.setValues({
+      ...formik.values,
+      pagoCasetas: '',
+      stateCaseta: null,
+      nombreCaseta: null,
+    });
   };
 
   const handleRemoveDot = (id: number) => {
@@ -319,24 +276,24 @@ export const useHelpers = ({ setOpen }: HelpersProps) => {
 
         console.log('newValues', newValues);
 
-        // const response: ResponseUnidades = await _createToll({
-        //   body: newValues,
-        // });
-        // const code: Response['code'] = get(response, 'response.code');
-        // const message: Response['message'] = get(
-        //   response,
-        //   'response.message',
-        //   ''
-        // );
+        const response: ResponseUnidades = await _createToll({
+          body: newValues,
+        });
+        const code: Response['code'] = get(response, 'response.code');
+        const message: Response['message'] = get(
+          response,
+          'response.message',
+          ''
+        );
 
-        // if (code === 200) {
-        //   modalSuccess({ message });
-        //   handleGetTolls();
-        //   formik.resetForm();
-        //   setOpen(false);
-        // } else {
-        //   modalInformation({ message });
-        // }
+        if (code === 200) {
+          modalSuccess({ message });
+          handleGetTolls();
+          formik.resetForm();
+          setOpen(false);
+        } else {
+          modalInformation({ message });
+        }
 
         return true;
       } catch (error) {
@@ -359,19 +316,10 @@ export const useHelpers = ({ setOpen }: HelpersProps) => {
   return {
     tollsData,
     formik,
-    // pagoCasetas,
-    // nombreCaseta,
-    nameState,
-    // costo,
     dataDotsTable,
     dataEdit,
     dataDestinoLocation,
-    allDataTolls,
     options,
-    // setPagoCasetas,
-    // setNombreCaseta,
-    // setNameState,
-    // setCosto,
     handleOpenModalDelete,
     handleGetToll,
     handleAddDot,
