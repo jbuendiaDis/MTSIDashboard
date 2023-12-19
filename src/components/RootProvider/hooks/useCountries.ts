@@ -2,7 +2,6 @@ import { get } from 'lodash';
 import { useApi } from '../../../hooks/useApi';
 import {
   CountriesData,
-  FormatDataState,
   PayloadCountries,
   Response,
   ResponseCountries,
@@ -14,7 +13,7 @@ export const useCountries = ({ rootState, rootDispatch }: any) => {
   const { countries, countriesByState, countriesByStateUnitType } = rootState;
 
   const _getAllCountries = useApi({
-    endpoint: '/countriesx',
+    endpoint: '/countries/all',
     method: 'get',
   });
 
