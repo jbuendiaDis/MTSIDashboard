@@ -8,12 +8,20 @@ import { useModalConfirmation } from '../../hooks/useModalConfirmation';
 import { useRootProvider } from '../../components/RootProvider/hooks/useRootProvider';
 import { get } from 'lodash';
 
-export const useHelpers = () => {
+interface PropsHelpers {
+  valueState: any;
+}
+
+export const useHelpers = ({ valueState }: PropsHelpers) => {
   const [dataEdit, setDataEdit] = useState<FormValues | null>(null);
   const [dataTemp, setDataTemp] = useState<any | null>(null);
   const { actionsCountries, actionsState }: any = useRootProvider();
-  const { handleGetAllCountries, handleGetCountrie, countriesByState } =
-    actionsCountries;
+  const {
+    handleGetAllCountries,
+    handleGetCountrie,
+    handleGetCountrieSecond,
+    countriesByStateSecond,
+  } = actionsCountries;
   const { states } = actionsState;
   const { modalDelete, modalSuccess, modalInformation } =
     useModalConfirmation();
@@ -21,7 +29,7 @@ export const useHelpers = () => {
   const requiredField: string = 'Este campo es obligatorio.';
 
   const _getCountrieById = useApi({
-    endpoint: '/countries/by-estado',
+    endpoint: '/countries/estado',
     method: 'get',
   });
 
@@ -41,13 +49,17 @@ export const useHelpers = () => {
   });
 
   useEffect(() => {
-    if (dataTemp !== null && countriesByState.length > 0) {
+    if (dataTemp !== null && countriesByStateSecond.length > 0) {
+      console.log('dataTemp', dataTemp);
       const filterState = states.find(
         (item: any) => item.codigo === dataTemp.estado
       );
-      const filterCountrie = countriesByState.find(
+
+      const filterCountrie = countriesByStateSecond.find(
         (item: any) => item.codigo === dataTemp.codigo
       );
+
+      console.log('filter', filterCountrie, countriesByStateSecond);
 
       const newDataEdit: FormValues = {
         state: filterState,
@@ -60,7 +72,7 @@ export const useHelpers = () => {
       setDataEdit(newDataEdit);
       setDataTemp(null);
     }
-  }, [dataTemp, countriesByState]);
+  }, [dataTemp, countriesByStateSecond]);
 
   const handleOpenModalDelete = (data: DataToll): void => {
     const message: string = '¿Seguro que desea eliminar este peaje:';
@@ -92,10 +104,11 @@ export const useHelpers = () => {
     }
   };
 
-  const handleGetToll = async (code: number): Promise<boolean> => {
+  const handleGetToll = async (data: DataToll): Promise<boolean> => {
     try {
+      console.log('data', data);
       const { payload, response }: ResponseTolls = await _getCountrieById({
-        urlParam: code,
+        urlParam: `${data.estado}/tipoUnidad/${data.tipoUnidad}`,
       });
       const dataResponse: DataToll = Array.isArray(payload.data)
         ? payload.data[0]
@@ -103,7 +116,8 @@ export const useHelpers = () => {
       const codeResponse: Response['code'] = response.code;
 
       if (codeResponse === 200) {
-        handleGetCountrie(dataResponse.estado);
+        console.log('res', dataResponse);
+        handleGetCountrieSecond(dataResponse.estado);
         setDataTemp(dataResponse);
       }
 
@@ -152,7 +166,8 @@ export const useHelpers = () => {
 
         if (code === 200) {
           modalSuccess({ message });
-          handleGetAllCountries();
+          // handleGetAllCountries();
+          handleGetCountrie(valueState.codigo);
         } else {
           modalInformation({ message });
         }
@@ -170,7 +185,8 @@ export const useHelpers = () => {
 
         if (code === 200) {
           modalSuccess({ message });
-          handleGetAllCountries();
+          // handleGetAllCountries();
+          handleGetCountrie();
         } else {
           modalInformation({ message });
         }

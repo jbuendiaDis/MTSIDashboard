@@ -1,14 +1,25 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Table } from '../../components/Table';
-import { Button } from '@mui/material';
+import {
+  Autocomplete,
+  Button,
+  Grid,
+  TextField,
+  Typography,
+} from '@mui/material';
 import {
   Add,
   DeleteOutlineOutlined,
   ModeEditOutlineOutlined,
 } from '@mui/icons-material';
 import { useHelpers } from './helpers';
-import { Column, LoaderContextType } from '../../models';
+import {
+  Column,
+  CountriesData,
+  FormatDataState,
+  LoaderContextType,
+} from '../../models';
 import { useModal } from '../../components/Modal';
 import { Formik } from 'formik';
 import { DataToll } from './types';
@@ -17,14 +28,20 @@ import { useLoader } from '../../components/Loader';
 import { Helmet } from 'react-helmet-async';
 import { HeaderTitleModal } from '../../components/Modal/HeaderTitleModal';
 import { FormTolls } from './FormTolls';
+import { formatToCurrency } from '../../utils/amountFormater';
+import { format, parseISO } from 'date-fns';
 
 const Tolls = () => {
+  const [valueState, setValueState] = useState<FormatDataState | null>(null);
+  const [countriesByStateData, setCountriesByStateData] = useState<
+    CountriesData[]
+  >([]);
   const { handleShowLoader }: LoaderContextType = useLoader();
   const { handleOpenModal, handleCloseModal } = useModal();
   const { actionsState, actionsCountries, actionsCatalogs }: any =
     useRootProvider();
   const { states, handleGetStates } = actionsState;
-  const { countries, handleGetAllCountries } = actionsCountries;
+  const { countriesByState, handleGetCountrie } = actionsCountries;
   const { catalogs, handleGetCatalogs, handleGetUnitType, unitTypes } =
     actionsCatalogs;
   const {
@@ -36,12 +53,12 @@ const Tolls = () => {
     handleGetToll,
     setDataEdit,
     setDataTemp,
-  } = useHelpers();
+  } = useHelpers({ valueState });
 
   useEffect(() => {
     handleShowLoader(true);
     handleGetStates();
-    handleGetAllCountries();
+    // handleGetAllCountries();
     handleGetCatalogs();
     setDataEdit(null);
     setDataTemp(null);
@@ -54,6 +71,37 @@ const Tolls = () => {
   useEffect(() => {
     if (dataEdit) handleModal();
   }, [dataEdit]);
+
+  useEffect(() => {
+    if (valueState) {
+      handleGetCountrie(valueState.codigo);
+    }
+  }, [valueState]);
+
+  useEffect(() => {
+    if (countriesByState?.length > 0) {
+      console.log('YES');
+      const formatData: CountriesData[] = countriesByState.map((item: any) => {
+        const costoNumber =
+          typeof item.costo === 'number'
+            ? item.costo
+            : parseFloat(item.costo || '0');
+
+        return {
+          ...item,
+          costo: item.costo
+            ? formatToCurrency(costoNumber)
+            : formatToCurrency(0),
+          fechaCreacion:
+            typeof item.fechaCreacion === 'string'
+              ? format(parseISO(item.fechaCreacion), 'dd/MM/yyyy')
+              : format(item.fechaCreacion, 'dd/MM/yyyy'),
+        };
+      });
+
+      setCountriesByStateData(formatData);
+    }
+  }, [countriesByState]);
 
   const columns: Column[] = [
     { id: 'estadoNombre', label: 'Estado', align: 'left' },
@@ -69,7 +117,7 @@ const Tolls = () => {
         {
           label: 'Editar',
           icon: <ModeEditOutlineOutlined sx={{ width: 20, height: 20 }} />,
-          onClick: (rowData: DataToll) => handleGetToll(rowData.codigo),
+          onClick: (rowData: DataToll) => handleGetToll(rowData),
         },
         {
           label: 'Eliminar',
@@ -121,12 +169,19 @@ const Tolls = () => {
       <Helmet>
         <title>MTSI | Peajes</title>
       </Helmet>
-      <Table
-        tableHead
-        customButton
-        showCheckboxes={false}
-        title="Peajes"
-        renderCustomButton={
+      <Grid
+        sx={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+        }}
+      >
+        <Grid>
+          <Typography variant="h4" sx={{ letterSpacing: '1px' }}>
+            Peajes
+          </Typography>
+        </Grid>
+        <Grid>
           <Button
             variant="contained"
             color="inherit"
@@ -136,12 +191,31 @@ const Tolls = () => {
               setDataEdit(null);
             }}
             startIcon={<Add />}
+            disabled={countriesByState?.length > 0 ? false : true}
           >
             Agregar Peaje
           </Button>
-        }
+        </Grid>
+      </Grid>
+      <Grid sx={{ mt: 3 }}>
+        <Typography sx={{ mb: 3 }}>Instrucciones</Typography>
+        <Autocomplete
+          value={valueState}
+          onChange={(_event: any, newValue: FormatDataState | null) => {
+            setValueState(newValue);
+          }}
+          options={states}
+          sx={{ width: '320px' }}
+          renderInput={(params) => (
+            <TextField {...params} label="Seleccione un estado" />
+          )}
+        />
+      </Grid>
+      <Table
+        tableHead
+        showCheckboxes={false}
         columns={columns}
-        data={countries}
+        data={countriesByStateData}
       />
     </>
   );

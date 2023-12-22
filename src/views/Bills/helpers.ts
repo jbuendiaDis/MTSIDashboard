@@ -66,7 +66,7 @@ export const useHelpers = () => {
       countriesByState.length > 0 &&
       countriesByStateSecond.length > 0
     ) {
-      console.log('RENDER', dataTemp, countriesByState);
+      console.log('RENDER', dataTemp, countriesByState, countriesByStateSecond);
       const filterOriginState = states.find(
         (item: any) => item.codigo === parseInt(dataTemp.estadoOrigen)
       );

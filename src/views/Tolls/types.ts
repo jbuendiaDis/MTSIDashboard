@@ -20,6 +20,7 @@ export interface DataToll {
   estado: number;
   fechaCreacion: string | Date;
   nombre: string;
+  tipoUnidad: string;
   __v: number;
   _id: string;
 }
