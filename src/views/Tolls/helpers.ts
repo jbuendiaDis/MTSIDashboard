@@ -29,7 +29,7 @@ export const useHelpers = ({ valueState }: PropsHelpers) => {
   const requiredField: string = 'Este campo es obligatorio.';
 
   const _getCountrieById = useApi({
-    endpoint: '/countries/estado',
+    endpoint: '/countries/by-id',
     method: 'get',
   });
 
@@ -50,7 +50,6 @@ export const useHelpers = ({ valueState }: PropsHelpers) => {
 
   useEffect(() => {
     if (dataTemp !== null && countriesByStateSecond.length > 0) {
-      console.log('dataTemp', dataTemp);
       const filterState = states.find(
         (item: any) => item.codigo === dataTemp.estado
       );
@@ -58,8 +57,6 @@ export const useHelpers = ({ valueState }: PropsHelpers) => {
       const filterCountrie = countriesByStateSecond.find(
         (item: any) => item.codigo === dataTemp.codigo
       );
-
-      console.log('filter', filterCountrie, countriesByStateSecond);
 
       const newDataEdit: FormValues = {
         state: filterState,
@@ -108,7 +105,7 @@ export const useHelpers = ({ valueState }: PropsHelpers) => {
     try {
       console.log('data', data);
       const { payload, response }: ResponseTolls = await _getCountrieById({
-        urlParam: `${data.estado}/tipoUnidad/${data.tipoUnidad}`,
+        urlParam: data._id,
       });
       const dataResponse: DataToll = Array.isArray(payload.data)
         ? payload.data[0]

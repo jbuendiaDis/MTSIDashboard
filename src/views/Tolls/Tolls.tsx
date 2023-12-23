@@ -181,7 +181,7 @@ const Tolls = () => {
             Peajes
           </Typography>
         </Grid>
-        <Grid>
+        {/* <Grid>
           <Button
             variant="contained"
             color="inherit"
@@ -195,10 +195,19 @@ const Tolls = () => {
           >
             Agregar Peaje
           </Button>
-        </Grid>
+        </Grid> */}
       </Grid>
       <Grid sx={{ mt: 3 }}>
-        <Typography sx={{ mb: 3 }}>Instrucciones</Typography>
+        <Typography
+          sx={{
+            mb: 2,
+            fontWeight: 500,
+            fontSize: '15px',
+          }}
+        >
+          Elija un estado para visualizar la información de las casetas en la
+          tabla.
+        </Typography>
         <Autocomplete
           value={valueState}
           onChange={(_event: any, newValue: FormatDataState | null) => {
