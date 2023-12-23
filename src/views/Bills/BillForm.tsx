@@ -20,10 +20,13 @@ const BillForm = ({ handleToggleModal, states, dataEdit }: BillFormProps) => {
     countriesByStateSecond,
     handleGetCountrie,
     handleGetCountrieSecond,
+    handleResetCountriesByState,
+    handleResetCountriesByStateSecond,
   } = actionsCountries;
 
   useEffect(() => {
     if (values.originState !== null) {
+      handleResetCountriesByState();
       handleGetCountrie(values.originState?.codigo);
       setValues({
         ...values,
@@ -34,6 +37,7 @@ const BillForm = ({ handleToggleModal, states, dataEdit }: BillFormProps) => {
 
   useEffect(() => {
     if (values.destinationState !== null) {
+      handleResetCountriesByStateSecond();
       handleGetCountrieSecond(values.destinationState?.codigo);
       setValues({
         ...values,

@@ -58,7 +58,7 @@ export const useHelpers = () => {
     method: 'put',
   });
 
-  console.log('locations', countriesByState, countriesByStateSecond);
+  // console.log('locations', countriesByState, countriesByStateSecond);
 
   useEffect(() => {
     if (

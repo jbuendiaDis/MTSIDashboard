@@ -20,27 +20,6 @@ export const initialState: Values = {
   countriesByStateUnitType: [],
   catalogs: [],
   unitTypes: [],
-  // countries: [],
-  // userAdmin: {},
-  // users: [],
-  // tags: [],
-  // tasks: [],
-  // modules: [],
-  // quotations: [],
-  // doctors: [],
-  // specialitys: [],
-  // states: [],
-  // statistics: {
-  //   staticData: [],
-  //   userInteractions: [],
-  //   mostSee: [],
-  //   topRated: [],
-  //   percentageDoctorsBySpeciality: [],
-  // },
-  // lastContent: {
-  //   lastDocuments: [],
-  //   lastVideos: [],
-  // },
 };
 
 export const RootProviderContext: Context<any> | any = createContext(null);

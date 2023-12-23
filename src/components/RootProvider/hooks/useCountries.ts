@@ -119,6 +119,14 @@ export const useCountries = ({ rootState, rootDispatch }: any) => {
     }
   };
 
+  const handleResetCountriesByState = (): void => {
+    rootDispatch({ type: 'resetCountriesByState' });
+  };
+
+  const handleResetCountriesByStateSecond = (): void => {
+    rootDispatch({ type: 'resetCountriesByStateSecond' });
+  };
+
   return {
     countries,
     countriesByState,
@@ -128,5 +136,7 @@ export const useCountries = ({ rootState, rootDispatch }: any) => {
     handleGetCountrie,
     handleGetCountrieSecond,
     handleGetCountriesByStateUnitType,
+    handleResetCountriesByState,
+    handleResetCountriesByStateSecond,
   };
 };

@@ -147,7 +147,6 @@ export const useHelpers = ({ valueState }: PropsHelpers) => {
         nombre: values.nombre?.nombre,
         costo: values.costo,
         estado: values.state?.codigo,
-        // nombreEstado: values.state?.label
       };
       if (dataEdit) {
         const response: ResponseTolls = await _updateCountrie({
@@ -163,7 +162,6 @@ export const useHelpers = ({ valueState }: PropsHelpers) => {
 
         if (code === 200) {
           modalSuccess({ message });
-          // handleGetAllCountries();
           handleGetCountrie(valueState.codigo);
         } else {
           modalInformation({ message });
@@ -181,9 +179,8 @@ export const useHelpers = ({ valueState }: PropsHelpers) => {
         );
 
         if (code === 200) {
+          handleGetCountrie(newValues.estado);
           modalSuccess({ message });
-          // handleGetAllCountries();
-          handleGetCountrie();
         } else {
           modalInformation({ message });
         }

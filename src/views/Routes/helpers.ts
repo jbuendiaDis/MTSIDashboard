@@ -2,13 +2,7 @@
 import { useEffect, useState } from 'react';
 import { useApi } from '../../hooks/useApi';
 import { useLoader } from '../../components/Loader';
-import {
-  FormatDataState,
-  LoaderContextType,
-  PayloadCountries,
-  Response,
-  ResponseCountries,
-} from '../../models';
+import { FormatDataState, LoaderContextType, Response } from '../../models';
 import { DataTolls, ResponseTolls, ResponseUnidades, TableDots } from './types';
 import {
   formatToCurrency,
@@ -40,7 +34,6 @@ export const useHelpers = ({ setOpen }: HelpersProps) => {
   const [tollsData, setTollsData] = useState<DataTolls[]>([]);
   const [dataEdit, setDataEdit] = useState<DataTolls[] | null>(null);
   const [dataDotsTable, setDataDotsTable] = useState<any[]>([]);
-  const [dataDestinoLocation, setDataDestinoLocation] = useState<any[]>([]);
   const { handleShowLoader }: LoaderContextType = useLoader();
   const { modalDelete, modalSuccess, modalInformation } =
     useModalConfirmation();
@@ -67,34 +60,10 @@ export const useHelpers = ({ setOpen }: HelpersProps) => {
     method: 'delete',
   });
 
-  const _getCountriesByState = useApi({
-    endpoint: '/countries/by-estado',
-    method: 'get',
-  });
-
   useEffect(() => {
     handleShowLoader(true);
     handleGetTolls();
   }, []);
-
-  const handleGetCountrieDestino = async (state: number): Promise<boolean> => {
-    try {
-      const { payload, response }: ResponseCountries =
-        await _getCountriesByState({
-          urlParam: state,
-        });
-      const code: Response['code'] = response.code;
-      const dataResponse: PayloadCountries['data'] = payload.data;
-
-      if (code === 200) {
-        const payload: PayloadCountries['data'] = dataResponse;
-        setDataDestinoLocation(payload);
-      }
-      return true;
-    } catch (error) {
-      return false;
-    }
-  };
 
   const handleGetTolls = async (): Promise<boolean> => {
     try {
@@ -318,13 +287,11 @@ export const useHelpers = ({ setOpen }: HelpersProps) => {
     formik,
     dataDotsTable,
     dataEdit,
-    dataDestinoLocation,
     options,
     handleOpenModalDelete,
     handleGetToll,
     handleAddDot,
     handleRemoveDot,
     setDataDotsTable,
-    handleGetCountrieDestino,
   };
 };

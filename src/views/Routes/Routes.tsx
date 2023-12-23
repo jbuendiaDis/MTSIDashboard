@@ -41,8 +41,12 @@ const Routes = () => {
   const {
     countriesByStateUnitType,
     handleGetCountrie,
+    handleGetCountrieSecond,
     countriesByState,
+    countriesByStateSecond,
     handleGetCountriesByStateUnitType,
+    handleResetCountriesByState,
+    handleResetCountriesByStateSecond,
   } = actionsCountries;
   const { catalogs, handleGetCatalogs, handleGetUnitType, unitTypes } =
     actionsCatalogs;
@@ -51,17 +55,17 @@ const Routes = () => {
     formik,
     dataDotsTable,
     dataEdit,
-    dataDestinoLocation,
     options,
     handleOpenModalDelete,
     handleGetToll,
     handleAddDot,
     handleRemoveDot,
     setDataDotsTable,
-    handleGetCountrieDestino,
   } = useHelpers({ setOpen });
 
   useEffect(() => {
+    handleResetCountriesByState();
+    handleResetCountriesByStateSecond();
     handleShowLoader(true);
     handleGetStates();
     handleGetCatalogs();
@@ -77,6 +81,7 @@ const Routes = () => {
 
   useEffect(() => {
     if (formik.values.stateOrigen !== null) {
+      handleResetCountriesByState();
       handleGetCountrie(formik.values.stateOrigen.codigo);
       formik.setValues({
         ...formik.values,
@@ -87,7 +92,8 @@ const Routes = () => {
 
   useEffect(() => {
     if (formik.values.stateDestino !== null) {
-      handleGetCountrieDestino(formik.values.stateDestino.codigo);
+      handleResetCountriesByStateSecond();
+      handleGetCountrieSecond(formik.values.stateDestino.codigo);
       formik.setValues({
         ...formik.values,
         localidadDestino: null,
@@ -247,6 +253,50 @@ const Routes = () => {
           <form onSubmit={formik.handleSubmit}>
             <Grid container spacing={2} sx={{ mt: 1 }}>
               <Grid item xs={12} sm={6} md={3} lg={3}>
+                <TextField
+                  fullWidth
+                  label="Tipo Unidad"
+                  select
+                  id="tipoUnidad"
+                  name="tipoUnidad"
+                  value={formik.values.tipoUnidad}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  error={
+                    formik.touched.tipoUnidad &&
+                    Boolean(formik.errors.tipoUnidad)
+                  }
+                  helperText={
+                    formik.touched.tipoUnidad && formik.errors.tipoUnidad
+                  }
+                >
+                  {unitTypes.map((item: any) => (
+                    <MenuItem key={item.descripcion} value={item.descripcion}>
+                      {item.descripcion}
+                    </MenuItem>
+                  ))}
+                </TextField>
+              </Grid>
+              <Grid item xs={12} sm={6} md={3} lg={3}>
+                <TextField
+                  fullWidth
+                  label="Kilometraje"
+                  type="number"
+                  id="kms"
+                  name="kms"
+                  value={formik.values.kms}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  error={formik.touched.kms && Boolean(formik.errors.kms)}
+                  helperText={formik.touched.kms && formik.errors.kms}
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">kms</InputAdornment>
+                    ),
+                  }}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6} md={3} lg={3}>
                 <Autocomplete
                   id="stateOrigen"
                   options={states}
@@ -270,6 +320,7 @@ const Routes = () => {
                       }
                     />
                   )}
+                  disabled={formik.values.tipoUnidad === '' ? true : false}
                 />
               </Grid>
               <Grid item xs={12} sm={6} md={3} lg={3}>
@@ -297,6 +348,7 @@ const Routes = () => {
                       }
                     />
                   )}
+                  disabled={formik.values.tipoUnidad === '' ? true : false}
                 />
               </Grid>
               <Grid item xs={12} sm={6} md={3} lg={3}>
@@ -324,12 +376,13 @@ const Routes = () => {
                       }
                     />
                   )}
+                  disabled={formik.values.tipoUnidad === '' ? true : false}
                 />
               </Grid>
               <Grid item xs={12} sm={6} md={3} lg={3}>
                 <Autocomplete
                   id="localidadDestino"
-                  options={dataDestinoLocation}
+                  options={countriesByStateSecond}
                   getOptionLabel={(option: any) => option.nombre}
                   value={formik.values.localidadDestino}
                   onChange={(_event, selected) => {
@@ -351,51 +404,8 @@ const Routes = () => {
                       }
                     />
                   )}
+                  disabled={formik.values.tipoUnidad === '' ? true : false}
                 />
-              </Grid>
-              <Grid item xs={12} sm={6} md={3} lg={3}>
-                <TextField
-                  fullWidth
-                  label="Kilometraje"
-                  type="number"
-                  id="kms"
-                  name="kms"
-                  value={formik.values.kms}
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  error={formik.touched.kms && Boolean(formik.errors.kms)}
-                  helperText={formik.touched.kms && formik.errors.kms}
-                  InputProps={{
-                    endAdornment: (
-                      <InputAdornment position="end">kms</InputAdornment>
-                    ),
-                  }}
-                />
-              </Grid>
-              <Grid item xs={12} sm={6} md={3} lg={3}>
-                <TextField
-                  fullWidth
-                  label="Tipo Unidad"
-                  select
-                  id="tipoUnidad"
-                  name="tipoUnidad"
-                  value={formik.values.tipoUnidad}
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  error={
-                    formik.touched.tipoUnidad &&
-                    Boolean(formik.errors.tipoUnidad)
-                  }
-                  helperText={
-                    formik.touched.tipoUnidad && formik.errors.tipoUnidad
-                  }
-                >
-                  {unitTypes.map((item: any) => (
-                    <MenuItem key={item.descripcion} value={item.descripcion}>
-                      {item.descripcion}
-                    </MenuItem>
-                  ))}
-                </TextField>
               </Grid>
             </Grid>
             <Grid container spacing={2} sx={{ mt: 2 }}>

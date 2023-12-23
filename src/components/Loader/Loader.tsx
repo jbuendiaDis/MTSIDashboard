@@ -1,6 +1,8 @@
 import { ReactNode } from 'react';
-import { Backdrop, Box, CircularProgress, Typography } from '@mui/material';
+import { Backdrop, Box, Typography } from '@mui/material';
 import { useLoader } from './hooks/useLoader';
+import Lottie from 'react-lottie-player';
+import animationLoader from '../../assets/animation/loader.json';
 
 interface LoaderProps {
   children?: ReactNode;
@@ -13,7 +15,7 @@ const Loader = ({ children, topText, bottomText }: LoaderProps) => {
 
   const textRender = (text: any) =>
     text ? (
-      <Box m={4}>
+      <Box m={2}>
         <Typography variant="h5">{text}</Typography>
       </Box>
     ) : null;
@@ -25,7 +27,9 @@ const Loader = ({ children, topText, bottomText }: LoaderProps) => {
         display: 'flex',
         flexDirection: 'column',
         opacity: '0.85 !important',
-        zIndex: (theme) => theme.zIndex.drawer + 2,
+        justifyContent: 'center',
+        alignItems: 'center',
+        zIndex: (theme) => theme.zIndex.drawer + 1004,
       }}
     >
       {children ? (
@@ -33,7 +37,15 @@ const Loader = ({ children, topText, bottomText }: LoaderProps) => {
       ) : (
         <>
           {textRender(topText || texts?.topText)}
-          <CircularProgress />
+          <Lottie
+            loop
+            play
+            animationData={animationLoader}
+            speed={1.5}
+            style={{
+              width: 350,
+            }}
+          />
           {textRender(bottomText || texts?.bottomText)}
         </>
       )}

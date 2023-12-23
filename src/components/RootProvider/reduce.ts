@@ -48,6 +48,16 @@ export const reducer = (state: Values, action: ActionValues) => {
         ...state,
         unitTypes: _.get(action, ['payload'], []),
       };
+    case 'resetCountriesByState':
+      return {
+        ...state,
+        countriesByState: [],
+      };
+    case 'resetCountriesByStateSecond':
+      return {
+        ...state,
+        countriesByStateSecond: [],
+      };
     default:
       return state;
   }
