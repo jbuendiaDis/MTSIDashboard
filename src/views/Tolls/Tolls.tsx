@@ -181,7 +181,7 @@ const Tolls = () => {
             Peajes
           </Typography>
         </Grid>
-        {/* <Grid>
+        <Grid>
           <Button
             variant="contained"
             color="inherit"
@@ -191,11 +191,11 @@ const Tolls = () => {
               setDataEdit(null);
             }}
             startIcon={<Add />}
-            disabled={countriesByState?.length > 0 ? false : true}
+            // disabled={countriesByState?.length > 0 ? false : true}
           >
             Agregar Peaje
           </Button>
-        </Grid> */}
+        </Grid>
       </Grid>
       <Grid sx={{ mt: 3 }}>
         <Typography
