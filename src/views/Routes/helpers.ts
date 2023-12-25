@@ -3,7 +3,13 @@ import { useEffect, useState } from 'react';
 import { useApi } from '../../hooks/useApi';
 import { useLoader } from '../../components/Loader';
 import { FormatDataState, LoaderContextType, Response } from '../../models';
-import { DataTolls, ResponseTolls, ResponseUnidades, TableDots } from './types';
+import {
+  DataTolls,
+  Options,
+  ResponseTolls,
+  ResponseUnidades,
+  TableDots,
+} from './types';
 import {
   formatToCurrency,
   parseCurrencyStringToNumber,
@@ -12,6 +18,7 @@ import { useModalConfirmation } from '../../hooks/useModalConfirmation';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { get } from 'lodash';
+import { useRootProvider } from '../../components/RootProvider/hooks/useRootProvider';
 
 interface FormValues {
   tipoUnidad: string;
@@ -32,11 +39,15 @@ interface HelpersProps {
 
 export const useHelpers = ({ setOpen }: HelpersProps) => {
   const [tollsData, setTollsData] = useState<DataTolls[]>([]);
-  const [dataEdit, setDataEdit] = useState<DataTolls[] | null>(null);
+  // const [dataEdit, setDataEdit] = useState<DataTolls[] | null>(null);
+  const [dataEdit, setDataEdit] = useState<any | null>(null);
+  const [dataTemp, setDataTemp] = useState<any | null>(null);
   const [dataDotsTable, setDataDotsTable] = useState<any[]>([]);
   const { handleShowLoader }: LoaderContextType = useLoader();
   const { modalDelete, modalSuccess, modalInformation } =
     useModalConfirmation();
+  const { actionsCountries }: any = useRootProvider();
+  const { handleResetCountriesByStateUnitType } = actionsCountries;
 
   const requiredField: string = 'Este campo es obligatorio.';
 
@@ -64,6 +75,20 @@ export const useHelpers = ({ setOpen }: HelpersProps) => {
     handleShowLoader(true);
     handleGetTolls();
   }, []);
+
+  // useEffect(() => {
+  //   if (dataTemp !== null) {
+  //     console.log('render', dataTemp);
+
+  //     const newValuesEdit = {
+  //       tipoUnidad: dataTemp.tipoUnidad,
+  //       kms: dataTemp.kms,
+  //     };
+
+  //     console.log('newValues', newValuesEdit);
+  //     setDataEdit(newValuesEdit);
+  //   }
+  // }, [dataTemp]);
 
   const handleGetTolls = async (): Promise<boolean> => {
     try {
@@ -101,7 +126,11 @@ export const useHelpers = ({ setOpen }: HelpersProps) => {
         urlParam: id,
       });
       const code: Response['code'] = response.code;
-      const dataResponse: DataTolls[] = payload.data;
+      const dataResponse: DataTolls = Array.isArray(payload.data)
+        ? payload.data[0]
+        : payload.data;
+
+      console.log('RES', dataResponse);
 
       const formatDots = get(dataResponse, 'puntos', []).map((item: any) => {
         return {
@@ -109,6 +138,13 @@ export const useHelpers = ({ setOpen }: HelpersProps) => {
           costo: formatToCurrency(item.costo),
         };
       });
+
+      // console.log('>>>', formatDots);
+
+      // if (code === 200) {
+      //   setDataTemp(dataResponse);
+      //   handleGetCountriesByStateUnitType(dataResponse., dataResponse.tipoUnidad);
+      // }
 
       if (code === 200) {
         setDataEdit(dataResponse);
@@ -166,6 +202,7 @@ export const useHelpers = ({ setOpen }: HelpersProps) => {
       stateCaseta: null,
       nombreCaseta: null,
     });
+    handleResetCountriesByStateUnitType();
   };
 
   const handleRemoveDot = (id: number) => {
@@ -179,11 +216,13 @@ export const useHelpers = ({ setOpen }: HelpersProps) => {
     });
   };
 
+  console.log('EDIT', dataEdit);
+
   const initialValues: FormValues = {
-    tipoUnidad: '',
+    tipoUnidad: dataEdit ? dataEdit?.tipoUnidad : '',
     localidadOrigen: null,
     localidadDestino: null,
-    kms: '',
+    kms: dataEdit ? dataEdit?.kms : '',
     stateOrigen: null,
     stateDestino: null,
 
@@ -271,7 +310,7 @@ export const useHelpers = ({ setOpen }: HelpersProps) => {
     },
   });
 
-  const options: any = [
+  const options: Options[] = [
     {
       label: 'VIAPASS',
       value: 'VIAPASS',
@@ -293,5 +332,6 @@ export const useHelpers = ({ setOpen }: HelpersProps) => {
     handleAddDot,
     handleRemoveDot,
     setDataDotsTable,
+    setDataEdit,
   };
 };

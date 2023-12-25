@@ -12,5 +12,5 @@ export interface ResponseStates {
 export interface FormatDataState {
   codigo: number;
   label: string;
-  _id: string;
+  // _id: string;
 }

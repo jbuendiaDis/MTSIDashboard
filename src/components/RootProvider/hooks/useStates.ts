@@ -27,7 +27,7 @@ export const useStates = ({ rootState, rootDispatch }: any) => {
             return keys.map((key) => ({
               label: obj[key],
               codigo: Number(key),
-              _id: obj._id,
+              // _id: obj._id,
             }));
           })
           .flat();

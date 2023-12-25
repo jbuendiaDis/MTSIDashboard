@@ -39,14 +39,14 @@ const Routes = () => {
     useRootProvider();
   const { states, handleGetStates } = actionsState;
   const {
+    countriesByStateUnitTypeOrigin,
+    countriesByStateUnitTypeDestination,
     countriesByStateUnitType,
-    handleGetCountrie,
-    handleGetCountrieSecond,
-    countriesByState,
-    countriesByStateSecond,
+    handleGetCountriesByStateUnitTypeOrigin,
+    handleGetCountriesByStateUnitTypeDestination,
     handleGetCountriesByStateUnitType,
-    handleResetCountriesByState,
-    handleResetCountriesByStateSecond,
+    handleResetCountriesByStateUnitTypeOrigin,
+    handleResetCountriesByStateUnitTypeDestination,
   } = actionsCountries;
   const { catalogs, handleGetCatalogs, handleGetUnitType, unitTypes } =
     actionsCatalogs;
@@ -61,11 +61,12 @@ const Routes = () => {
     handleAddDot,
     handleRemoveDot,
     setDataDotsTable,
+    setDataEdit,
   } = useHelpers({ setOpen });
 
   useEffect(() => {
-    handleResetCountriesByState();
-    handleResetCountriesByStateSecond();
+    handleResetCountriesByStateUnitTypeOrigin();
+    handleResetCountriesByStateUnitTypeDestination();
     handleShowLoader(true);
     handleGetStates();
     handleGetCatalogs();
@@ -80,26 +81,35 @@ const Routes = () => {
   }, [dataEdit]);
 
   useEffect(() => {
-    if (formik.values.stateOrigen !== null) {
-      handleResetCountriesByState();
-      handleGetCountrie(formik.values.stateOrigen.codigo);
+    if (formik.values.stateOrigen !== null && formik.values.tipoUnidad !== '') {
+      handleResetCountriesByStateUnitTypeOrigin();
+      handleGetCountriesByStateUnitTypeOrigin(
+        formik.values.stateOrigen?.codigo,
+        formik.values.tipoUnidad
+      );
       formik.setValues({
         ...formik.values,
         localidadOrigen: null,
       });
     }
-  }, [formik.values.stateOrigen]);
+  }, [formik.values.tipoUnidad, formik.values.stateOrigen]);
 
   useEffect(() => {
-    if (formik.values.stateDestino !== null) {
-      handleResetCountriesByStateSecond();
-      handleGetCountrieSecond(formik.values.stateDestino.codigo);
+    if (
+      formik.values.stateDestino !== null &&
+      formik.values.tipoUnidad !== ''
+    ) {
+      handleResetCountriesByStateUnitTypeDestination();
+      handleGetCountriesByStateUnitTypeDestination(
+        formik.values.stateDestino?.codigo,
+        formik.values.tipoUnidad
+      );
       formik.setValues({
         ...formik.values,
         localidadDestino: null,
       });
     }
-  }, [formik.values.stateDestino]);
+  }, [formik.values.tipoUnidad, formik.values.stateDestino]);
 
   useEffect(() => {
     const unit: string = formik.values.tipoUnidad;
@@ -141,11 +151,11 @@ const Routes = () => {
       label: 'Acciones',
       align: 'center',
       actions: [
-        // {
-        //   label: 'Editar',
-        //   icon: <ModeEditOutlineOutlined sx={{ width: 20, height: 20 }} />,
-        //   onClick: (rowData: DataTolls) => handleGetToll(rowData._id),
-        // },
+        {
+          label: 'Editar',
+          icon: <ModeEditOutlineOutlined sx={{ width: 20, height: 20 }} />,
+          onClick: (rowData: DataTolls) => handleGetToll(rowData._id),
+        },
         {
           label: 'Detalle',
           icon: <VisibilityOutlined sx={{ width: 20, height: 20 }} />,
@@ -203,9 +213,10 @@ const Routes = () => {
   const handleCloseDialog = () => {
     formik.resetForm();
     setOpen(false);
+    handleResetCountriesByStateUnitTypeOrigin();
+    handleResetCountriesByStateUnitTypeDestination();
+    setDataEdit(null);
   };
-
-  console.log('countriesByStateUnitType', countriesByStateUnitType);
 
   return (
     <div>
@@ -246,7 +257,7 @@ const Routes = () => {
         <DialogTitle>
           <HeaderTitleModal
             handleToggleModal={handleCloseDialog}
-            title="CREAR RUTA"
+            title={dataEdit ? 'EDITAR RUTA' : 'CREAR RUTA'}
           />
         </DialogTitle>
         <DialogContent>
@@ -278,25 +289,6 @@ const Routes = () => {
                 </TextField>
               </Grid>
               <Grid item xs={12} sm={6} md={3} lg={3}>
-                <TextField
-                  fullWidth
-                  label="Kilometraje"
-                  type="number"
-                  id="kms"
-                  name="kms"
-                  value={formik.values.kms}
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  error={formik.touched.kms && Boolean(formik.errors.kms)}
-                  helperText={formik.touched.kms && formik.errors.kms}
-                  InputProps={{
-                    endAdornment: (
-                      <InputAdornment position="end">kms</InputAdornment>
-                    ),
-                  }}
-                />
-              </Grid>
-              <Grid item xs={12} sm={6} md={3} lg={3}>
                 <Autocomplete
                   id="stateOrigen"
                   options={states}
@@ -326,7 +318,8 @@ const Routes = () => {
               <Grid item xs={12} sm={6} md={3} lg={3}>
                 <Autocomplete
                   id="localidadOrigen"
-                  options={countriesByState}
+                  // options={countriesByState}
+                  options={countriesByStateUnitTypeOrigin}
                   getOptionLabel={(option: any) => option.nombre}
                   value={formik.values.localidadOrigen}
                   onChange={(_event, selected) => {
@@ -382,7 +375,7 @@ const Routes = () => {
               <Grid item xs={12} sm={6} md={3} lg={3}>
                 <Autocomplete
                   id="localidadDestino"
-                  options={countriesByStateSecond}
+                  options={countriesByStateUnitTypeDestination}
                   getOptionLabel={(option: any) => option.nombre}
                   value={formik.values.localidadDestino}
                   onChange={(_event, selected) => {
@@ -405,6 +398,25 @@ const Routes = () => {
                     />
                   )}
                   disabled={formik.values.tipoUnidad === '' ? true : false}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6} md={3} lg={3}>
+                <TextField
+                  fullWidth
+                  label="Kilometraje"
+                  type="number"
+                  id="kms"
+                  name="kms"
+                  value={formik.values.kms}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  error={formik.touched.kms && Boolean(formik.errors.kms)}
+                  helperText={formik.touched.kms && formik.errors.kms}
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">kms</InputAdornment>
+                    ),
+                  }}
                 />
               </Grid>
             </Grid>
@@ -451,7 +463,7 @@ const Routes = () => {
                     <TextField
                       name="stateCaseta"
                       {...params}
-                      label="Seleccion un estado"
+                      label="Seleccione un estado"
                     />
                   )}
                 />
@@ -523,15 +535,8 @@ const Routes = () => {
               >
                 Cancelar
               </Button>
-              <Button
-                variant="contained"
-                type="submit"
-                // onClick={() => {
-                //   if (dataDotsTable.length === 0)
-                //     setErrorDots('Debe Ingresar por lo menos un Punto.');
-                // }}
-              >
-                Crear
+              <Button variant="contained" type="submit">
+                {dataEdit ? 'Guardar' : 'Crear'}
               </Button>
             </Stack>
           </form>

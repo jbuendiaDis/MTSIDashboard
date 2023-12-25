@@ -6,6 +6,8 @@ export interface Values {
   countries: [];
   countriesByState: [];
   countriesByStateSecond: [];
+  countriesByStateUnitTypeOrigin: [];
+  countriesByStateUnitTypeDestination: [];
   countriesByStateUnitType: [];
   catalogs: [];
   unitTypes: [];
@@ -17,6 +19,8 @@ export const initialState: Values = {
   countries: [],
   countriesByState: [],
   countriesByStateSecond: [],
+  countriesByStateUnitTypeOrigin: [],
+  countriesByStateUnitTypeDestination: [],
   countriesByStateUnitType: [],
   catalogs: [],
   unitTypes: [],

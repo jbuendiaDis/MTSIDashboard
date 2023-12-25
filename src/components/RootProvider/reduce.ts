@@ -38,6 +38,16 @@ export const reducer = (state: Values, action: ActionValues) => {
         ...state,
         countriesByStateUnitType: _.get(action, ['payload'], []),
       };
+    case 'countriesByStateUnitTypeOrigin':
+      return {
+        ...state,
+        countriesByStateUnitTypeOrigin: _.get(action, ['payload'], []),
+      };
+    case 'countriesByStateUnitTypeDestination':
+      return {
+        ...state,
+        countriesByStateUnitTypeDestination: _.get(action, ['payload'], []),
+      };
     case 'catalogs':
       return {
         ...state,
@@ -57,6 +67,21 @@ export const reducer = (state: Values, action: ActionValues) => {
       return {
         ...state,
         countriesByStateSecond: [],
+      };
+    case 'resetCountriesByStateUnitTypeOrigin':
+      return {
+        ...state,
+        countriesByStateUnitTypeOrigin: [],
+      };
+    case 'resetCountriesByStateUnitTypeDestination':
+      return {
+        ...state,
+        countriesByStateUnitTypeDestination: [],
+      };
+    case 'resetCountriesByStateUnitType':
+      return {
+        ...state,
+        countriesByStateUnitType: [],
       };
     default:
       return state;

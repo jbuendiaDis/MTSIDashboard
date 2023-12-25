@@ -14,6 +14,8 @@ export const useCountries = ({ rootState, rootDispatch }: any) => {
     countries,
     countriesByState,
     countriesByStateSecond,
+    countriesByStateUnitTypeOrigin,
+    countriesByStateUnitTypeDestination,
     countriesByStateUnitType,
   } = rootState;
 
@@ -98,12 +100,11 @@ export const useCountries = ({ rootState, rootDispatch }: any) => {
     }
   };
 
-  const handleGetCountriesByStateUnitType = async (
+  const handleGetCountriesByStateUnitTypeOrigin = async (
     state: number,
     unit: string
   ): Promise<boolean> => {
     try {
-      console.log('antes', state, unit);
       const response: ResponseCountries = await _getCountriesByStateUnitType({
         urlParam: `${state}/tipoUnidad/${unit}`,
       });
@@ -111,8 +112,46 @@ export const useCountries = ({ rootState, rootDispatch }: any) => {
       const payload: PayloadCountries['data'] = get(response, 'payload.data');
 
       if (code === 200)
+        rootDispatch({ type: 'countriesByStateUnitTypeOrigin', payload });
+      return true;
+    } catch (error) {
+      return false;
+    }
+  };
+
+  const handleGetCountriesByStateUnitTypeDestination = async (
+    state: number,
+    unit: string
+  ): Promise<boolean> => {
+    try {
+      const response: ResponseCountries = await _getCountriesByStateUnitType({
+        urlParam: `${state}/tipoUnidad/${unit}`,
+      });
+      const code: Response['code'] = get(response, 'response.code');
+      const payload: PayloadCountries['data'] = get(response, 'payload.data');
+
+      if (code === 200)
+        rootDispatch({ type: 'countriesByStateUnitTypeDestination', payload });
+      return true;
+    } catch (error) {
+      return false;
+    }
+  };
+
+  const handleGetCountriesByStateUnitType = async (
+    state: number,
+    unit: string
+  ): Promise<boolean> => {
+    try {
+      const response: ResponseCountries = await _getCountriesByStateUnitType({
+        urlParam: `${state}/tipoUnidad/${unit}`,
+      });
+      const code: Response['code'] = get(response, 'response.code');
+      const payload: PayloadCountries['data'] = get(response, 'payload.data');
+
+      if (code === 200) {
         rootDispatch({ type: 'countriesByStateUnitType', payload });
-      console.log('ROOT', payload, response);
+      }
       return true;
     } catch (error) {
       return false;
@@ -127,16 +166,35 @@ export const useCountries = ({ rootState, rootDispatch }: any) => {
     rootDispatch({ type: 'resetCountriesByStateSecond' });
   };
 
+  const handleResetCountriesByStateUnitTypeOrigin = (): void => {
+    rootDispatch({ type: 'resetCountriesByStateUnitTypeOrigin' });
+  };
+
+  const handleResetCountriesByStateUnitTypeDestination = (): void => {
+    rootDispatch({ type: 'resetCountriesByStateUnitTypeDestination' });
+  };
+
+  const handleResetCountriesByStateUnitType = (): void => {
+    rootDispatch({ type: 'resetCountriesByStateUnitType' });
+  };
+
   return {
     countries,
     countriesByState,
     countriesByStateSecond,
+    countriesByStateUnitTypeOrigin,
+    countriesByStateUnitTypeDestination,
     countriesByStateUnitType,
     handleGetAllCountries,
     handleGetCountrie,
     handleGetCountrieSecond,
+    handleGetCountriesByStateUnitTypeOrigin,
     handleGetCountriesByStateUnitType,
     handleResetCountriesByState,
     handleResetCountriesByStateSecond,
+    handleResetCountriesByStateUnitTypeOrigin,
+    handleGetCountriesByStateUnitTypeDestination,
+    handleResetCountriesByStateUnitTypeDestination,
+    handleResetCountriesByStateUnitType,
   };
 };

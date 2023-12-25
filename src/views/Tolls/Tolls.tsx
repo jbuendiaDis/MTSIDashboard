@@ -41,7 +41,11 @@ const Tolls = () => {
   const { actionsState, actionsCountries, actionsCatalogs }: any =
     useRootProvider();
   const { states, handleGetStates } = actionsState;
-  const { countriesByState, handleGetCountrie } = actionsCountries;
+  const {
+    countriesByState,
+    handleGetCountrie,
+    handleResetCountriesByStateUnitType,
+  } = actionsCountries;
   const { catalogs, handleGetCatalogs, handleGetUnitType, unitTypes } =
     actionsCatalogs;
   const {
@@ -56,9 +60,9 @@ const Tolls = () => {
   } = useHelpers({ valueState });
 
   useEffect(() => {
+    handleResetCountriesByStateUnitType();
     handleShowLoader(true);
     handleGetStates();
-    // handleGetAllCountries();
     handleGetCatalogs();
     setDataEdit(null);
     setDataTemp(null);

@@ -15,6 +15,8 @@ export interface DataTolls {
   totalPeajes: number;
   localidadDestino: string;
   localidadOrigen: string;
+  nombreOrigen: string;
+  nombreDestino: string;
   tipoUnidad: string;
   __v?: number;
   _id: string;
@@ -28,6 +30,11 @@ export interface ResponseTolls {
   payload: PayloadDataTolls;
   response: Response;
 }
+
+export type Options = {
+  label: string;
+  value: string;
+};
 
 export interface TableDots {
   casetas: string;

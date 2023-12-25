@@ -19,8 +19,10 @@ export const useHelpers = ({ valueState }: PropsHelpers) => {
   const {
     handleGetAllCountries,
     handleGetCountrie,
-    handleGetCountrieSecond,
-    countriesByStateSecond,
+    // handleGetCountrieSecond,
+    // countriesByStateSecond,
+    countriesByStateUnitType,
+    handleGetCountriesByStateUnitType,
   } = actionsCountries;
   const { states } = actionsState;
   const { modalDelete, modalSuccess, modalInformation } =
@@ -49,12 +51,12 @@ export const useHelpers = ({ valueState }: PropsHelpers) => {
   });
 
   useEffect(() => {
-    if (dataTemp !== null && countriesByStateSecond.length > 0) {
+    if (dataTemp !== null && countriesByStateUnitType.length > 0) {
       const filterState = states.find(
         (item: any) => item.codigo === dataTemp.estado
       );
 
-      const filterCountrie = countriesByStateSecond.find(
+      const filterCountrie = countriesByStateUnitType.find(
         (item: any) => item.codigo === dataTemp.codigo
       );
 
@@ -69,7 +71,7 @@ export const useHelpers = ({ valueState }: PropsHelpers) => {
       setDataEdit(newDataEdit);
       setDataTemp(null);
     }
-  }, [dataTemp, countriesByStateSecond]);
+  }, [dataTemp, countriesByStateUnitType]);
 
   const handleOpenModalDelete = (data: DataToll): void => {
     const message: string = '¿Seguro que desea eliminar este peaje:';
@@ -103,7 +105,6 @@ export const useHelpers = ({ valueState }: PropsHelpers) => {
 
   const handleGetToll = async (data: DataToll): Promise<boolean> => {
     try {
-      console.log('data', data);
       const { payload, response }: ResponseTolls = await _getCountrieById({
         urlParam: data._id,
       });
@@ -113,8 +114,10 @@ export const useHelpers = ({ valueState }: PropsHelpers) => {
       const codeResponse: Response['code'] = response.code;
 
       if (codeResponse === 200) {
-        console.log('res', dataResponse);
-        handleGetCountrieSecond(dataResponse.estado);
+        handleGetCountriesByStateUnitType(
+          dataResponse.estado,
+          dataResponse.tipoUnidad
+        );
         setDataTemp(dataResponse);
       }
 
@@ -142,13 +145,17 @@ export const useHelpers = ({ valueState }: PropsHelpers) => {
 
   const handleSubmit = async (values: FormValues): Promise<boolean> => {
     try {
+      console.log('values', values);
       const newValues = {
         tipoUnidad: values.unitType,
         nombre: values.nombre?.nombre,
         costo: values.costo,
         estado: values.state?.codigo,
       };
+
+      console.log('newValues', newValues);
       if (dataEdit) {
+        console.log('EDIT', dataEdit);
         const response: ResponseTolls = await _updateCountrie({
           urlParam: values.codigo,
           body: newValues,
@@ -163,6 +170,7 @@ export const useHelpers = ({ valueState }: PropsHelpers) => {
         if (code === 200) {
           modalSuccess({ message });
           handleGetCountrie(valueState.codigo);
+          console.log('edit', newValues, response);
         } else {
           modalInformation({ message });
         }
@@ -179,6 +187,7 @@ export const useHelpers = ({ valueState }: PropsHelpers) => {
         );
 
         if (code === 200) {
+          console.log('res', response);
           handleGetCountrie(newValues.estado);
           modalSuccess({ message });
         } else {

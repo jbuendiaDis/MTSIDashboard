@@ -24,35 +24,48 @@ const FormTolls = ({
 }: FormTollsProps) => {
   const { values, setValues } = useFormikContext<FormikValues>();
   const { actionsCountries }: any = useRootProvider();
-  const { countriesByState, handleGetCountrie } = actionsCountries;
+  const {
+    countriesByStateUnitType,
+    handleGetCountriesByStateUnitType,
+    handleResetCountriesByStateUnitType,
+  } = actionsCountries;
 
   useEffect(() => {
-    if (values.state !== null && dataEdit === null) {
-      handleGetCountrie(values.state?.codigo);
+    if (values.state !== null && values.unitType !== '' && dataEdit === null) {
+      handleResetCountriesByStateUnitType();
+      handleGetCountriesByStateUnitType(values.state?.codigo, values.unitType);
       setValues({
         ...values,
         nombre: null,
       });
     }
-  }, [values.state]);
+  }, [values.state, values.unitType]);
 
   useEffect(() => {
     if (dataEdit !== null) {
       if (values.state !== dataEdit?.state) {
-        handleGetCountrie(values.state?.codigo);
+        handleResetCountriesByStateUnitType();
+        handleGetCountriesByStateUnitType(
+          values.state?.codigo,
+          values.unitType
+        );
         setValues({
           ...values,
           nombre: null,
         });
       } else if (values.nombre !== dataEdit?.nombre) {
-        handleGetCountrie(values.state?.codigo);
+        handleResetCountriesByStateUnitType();
+        handleGetCountriesByStateUnitType(
+          values.state?.codigo,
+          values.unitType
+        );
         setValues({
           ...values,
           nombre: null,
         });
       }
     }
-  }, [values.state, dataEdit]);
+  }, [values.state, values.unitType, dataEdit]);
 
   return (
     <Form>
@@ -78,7 +91,7 @@ const FormTolls = ({
           <AutoCompleteComponent
             label="Seleccione una caseta"
             name="nombre"
-            options={countriesByState}
+            options={countriesByStateUnitType}
             labelField="nombre"
           />
         </Grid>

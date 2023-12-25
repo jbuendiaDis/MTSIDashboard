@@ -11,8 +11,6 @@ interface DetailRoutesProps {
 export const DetailDots = ({ detailDotsData }: DetailRoutesProps) => {
   const style = RoutesStyles;
 
-  console.log('>>>', detailDotsData);
-
   return (
     <div>
       <Grid container spacing={1} sx={{ mt: 1 }}>
@@ -22,7 +20,7 @@ export const DetailDots = ({ detailDotsData }: DetailRoutesProps) => {
               Estado Origen:
             </Typography>
             <Typography sx={{ fontSize: '14px' }}>
-              {detailDotsData.localidadOrigen}
+              {detailDotsData.nombreOrigen}
             </Typography>
           </Stack>
         </Grid>
@@ -32,7 +30,7 @@ export const DetailDots = ({ detailDotsData }: DetailRoutesProps) => {
               Estado Destino:
             </Typography>
             <Typography sx={{ fontSize: '14px' }}>
-              {detailDotsData.localidadDestino}
+              {detailDotsData.nombreDestino}
             </Typography>
           </Stack>
         </Grid>
