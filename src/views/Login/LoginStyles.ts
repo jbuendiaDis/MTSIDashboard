@@ -7,7 +7,7 @@ export const LoginStyles = () => {
 
   const container = {
     ...bgGradient({
-      color: alpha(theme.palette.background.default, 0.9),
+      color: alpha(theme.palette.background.default, 0.5),
       imgUrl: backgroundImg,
     }),
     height: '100vh',
