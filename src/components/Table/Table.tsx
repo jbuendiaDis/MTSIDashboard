@@ -19,7 +19,7 @@ import {
   ListItemText,
   Card,
   Paper,
-  Box,
+  Button,
 } from '@mui/material';
 import { MoreVert, InsertChartOutlinedOutlined } from '@mui/icons-material';
 import { Tabletoolbar } from './TableToolbar';
@@ -34,6 +34,9 @@ const Table = ({
   tableHead,
   customButton,
   renderCustomButton,
+  isQuotez,
+  isConfigureData,
+  handleQuotez,
 }: TableProps) => {
   const [sortData, setSortData] = useState<SortData>({
     activeColumn: '',
@@ -170,13 +173,47 @@ const Table = ({
       )}
       <Card>
         {/* {data.length > 0 &&} */}
-        <Tabletoolbar
-          showCheckboxes={showCheckboxes}
-          searchTerm={searchTerm}
-          handleSearch={handleSearch}
-          selectedRows={selectedRows}
-          handleDeleteSelected={handleDeleteSelected}
-        />
+        <Grid
+          container
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            pr: 3,
+            pb: { xs: 2, sm: 0 },
+          }}
+        >
+          <Grid item xs={12} sm={6}>
+            <Tabletoolbar
+              showCheckboxes={showCheckboxes}
+              searchTerm={searchTerm}
+              handleSearch={handleSearch}
+              selectedRows={selectedRows}
+              handleDeleteSelected={handleDeleteSelected}
+            />
+          </Grid>
+
+          {isQuotez && (
+            <Grid
+              item
+              xs={12}
+              sm={6}
+              sx={{
+                display: 'flex',
+                justifyContent: 'end',
+              }}
+            >
+              <Button
+                disabled={isConfigureData}
+                variant="contained"
+                color="inherit"
+                sx={{ p: 1.5, letterSpacing: '1.2px' }}
+                onClick={handleQuotez}
+              >
+                Configurar Variables
+              </Button>
+            </Grid>
+          )}
+        </Grid>
         <TableContainer>
           <MuiTable>
             <TableHead>

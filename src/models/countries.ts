@@ -22,3 +22,17 @@ export interface CountriesData {
   __v: number;
   _id: string;
 }
+
+export interface LocalidadesResponse {
+  payload: any;
+  response: Response;
+}
+
+export interface FormatDataLocalidades {
+  codigo: number;
+  label: string;
+}
+
+export interface DataLocalidades {
+  data: Array<{ [key: string]: string }>;
+}

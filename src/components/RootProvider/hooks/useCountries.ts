@@ -2,6 +2,8 @@ import { get } from 'lodash';
 import { useApi } from '../../../hooks/useApi';
 import {
   CountriesData,
+  DataLocalidades,
+  LocalidadesResponse,
   PayloadCountries,
   Response,
   ResponseCountries,
@@ -17,6 +19,8 @@ export const useCountries = ({ rootState, rootDispatch }: any) => {
     countriesByStateUnitTypeOrigin,
     countriesByStateUnitTypeDestination,
     countriesByStateUnitType,
+    localidades,
+    localidadesSecond,
   } = rootState;
 
   const _getAllCountries = useApi({
@@ -31,6 +35,11 @@ export const useCountries = ({ rootState, rootDispatch }: any) => {
 
   const _getCountriesByStateUnitType = useApi({
     endpoint: '/countries/estado',
+    method: 'get',
+  });
+
+  const _getLocalidades = useApi({
+    endpoint: '/localidades/by-estado',
     method: 'get',
   });
 
@@ -158,6 +167,52 @@ export const useCountries = ({ rootState, rootDispatch }: any) => {
     }
   };
 
+  const handleGetLocalidades = async (state: number): Promise<boolean> => {
+    try {
+      const { payload, response }: LocalidadesResponse = await _getLocalidades({
+        urlParam: state,
+      });
+      const code: Response['code'] = response.code;
+      const dataResponse: DataLocalidades[] = payload.data;
+
+      if (code === 200) {
+        const payload = dataResponse.map((label, index) => ({
+          codigo: index + 1,
+          label: label,
+        }));
+
+        rootDispatch({ type: 'localidades', payload });
+      }
+      return true;
+    } catch (error) {
+      return false;
+    }
+  };
+
+  const handleGetLocalidadesSecond = async (
+    state: number
+  ): Promise<boolean> => {
+    try {
+      const { payload, response }: LocalidadesResponse = await _getLocalidades({
+        urlParam: state,
+      });
+      const code: Response['code'] = response.code;
+      const dataResponse: DataLocalidades[] = payload.data;
+
+      if (code === 200) {
+        const payload = dataResponse.map((label, index) => ({
+          codigo: index + 1,
+          label: label,
+        }));
+
+        rootDispatch({ type: 'localidadesSecond', payload });
+      }
+      return true;
+    } catch (error) {
+      return false;
+    }
+  };
+
   const handleResetCountriesByState = (): void => {
     rootDispatch({ type: 'resetCountriesByState' });
   };
@@ -178,6 +233,14 @@ export const useCountries = ({ rootState, rootDispatch }: any) => {
     rootDispatch({ type: 'resetCountriesByStateUnitType' });
   };
 
+  const handleResetLocalidades = (): void => {
+    rootDispatch({ type: 'resetLocalidades' });
+  };
+
+  const handleResetLocalidadesSecond = (): void => {
+    rootDispatch({ type: 'resetLocalidadesSecond' });
+  };
+
   return {
     countries,
     countriesByState,
@@ -185,16 +248,22 @@ export const useCountries = ({ rootState, rootDispatch }: any) => {
     countriesByStateUnitTypeOrigin,
     countriesByStateUnitTypeDestination,
     countriesByStateUnitType,
+    localidades,
+    localidadesSecond,
     handleGetAllCountries,
     handleGetCountrie,
     handleGetCountrieSecond,
     handleGetCountriesByStateUnitTypeOrigin,
     handleGetCountriesByStateUnitType,
+    handleGetLocalidades,
+    handleGetLocalidadesSecond,
     handleResetCountriesByState,
     handleResetCountriesByStateSecond,
     handleResetCountriesByStateUnitTypeOrigin,
     handleGetCountriesByStateUnitTypeDestination,
     handleResetCountriesByStateUnitTypeDestination,
     handleResetCountriesByStateUnitType,
+    handleResetLocalidades,
+    handleResetLocalidadesSecond,
   };
 };

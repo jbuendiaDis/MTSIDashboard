@@ -61,12 +61,13 @@ const Tolls = () => {
   } = useHelpers({ valueState, setValueState });
 
   useEffect(() => {
-    handleResetCountriesByStateUnitType();
     handleShowLoader(true);
     handleGetStates();
     handleGetCatalogs();
     setDataEdit(null);
     setDataTemp(null);
+    handleResetCountriesByState();
+    handleResetCountriesByStateUnitType();
   }, []);
 
   useEffect(() => {

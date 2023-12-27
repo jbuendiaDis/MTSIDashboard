@@ -16,18 +16,18 @@ const BillForm = ({ handleToggleModal, states, dataEdit }: BillFormProps) => {
   const { values, setValues } = useFormikContext<FormikValues>();
   const { actionsCountries }: any = useRootProvider();
   const {
-    countriesByState,
-    countriesByStateSecond,
-    handleGetCountrie,
-    handleGetCountrieSecond,
-    handleResetCountriesByState,
-    handleResetCountriesByStateSecond,
+    localidades,
+    localidadesSecond,
+    handleResetLocalidades,
+    handleResetLocalidadesSecond,
+    handleGetLocalidades,
+    handleGetLocalidadesSecond,
   } = actionsCountries;
 
   useEffect(() => {
     if (values.originState !== null) {
-      handleResetCountriesByState();
-      handleGetCountrie(values.originState?.codigo);
+      handleResetLocalidades();
+      handleGetLocalidades(values.originState?.codigo);
       setValues({
         ...values,
         originLocality: null,
@@ -37,8 +37,8 @@ const BillForm = ({ handleToggleModal, states, dataEdit }: BillFormProps) => {
 
   useEffect(() => {
     if (values.destinationState !== null) {
-      handleResetCountriesByStateSecond();
-      handleGetCountrieSecond(values.destinationState?.codigo);
+      handleResetLocalidadesSecond();
+      handleGetLocalidadesSecond(values.destinationState?.codigo);
       setValues({
         ...values,
         destinationLocality: null,
@@ -61,8 +61,8 @@ const BillForm = ({ handleToggleModal, states, dataEdit }: BillFormProps) => {
           <AutoCompleteComponent
             label="Localidad origen"
             name="originLocality"
-            options={countriesByState}
-            labelField="nombre"
+            options={localidades}
+            labelField="label"
           />
         </Grid>
         <Grid item xs={12} sm={6}>
@@ -77,8 +77,8 @@ const BillForm = ({ handleToggleModal, states, dataEdit }: BillFormProps) => {
           <AutoCompleteComponent
             label="Localidad destino"
             name="destinationLocality"
-            options={countriesByStateSecond}
-            labelField="nombre"
+            options={localidadesSecond}
+            labelField="label"
           />
         </Grid>
         <Grid item xs={12} sm={6}>

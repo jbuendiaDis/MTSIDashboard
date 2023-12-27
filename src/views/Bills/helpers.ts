@@ -102,10 +102,18 @@ export const useHelpers = () => {
 
       if (code === 200) {
         const formaterData = dataResponse.map((item) => {
-          const foods = formatToCurrency(item.comidas);
-          const hotels = formatToCurrency(item.hoteles);
-          const originPassage = formatToCurrency(item.pasajeOrigen);
-          const destinyPassage = formatToCurrency(item.pasajeDestino);
+          const foods = item.comidas
+            ? formatToCurrency(item.comidas)
+            : formatToCurrency(0);
+          const hotels = item.hoteles
+            ? formatToCurrency(item.hoteles)
+            : formatToCurrency(0);
+          const originPassage = item.pasajeOrigen
+            ? formatToCurrency(item.pasajeOrigen)
+            : formatToCurrency(0);
+          const destinyPassage = item.pasajeDestino
+            ? formatToCurrency(item.pasajeDestino)
+            : formatToCurrency(0);
           const kilometers = item.peajes.reduce(
             (totalKilometers, kilometers) => {
               return totalKilometers + kilometers.kms;
@@ -164,8 +172,8 @@ export const useHelpers = () => {
 
   const handleOpenDeleteModal = (data: TollExpensesData['data']) => {
     const message: string = '¿Seguro que desea eliminar este dato:';
-    const dataValue = `${data?.origen ? data?.origen : '-'} - ${
-      data?.destino ? data?.destino : '-'
+    const dataValue = `${data?.nombreOrigen ? data?.nombreOrigen : '-'} - ${
+      data?.nombreDestino ? data?.nombreDestino : '-'
     }`;
     modalDelete({
       message,

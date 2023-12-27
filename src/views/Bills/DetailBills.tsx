@@ -19,7 +19,7 @@ const DetailBills = ({ detailBillsData }: DetailBillsProps) => {
           <Stack spacing={2} direction="row" justifyContent="center">
             <Typography sx={style.textDescriptionOrigen}>Origen:</Typography>
             <Typography sx={{ fontSize: '14px' }}>
-              {detailBillsData.origen}
+              {detailBillsData.nombreOrigen}
             </Typography>
           </Stack>
         </Grid>
@@ -27,7 +27,7 @@ const DetailBills = ({ detailBillsData }: DetailBillsProps) => {
           <Stack spacing={2} direction="row" justifyContent="center">
             <Typography sx={style.textDescriptionDestino}>Destino:</Typography>
             <Typography sx={{ fontSize: '14px' }}>
-              {detailBillsData.destino}
+              {detailBillsData.nombreDestino}
             </Typography>
           </Stack>
         </Grid>

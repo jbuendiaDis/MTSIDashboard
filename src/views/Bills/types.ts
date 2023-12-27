@@ -62,13 +62,13 @@ export interface TollExpensesData {
     hoteles: number;
     pasajeOrigen: number;
     pasajeDestino: number;
-    destino: string;
+    nombreDestino: string;
     estadoDestino: string;
     estadoOrigen: string;
     idCliente: string;
     localidadDestino: string;
     localidadOrigen: string;
-    origen: string;
+    nombreOrigen: string;
     peajes: Tolls[];
     __v: number;
     _id: string;

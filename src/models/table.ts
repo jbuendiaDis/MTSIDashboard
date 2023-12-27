@@ -8,6 +8,9 @@ export interface TableProps {
   tableHead?: boolean;
   customButton?: boolean;
   renderCustomButton?: ReactNode;
+  isQuotez?: boolean;
+  isConfigureData?: boolean;
+  handleQuotez?: () => void;
 }
 
 export interface Column {
