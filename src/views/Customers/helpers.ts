@@ -13,6 +13,7 @@ import { useEffect, useState } from 'react';
 import { Response } from '../../models/responseApi';
 import { useModalConfirmation } from '../../hooks/useModalConfirmation';
 import { useModal } from '../../components/Modal';
+import * as Yup from 'yup';
 
 export const useHelpers = () => {
   const [dataEdit, setDataEdit] = useState<PaylaodCustomers['data'] | null>(
@@ -29,6 +30,7 @@ export const useHelpers = () => {
   const { handleShowLoader }: LoaderContextType = useLoader();
   const { modalInformation, modalSuccess, modalDelete } =
     useModalConfirmation();
+  const requiredField: string = 'Este campo es obligatorio.';
 
   const _getCatalogsCfdi = useApi({
     endpoint: '/catalogs/children/6577fa0ba3b49e34400ca6b8',
@@ -204,6 +206,20 @@ export const useHelpers = () => {
     }
   };
 
+  const validationSchema = Yup.object().shape({
+    state: Yup.object().nullable().required(requiredField),
+    calle: Yup.string().required(requiredField),
+    numeroExterior: Yup.string().required(requiredField),
+    telefono: Yup.string().required(requiredField),
+    colonia: Yup.string().required(requiredField),
+    regimenFiscal: Yup.object().nullable().required(requiredField),
+    usoCFDI: Yup.object().nullable().required(requiredField),
+    rfc: Yup.string().required(requiredField),
+    razonSocial: Yup.string().required(requiredField),
+    formaPago: Yup.string().required(requiredField),
+    metodoPago: Yup.string().required(requiredField),
+  });
+
   const initialValuesForm: PaylaodCustomers['data'] = {
     state: dataEdit ? dataEdit.state : null,
     calle: dataEdit ? dataEdit.calle : '',
@@ -226,6 +242,7 @@ export const useHelpers = () => {
     customersData,
     dataCfdi,
     dataRegimenFiscal,
+    validationSchema,
     setDataEdit,
     handleGetCustomers,
     handleOpenModalDelete,

@@ -31,6 +31,7 @@ export const Customers = () => {
     customersData,
     dataCfdi,
     dataRegimenFiscal,
+    validationSchema,
     setDataEdit,
     handleGetCustomers,
     handleOpenModalDelete,
@@ -126,8 +127,6 @@ export const Customers = () => {
         state: filterState,
       };
 
-      console.log('>>>', newValuesEdit);
-
       if (code === 200) {
         setDataEdit(newValuesEdit);
       }
@@ -149,7 +148,11 @@ export const Customers = () => {
         />
       ),
       body: (
-        <Formik initialValues={initialValuesForm} onSubmit={handleSubmit}>
+        <Formik
+          initialValues={initialValuesForm}
+          validationSchema={validationSchema}
+          onSubmit={handleSubmit}
+        >
           <Form>
             <CustomerForm
               handleToggleModal={handleToggleModal}
