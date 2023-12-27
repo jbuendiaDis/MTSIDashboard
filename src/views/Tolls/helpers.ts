@@ -10,19 +10,19 @@ import { get } from 'lodash';
 
 interface PropsHelpers {
   valueState: any;
+  setValueState: (value: null) => void;
 }
 
-export const useHelpers = ({ valueState }: PropsHelpers) => {
+export const useHelpers = ({ valueState, setValueState }: PropsHelpers) => {
   const [dataEdit, setDataEdit] = useState<FormValues | null>(null);
   const [dataTemp, setDataTemp] = useState<any | null>(null);
   const { actionsCountries, actionsState }: any = useRootProvider();
   const {
     handleGetAllCountries,
     handleGetCountrie,
-    // handleGetCountrieSecond,
-    // countriesByStateSecond,
     countriesByStateUnitType,
     handleGetCountriesByStateUnitType,
+    handleResetCountriesByState,
   } = actionsCountries;
   const { states } = actionsState;
   const { modalDelete, modalSuccess, modalInformation } =
@@ -36,7 +36,7 @@ export const useHelpers = ({ valueState }: PropsHelpers) => {
   });
 
   const _createCountrie = useApi({
-    endpoint: '/countries',
+    endpoint: '/countrie',
     method: 'post',
   });
 
@@ -66,6 +66,7 @@ export const useHelpers = ({ valueState }: PropsHelpers) => {
         costo: dataTemp.costo,
         unitType: dataTemp.tipoUnidad,
         codigo: dataTemp.codigo,
+        _id: dataTemp._id,
       };
 
       setDataEdit(newDataEdit);
@@ -141,11 +142,11 @@ export const useHelpers = ({ valueState }: PropsHelpers) => {
     nombre: dataEdit ? dataEdit?.nombre : null,
     costo: dataEdit ? dataEdit?.costo : '',
     codigo: dataEdit ? dataEdit?.codigo : 0,
+    _id: dataEdit ? dataEdit?._id : '',
   };
 
   const handleSubmit = async (values: FormValues): Promise<boolean> => {
     try {
-      console.log('values', values);
       const newValues = {
         tipoUnidad: values.unitType,
         nombre: values.nombre?.nombre,
@@ -153,11 +154,9 @@ export const useHelpers = ({ valueState }: PropsHelpers) => {
         estado: values.state?.codigo,
       };
 
-      console.log('newValues', newValues);
       if (dataEdit) {
-        console.log('EDIT', dataEdit);
         const response: ResponseTolls = await _updateCountrie({
-          urlParam: values.codigo,
+          urlParam: values._id,
           body: newValues,
         });
         const code: Response['code'] = get(response, 'response.code');
@@ -166,15 +165,14 @@ export const useHelpers = ({ valueState }: PropsHelpers) => {
           'response.message',
           ''
         );
-
         if (code === 200) {
           modalSuccess({ message });
           handleGetCountrie(valueState.codigo);
-          console.log('edit', newValues, response);
         } else {
           modalInformation({ message });
         }
       } else {
+        setValueState(null);
         const response: ResponseTolls = await _createCountrie({
           body: newValues,
         });
@@ -187,6 +185,7 @@ export const useHelpers = ({ valueState }: PropsHelpers) => {
         );
 
         if (code === 200) {
+          handleResetCountriesByState();
           console.log('res', response);
           handleGetCountrie(newValues.estado);
           modalSuccess({ message });

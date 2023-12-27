@@ -45,6 +45,7 @@ const Tolls = () => {
     countriesByState,
     handleGetCountrie,
     handleResetCountriesByStateUnitType,
+    handleResetCountriesByState,
   } = actionsCountries;
   const { catalogs, handleGetCatalogs, handleGetUnitType, unitTypes } =
     actionsCatalogs;
@@ -57,7 +58,7 @@ const Tolls = () => {
     handleGetToll,
     setDataEdit,
     setDataTemp,
-  } = useHelpers({ valueState });
+  } = useHelpers({ valueState, setValueState });
 
   useEffect(() => {
     handleResetCountriesByStateUnitType();
@@ -78,6 +79,7 @@ const Tolls = () => {
 
   useEffect(() => {
     if (valueState) {
+      handleResetCountriesByState();
       handleGetCountrie(valueState.codigo);
     }
   }, [valueState]);

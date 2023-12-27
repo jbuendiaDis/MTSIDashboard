@@ -11,6 +11,7 @@ export interface FormValues {
   nombre: CountriesData | null;
   costo: string | number;
   codigo?: number;
+  _id?: string;
 }
 
 export interface DataToll {
