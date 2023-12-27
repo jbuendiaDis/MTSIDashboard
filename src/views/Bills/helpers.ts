@@ -195,6 +195,7 @@ export const useHelpers = () => {
   };
 
   const validationSchema = Yup.object().shape({
+    unitType: Yup.string(),
     originState: Yup.object().nullable().required(),
     destinationState: Yup.object().nullable().required(),
     originLocality: Yup.object().nullable().required(),
@@ -206,6 +207,7 @@ export const useHelpers = () => {
   });
 
   const initialValues: FormValues = {
+    unitType: '',
     originState: null,
     destinationState: null,
     originLocality: null,

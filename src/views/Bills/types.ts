@@ -7,6 +7,7 @@ interface State {
 }
 
 export interface FormValues {
+  unitType: string;
   originState: State | null;
   destinationState: State | null;
   originLocality: any;
