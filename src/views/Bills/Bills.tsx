@@ -70,12 +70,12 @@ const Bills = () => {
       label: 'Acciones',
       align: 'center',
       actions: [
-        {
-          label: 'Editar',
-          icon: <ModeEditOutlineOutlined sx={{ width: 20, height: 20 }} />,
-          onClick: (rowData: TollExpensesData['data']) =>
-            handleGetBill(rowData._id),
-        },
+        // {
+        //   label: 'Editar',
+        //   icon: <ModeEditOutlineOutlined sx={{ width: 20, height: 20 }} />,
+        //   onClick: (rowData: TollExpensesData['data']) =>
+        //     handleGetBill(rowData._id),
+        // },
         {
           label: 'Detalle',
           icon: <VisibilityOutlined sx={{ width: 20, height: 20 }} />,
