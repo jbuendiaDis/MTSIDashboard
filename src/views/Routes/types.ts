@@ -1,4 +1,4 @@
-import { Response } from '../../models';
+import { FormatDataState, Response } from '../../models';
 
 export interface Puntos {
   costo: number;
@@ -8,6 +8,8 @@ export interface Puntos {
 }
 
 export interface DataTolls {
+  idEstadoDestino: number;
+  idEstadoOrigen: number;
   casetas: string;
   idgasto: string;
   kms: number;
@@ -37,7 +39,7 @@ export type Options = {
 };
 
 export interface TableDots {
-  casetas: string;
+  casetas?: string;
   nombreCaseta: string;
   costo: string | number;
   _id: number;
@@ -58,4 +60,18 @@ export interface PayloadUnidades {
 export interface ResponseUnidades {
   payload: PayloadUnidades;
   response: Response;
+}
+
+export interface FormValues {
+  tipoUnidad: string;
+  localidadOrigen: number | null | FormatDataState;
+  localidadDestino: number | null | FormatDataState;
+  kms: null | string | number;
+  stateOrigen: null | FormatDataState;
+  stateDestino: null | FormatDataState;
+
+  pagoCasetas?: string;
+  stateCaseta?: null;
+  nombreCaseta?: null;
+  _id?: string;
 }

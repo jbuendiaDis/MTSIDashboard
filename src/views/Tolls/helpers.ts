@@ -51,7 +51,7 @@ export const useHelpers = ({ valueState, setValueState }: PropsHelpers) => {
   });
 
   useEffect(() => {
-    if (dataTemp !== null && countriesByStateUnitType.length > 0) {
+    if (dataTemp !== null && countriesByStateUnitType?.length > 0) {
       const filterState = states.find(
         (item: any) => item.codigo === dataTemp.estado
       );

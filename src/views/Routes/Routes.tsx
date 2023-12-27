@@ -54,14 +54,14 @@ const Routes = () => {
     tollsData,
     formik,
     dataDotsTable,
-    dataEdit,
+    isEditing,
     options,
     handleOpenModalDelete,
     handleGetToll,
     handleAddDot,
     handleRemoveDot,
     setDataDotsTable,
-    setDataEdit,
+    setIsEditing,
   } = useHelpers({ setOpen });
 
   useEffect(() => {
@@ -75,10 +75,6 @@ const Routes = () => {
   useEffect(() => {
     if (catalogs.length > 0) handleGetUnitType(catalogs[2]?._id);
   }, [catalogs]);
-
-  useEffect(() => {
-    if (dataEdit) setOpen(true);
-  }, [dataEdit]);
 
   useEffect(() => {
     if (formik.values.stateOrigen !== null && formik.values.tipoUnidad !== '') {
@@ -215,7 +211,7 @@ const Routes = () => {
     setOpen(false);
     handleResetCountriesByStateUnitTypeOrigin();
     handleResetCountriesByStateUnitTypeDestination();
-    setDataEdit(null);
+    setIsEditing(false);
   };
 
   return (
@@ -231,7 +227,7 @@ const Routes = () => {
             color="inherit"
             sx={{ p: '10px 20px', letterSpacing: '1px' }}
             onClick={() => {
-              setOpen(!open);
+              setOpen(true);
               formik.resetForm();
               setDataDotsTable([]);
             }}
@@ -257,7 +253,7 @@ const Routes = () => {
         <DialogTitle>
           <HeaderTitleModal
             handleToggleModal={handleCloseDialog}
-            title={dataEdit ? 'EDITAR RUTA' : 'CREAR RUTA'}
+            title={isEditing ? 'EDITAR RUTA' : 'CREAR RUTA'}
           />
         </DialogTitle>
         <DialogContent>
@@ -280,6 +276,7 @@ const Routes = () => {
                   helperText={
                     formik.touched.tipoUnidad && formik.errors.tipoUnidad
                   }
+                  disabled={isEditing ? true : false}
                 >
                   {unitTypes.map((item: any) => (
                     <MenuItem key={item.descripcion} value={item.descripcion}>
@@ -312,13 +309,18 @@ const Routes = () => {
                       }
                     />
                   )}
-                  disabled={formik.values.tipoUnidad === '' ? true : false}
+                  disabled={
+                    formik.values.tipoUnidad === ''
+                      ? true
+                      : isEditing
+                      ? true
+                      : false
+                  }
                 />
               </Grid>
               <Grid item xs={12} sm={6} md={3} lg={3}>
                 <Autocomplete
                   id="localidadOrigen"
-                  // options={countriesByState}
                   options={countriesByStateUnitTypeOrigin}
                   getOptionLabel={(option: any) => option.nombre}
                   value={formik.values.localidadOrigen}
@@ -341,7 +343,13 @@ const Routes = () => {
                       }
                     />
                   )}
-                  disabled={formik.values.tipoUnidad === '' ? true : false}
+                  disabled={
+                    formik.values.tipoUnidad === ''
+                      ? true
+                      : isEditing
+                      ? true
+                      : false
+                  }
                 />
               </Grid>
               <Grid item xs={12} sm={6} md={3} lg={3}>
@@ -369,7 +377,13 @@ const Routes = () => {
                       }
                     />
                   )}
-                  disabled={formik.values.tipoUnidad === '' ? true : false}
+                  disabled={
+                    formik.values.tipoUnidad === ''
+                      ? true
+                      : isEditing
+                      ? true
+                      : false
+                  }
                 />
               </Grid>
               <Grid item xs={12} sm={6} md={3} lg={3}>
@@ -397,7 +411,13 @@ const Routes = () => {
                       }
                     />
                   )}
-                  disabled={formik.values.tipoUnidad === '' ? true : false}
+                  disabled={
+                    formik.values.tipoUnidad === ''
+                      ? true
+                      : isEditing
+                      ? true
+                      : false
+                  }
                 />
               </Grid>
               <Grid item xs={12} sm={6} md={3} lg={3}>
@@ -536,7 +556,7 @@ const Routes = () => {
                 Cancelar
               </Button>
               <Button variant="contained" type="submit">
-                {dataEdit ? 'Guardar' : 'Crear'}
+                {isEditing ? 'Guardar' : 'Crear'}
               </Button>
             </Stack>
           </form>

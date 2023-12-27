@@ -5,6 +5,7 @@ import { useLoader } from '../../components/Loader';
 import { FormatDataState, LoaderContextType, Response } from '../../models';
 import {
   DataTolls,
+  FormValues,
   Options,
   ResponseTolls,
   ResponseUnidades,
@@ -20,34 +21,27 @@ import * as Yup from 'yup';
 import { get } from 'lodash';
 import { useRootProvider } from '../../components/RootProvider/hooks/useRootProvider';
 
-interface FormValues {
-  tipoUnidad: string;
-  localidadOrigen: number | null | FormatDataState;
-  localidadDestino: number | null | FormatDataState;
-  kms: null | string | number;
-  stateOrigen: null | FormatDataState;
-  stateDestino: null | FormatDataState;
-
-  pagoCasetas: string;
-  stateCaseta: null;
-  nombreCaseta: null;
-}
-
 interface HelpersProps {
   setOpen: (value: boolean) => void;
 }
 
 export const useHelpers = ({ setOpen }: HelpersProps) => {
   const [tollsData, setTollsData] = useState<DataTolls[]>([]);
-  // const [dataEdit, setDataEdit] = useState<DataTolls[] | null>(null);
-  const [dataEdit, setDataEdit] = useState<any | null>(null);
+  const [isEditing, setIsEditing] = useState<boolean>(false);
   const [dataTemp, setDataTemp] = useState<any | null>(null);
   const [dataDotsTable, setDataDotsTable] = useState<any[]>([]);
   const { handleShowLoader }: LoaderContextType = useLoader();
   const { modalDelete, modalSuccess, modalInformation } =
     useModalConfirmation();
-  const { actionsCountries }: any = useRootProvider();
-  const { handleResetCountriesByStateUnitType } = actionsCountries;
+  const { actionsCountries, actionsState }: any = useRootProvider();
+  const {
+    countriesByStateUnitTypeOrigin,
+    countriesByStateUnitTypeDestination,
+    handleResetCountriesByStateUnitType,
+    handleGetCountriesByStateUnitTypeOrigin,
+    handleGetCountriesByStateUnitTypeDestination,
+  } = actionsCountries;
+  const { states } = actionsState;
 
   const requiredField: string = 'Este campo es obligatorio.';
 
@@ -66,6 +60,11 @@ export const useHelpers = ({ setOpen }: HelpersProps) => {
     method: 'post',
   });
 
+  const _updateToll = useApi({
+    endpoint: '/peajes',
+    method: 'put',
+  });
+
   const _deleteToll = useApi({
     endpoint: '/peajes',
     method: 'delete',
@@ -76,19 +75,53 @@ export const useHelpers = ({ setOpen }: HelpersProps) => {
     handleGetTolls();
   }, []);
 
-  // useEffect(() => {
-  //   if (dataTemp !== null) {
-  //     console.log('render', dataTemp);
+  useEffect(() => {
+    if (
+      dataTemp !== null &&
+      countriesByStateUnitTypeOrigin?.length > 0 &&
+      countriesByStateUnitTypeDestination?.length > 0
+    ) {
+      const filterStateOrigin = states.find(
+        (item: any) => item.codigo === dataTemp?.idEstadoOrigen
+      );
+      const filterStateDestination = states.find(
+        (item: any) => item.codigo === dataTemp?.idEstadoDestino
+      );
+      const filterCountrieOrigin = countriesByStateUnitTypeOrigin.find(
+        (item: any) => item.codigo === parseInt(dataTemp.localidadOrigen)
+      );
+      const filterCountrieDestination =
+        countriesByStateUnitTypeDestination.find(
+          (item: any) => item.codigo === parseInt(dataTemp.localidadDestino)
+        );
 
-  //     const newValuesEdit = {
-  //       tipoUnidad: dataTemp.tipoUnidad,
-  //       kms: dataTemp.kms,
-  //     };
+      const formatDots = get(dataTemp, 'puntos', []).map((item: any) => {
+        return {
+          ...item,
+          costo: formatToCurrency(item.costo),
+        };
+      });
 
-  //     console.log('newValues', newValuesEdit);
-  //     setDataEdit(newValuesEdit);
-  //   }
-  // }, [dataTemp]);
+      formik.setValues({
+        stateOrigen: filterStateOrigin,
+        stateDestino: filterStateDestination,
+        localidadOrigen: filterCountrieOrigin,
+        localidadDestino: filterCountrieDestination,
+        kms: dataTemp.kms,
+        tipoUnidad: dataTemp.tipoUnidad,
+        _id: dataTemp._id,
+      });
+
+      setIsEditing(true);
+      setDataTemp(null);
+      setDataDotsTable(formatDots);
+      setOpen(true);
+    }
+  }, [
+    dataTemp,
+    countriesByStateUnitTypeOrigin,
+    countriesByStateUnitTypeDestination,
+  ]);
 
   const handleGetTolls = async (): Promise<boolean> => {
     try {
@@ -112,7 +145,6 @@ export const useHelpers = ({ setOpen }: HelpersProps) => {
       if (code === 200) {
         handleShowLoader(false);
         setTollsData(formatData);
-        // console.log('DATA', formatData);
       }
       return true;
     } catch (error) {
@@ -130,26 +162,18 @@ export const useHelpers = ({ setOpen }: HelpersProps) => {
         ? payload.data[0]
         : payload.data;
 
-      console.log('RES', dataResponse);
-
-      const formatDots = get(dataResponse, 'puntos', []).map((item: any) => {
-        return {
-          ...item,
-          costo: formatToCurrency(item.costo),
-        };
-      });
-
-      // console.log('>>>', formatDots);
-
-      // if (code === 200) {
-      //   setDataTemp(dataResponse);
-      //   handleGetCountriesByStateUnitType(dataResponse., dataResponse.tipoUnidad);
-      // }
-
       if (code === 200) {
-        setDataEdit(dataResponse);
-        setDataDotsTable(formatDots);
+        handleGetCountriesByStateUnitTypeOrigin(
+          dataResponse.idEstadoOrigen,
+          dataResponse.tipoUnidad
+        );
+        handleGetCountriesByStateUnitTypeDestination(
+          dataResponse.idEstadoDestino,
+          dataResponse.tipoUnidad
+        );
+        setDataTemp(dataResponse);
       }
+
       return true;
     } catch (error) {
       return false;
@@ -216,19 +240,18 @@ export const useHelpers = ({ setOpen }: HelpersProps) => {
     });
   };
 
-  console.log('EDIT', dataEdit);
-
   const initialValues: FormValues = {
-    tipoUnidad: dataEdit ? dataEdit?.tipoUnidad : '',
+    tipoUnidad: '',
     localidadOrigen: null,
     localidadDestino: null,
-    kms: dataEdit ? dataEdit?.kms : '',
+    kms: '',
     stateOrigen: null,
     stateDestino: null,
 
     pagoCasetas: '',
     stateCaseta: null,
     nombreCaseta: null,
+    _id: '',
   };
 
   const validationSchema = Yup.object().shape({
@@ -251,7 +274,6 @@ export const useHelpers = ({ setOpen }: HelpersProps) => {
     validationSchema,
     onSubmit: async (values: FormValues) => {
       try {
-        console.log('VALUES', values);
         const arrayDots: any[] = [];
 
         dataDotsTable.map((item: any) => {
@@ -262,8 +284,6 @@ export const useHelpers = ({ setOpen }: HelpersProps) => {
             // _id: item._id.toString(),
           });
         });
-
-        console.log('array', arrayDots);
 
         const newValues: any = {
           estadoOrigen: values.stateOrigen!.codigo,
@@ -282,25 +302,44 @@ export const useHelpers = ({ setOpen }: HelpersProps) => {
           }, 0),
         };
 
-        console.log('newValues', newValues);
+        if (isEditing) {
+          const response: ResponseUnidades = await _updateToll({
+            urlParam: formik.values._id,
+            body: newValues,
+          });
+          const code: Response['code'] = get(response, 'response.code');
+          const message: Response['message'] = get(
+            response,
+            'response.message',
+            ''
+          );
 
-        const response: ResponseUnidades = await _createToll({
-          body: newValues,
-        });
-        const code: Response['code'] = get(response, 'response.code');
-        const message: Response['message'] = get(
-          response,
-          'response.message',
-          ''
-        );
-
-        if (code === 200) {
-          modalSuccess({ message });
-          handleGetTolls();
-          formik.resetForm();
-          setOpen(false);
+          if (code === 200) {
+            setOpen(false);
+            modalSuccess({ message });
+            handleGetTolls();
+          } else {
+            modalInformation({ message });
+          }
         } else {
-          modalInformation({ message });
+          const response: ResponseUnidades = await _createToll({
+            body: newValues,
+          });
+          const code: Response['code'] = get(response, 'response.code');
+          const message: Response['message'] = get(
+            response,
+            'response.message',
+            ''
+          );
+
+          if (code === 200) {
+            modalSuccess({ message });
+            handleGetTolls();
+            formik.resetForm();
+            setOpen(false);
+          } else {
+            modalInformation({ message });
+          }
         }
 
         return true;
@@ -325,13 +364,13 @@ export const useHelpers = ({ setOpen }: HelpersProps) => {
     tollsData,
     formik,
     dataDotsTable,
-    dataEdit,
+    isEditing,
     options,
     handleOpenModalDelete,
     handleGetToll,
     handleAddDot,
     handleRemoveDot,
     setDataDotsTable,
-    setDataEdit,
+    setIsEditing,
   };
 };
