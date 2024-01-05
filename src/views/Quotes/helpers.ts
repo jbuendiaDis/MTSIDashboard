@@ -46,13 +46,15 @@ export const useHelpers = ({ setOpen }: HelpersProps) => {
   });
 
   useEffect(() => {
-    handleGetAllQuotez();
     handleGetconfigureData();
     setIsQuotez(true);
   }, []);
 
   useEffect(() => {
-    if (configureData !== null) setIsConfigureData(true);
+    if (configureData !== null) {
+      setIsConfigureData(true);
+      handleGetAllQuotez();
+    }
   }, [configureData]);
 
   const handleGetAllQuotez = async (): Promise<boolean> => {
@@ -91,6 +93,7 @@ export const useHelpers = ({ setOpen }: HelpersProps) => {
 
       if (code == 200) {
         console.log('HAY DATA');
+        setConfigureData(payload.data);
       } else if (code === 204) {
         const message: string = `${messageResponse} Configure las variables antes de continuar`;
         modalInformation({ message });

@@ -46,6 +46,8 @@ const BillForm = ({ handleToggleModal, states, dataEdit }: BillFormProps) => {
     }
   }, [values.destinationState]);
 
+  console.log('>>', localidades)
+
   return (
     <Form>
       <Grid container spacing={2}>

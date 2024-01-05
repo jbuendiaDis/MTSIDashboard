@@ -245,18 +245,18 @@ export const useHelpers = () => {
 
       console.log('newValues', newValues);
 
-      const response: ResponseTollExpenses = await _createBill({
-        body: newValues,
-      });
-      const code: Response['code'] = get(response, 'response.code');
-      const message: Response['message'] = get(response, 'response.message');
+      // const response: ResponseTollExpenses = await _createBill({
+      //   body: newValues,
+      // });
+      // const code: Response['code'] = get(response, 'response.code');
+      // const message: Response['message'] = get(response, 'response.message');
 
-      if (code === 200) {
-        modalSuccess({ message });
-        handleGetAllBills();
-      } else {
-        modalInformation({ message });
-      }
+      // if (code === 200) {
+      //   modalSuccess({ message });
+      //   handleGetAllBills();
+      // } else {
+      //   modalInformation({ message });
+      // }
       return true;
     } catch (error) {
       return false;
