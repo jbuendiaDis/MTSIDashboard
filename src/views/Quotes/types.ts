@@ -51,4 +51,5 @@ export interface FormValues {
   financiamiento: string | number | undefined;
   otros: string | number | undefined;
   sucontrato: string | number | undefined;
+  _id?: string;
 }

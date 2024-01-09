@@ -35,7 +35,6 @@ const Table = ({
   customButton,
   renderCustomButton,
   isQuotez,
-  isConfigureData,
   handleQuotez,
 }: TableProps) => {
   const [sortData, setSortData] = useState<SortData>({
@@ -203,7 +202,6 @@ const Table = ({
               }}
             >
               <Button
-                disabled={isConfigureData}
                 variant="contained"
                 color="inherit"
                 sx={{ p: 1.5, letterSpacing: '1.2px' }}

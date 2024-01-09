@@ -13,8 +13,13 @@ import { HeaderTitleModal } from '../../components/Modal/HeaderTitleModal';
 const Quotes = () => {
   const [open, setOpen] = useState<boolean>(false);
   const { handleOpenModal, handleCloseModal }: ModalContextType = useModal();
-  const { formikConfig, isQuotez, isConfigureData, dataQuotezTable } =
-    useHelpers({ setOpen });
+  const {
+    formikConfig,
+    isQuotez,
+    dataQuotezTable,
+    configureData,
+    handleGetConfigDataById,
+  } = useHelpers({ setOpen });
 
   const columns: Column[] = [
     { id: 'folio', label: 'Folio', align: 'left' },
@@ -99,18 +104,21 @@ const Quotes = () => {
     <div>
       <Table
         isQuotez={isQuotez}
-        isConfigureData={isConfigureData}
         showCheckboxes={false}
         tableHead
         title="Cotizaciones"
         columns={columns}
         data={dataQuotezTable}
-        handleQuotez={() => setOpen(!open)}
+        handleQuotez={() =>
+          configureData
+            ? handleGetConfigDataById(configureData._id)
+            : setOpen(!open)
+        }
       />
       <Drawer
         open={open}
         anchor="right"
-        title="Configurar Variables"
+        title={configureData ? 'Editar Variables' : 'Configurar Variables'}
         onClose={handleCloseDrawer}
       >
         <form>
@@ -241,7 +249,7 @@ const Quotes = () => {
               variant="contained"
               onClick={() => formikConfig.submitForm()}
             >
-              Enviar
+              {configureData ? 'Guardar' : 'Enviar'}
             </Button>
           </Stack>
         </form>

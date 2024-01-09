@@ -13,6 +13,7 @@ import { format, parseISO } from 'date-fns';
 import { useFormik } from 'formik';
 import { useModalConfirmation } from '../../hooks/useModalConfirmation';
 import * as Yup from 'yup';
+import { get } from 'lodash';
 
 interface HelpersProps {
   setOpen: (value: boolean) => void;
@@ -20,7 +21,7 @@ interface HelpersProps {
 
 export const useHelpers = ({ setOpen }: HelpersProps) => {
   const [isQuotez, setIsQuotez] = useState<boolean>(false);
-  const [isConfigureData, setIsConfigureData] = useState<boolean>(true);
+  // const [isConfigureData, setIsConfigureData] = useState<boolean>(true);
   const [configureData, setConfigureData] = useState<
     PayloadConfigureData['data'] | null
   >(null);
@@ -45,6 +46,16 @@ export const useHelpers = ({ setOpen }: HelpersProps) => {
     method: 'post',
   });
 
+  const _getConfigDataById = useApi({
+    endpoint: '/configureData',
+    method: 'get',
+  });
+
+  const _updateConfigureData = useApi({
+    endpoint: '/configureData',
+    method: 'put',
+  });
+
   useEffect(() => {
     handleGetconfigureData();
     setIsQuotez(true);
@@ -52,7 +63,7 @@ export const useHelpers = ({ setOpen }: HelpersProps) => {
 
   useEffect(() => {
     if (configureData !== null) {
-      setIsConfigureData(true);
+      // setIsConfigureData(true);
       handleGetAllQuotez();
     }
   }, [configureData]);
@@ -89,15 +100,37 @@ export const useHelpers = ({ setOpen }: HelpersProps) => {
       const code: Response['code'] = response.code;
       const messageResponse: Response['message'] = response.message;
 
-      console.log('payload', payload);
-
       if (code == 200) {
-        console.log('HAY DATA');
         setConfigureData(payload.data);
       } else if (code === 204) {
         const message: string = `${messageResponse} Configure las variables antes de continuar`;
         modalInformation({ message });
-        setIsConfigureData(false);
+        // setIsConfigureData(false);
+      }
+      return true;
+    } catch (error) {
+      return false;
+    }
+  };
+
+  const handleGetConfigDataById = async (id: string): Promise<boolean> => {
+    try {
+      const { payload, response }: ResponseConfigureData =
+        await _getConfigDataById({ urlParam: id });
+      const code: Response['code'] = response.code;
+      const dataResponse = payload.data;
+
+      if (code === 200) {
+        formikConfig.setValues({
+          rendimiento: dataResponse ? dataResponse.rendimiento : '',
+          combustible: dataResponse ? dataResponse.combustible : '',
+          inflacion: dataResponse ? dataResponse.inflacion : '',
+          financiamiento: dataResponse ? dataResponse.financiamiento : '',
+          otros: dataResponse ? dataResponse.otros : '',
+          sucontrato: dataResponse ? dataResponse.sucontrato : '',
+          _id: dataResponse ? dataResponse._id : '',
+        });
+        setOpen(true);
       }
       return true;
     } catch (error) {
@@ -112,6 +145,7 @@ export const useHelpers = ({ setOpen }: HelpersProps) => {
     financiamiento: '',
     otros: '',
     sucontrato: '',
+    _id: '',
   };
 
   const validationSchema = Yup.object().shape({
@@ -128,23 +162,46 @@ export const useHelpers = ({ setOpen }: HelpersProps) => {
     validationSchema,
     onSubmit: async (values: FormValues) => {
       try {
-        console.log('VALUES', values);
-        const { payload, response }: ResponseConfigureData =
-          await _createConfigureData({
-            body: values,
+        const newValues = {
+          rendimiento: values.rendimiento,
+          combustible: values.combustible,
+          inflacion: values.inflacion,
+          financiamiento: values.financiamiento,
+          otros: values.otros,
+          sucontrato: values.sucontrato,
+        };
+        if (configureData) {
+          const response = await _updateConfigureData({
+            urlParam: values._id,
+            body: newValues,
           });
-        const code: Response['code'] = response.code;
-        const message: Response['message'] = response.message;
-        const dataResponse: PayloadConfigureData['data'] = payload.data;
+          const code = get(response, 'response.code');
+          const message = get(response, 'response.message', '');
 
-        if (code === 200) {
-          modalSuccess({ message });
-          setConfigureData(dataResponse);
+          if (code === 200) {
+            modalSuccess({ message });
+            setOpen(false);
+          } else {
+            modalInformation({ message });
+          }
         } else {
-          modalInformation({ message });
+          const { payload, response }: ResponseConfigureData =
+            await _createConfigureData({
+              body: newValues,
+            });
+          const code: Response['code'] = response.code;
+          const message: Response['message'] = response.message;
+          const dataResponse: PayloadConfigureData['data'] = payload.data;
+
+          if (code === 200) {
+            modalSuccess({ message });
+            setConfigureData(dataResponse);
+          } else {
+            modalInformation({ message });
+          }
+          setOpen(false);
+          return true;
         }
-        setOpen(false);
-        return true;
       } catch (error) {
         return false;
       }
@@ -154,7 +211,9 @@ export const useHelpers = ({ setOpen }: HelpersProps) => {
   return {
     formikConfig,
     isQuotez,
-    isConfigureData,
+    // isConfigureData,
     dataQuotezTable,
+    configureData,
+    handleGetConfigDataById,
   };
 };
