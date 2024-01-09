@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Drawer } from '../../components/Drawer';
 import { Table } from '../../components/Table';
 import { Column, ModalContextType } from '../../models';
@@ -9,6 +9,7 @@ import { RequestQuoteOutlined } from '@mui/icons-material';
 import { FormValues } from './types';
 import { useModal } from '../../components/Modal';
 import { HeaderTitleModal } from '../../components/Modal/HeaderTitleModal';
+import DetailQuote from './DetailQuote';
 
 const Quotes = () => {
   const [open, setOpen] = useState<boolean>(false);
@@ -18,8 +19,15 @@ const Quotes = () => {
     isQuotez,
     dataQuotezTable,
     configureData,
+    generateQuote,
     handleGetConfigDataById,
+    handleGetQuoteFolio,
+    setGenerateQuote,
   } = useHelpers({ setOpen });
+
+  useEffect(() => {
+    if (generateQuote) handleModal();
+  }, [generateQuote]);
 
   const columns: Column[] = [
     { id: 'folio', label: 'Folio', align: 'left' },
@@ -34,24 +42,9 @@ const Quotes = () => {
         {
           label: 'Generar',
           icon: <RequestQuoteOutlined sx={{ width: 20, height: 20 }} />,
-          onClick: (rowData: any) => handleModal(),
+          // onClick: (rowData: any) => handleGetQuoteFolio(rowData._id),
+          onClick: (rowData: any) => handleGetQuoteFolio(rowData._id),
         },
-        // {
-        //   label: 'Detalle',
-        //   icon: <VisibilityOutlined sx={{ width: 20, height: 20 }} />,
-        //   onClick: (rowData: TollExpensesData['data']) =>
-        //     hanldeDetailBills(rowData),
-        // },
-        // {
-        //   label: 'Eliminar',
-        //   icon: (
-        //     <DeleteOutlineOutlined
-        //       sx={{ width: 20, height: 20, color: 'red' }}
-        //     />
-        //   ),
-        //   onClick: (rowData: TollExpensesData['data']) =>
-        //     handleOpenDeleteModal(rowData),
-        // },
       ],
     },
   ];
@@ -59,15 +52,19 @@ const Quotes = () => {
   const handleModal = () => {
     handleOpenModal({
       fullWidth: true,
-      maxWidth: 'sm',
+      maxWidth: 'lg',
       title: (
         <HeaderTitleModal
-          handleToggleModal={() => handleCloseModal()}
+          handleToggleModal={() => {
+            handleCloseModal();
+            setGenerateQuote(false);
+          }}
           title="GENERAR COTIZACION"
         />
       ),
       body: (
         <Grid>
+          <DetailQuote />
           <Stack
             direction="row"
             spacing={2}
@@ -77,9 +74,12 @@ const Quotes = () => {
             <Button
               variant="outlined"
               color="inherit"
-              onClick={() => handleCloseModal()}
+              // onClick={() => {
+              //   handleCloseModal();
+              //   setGenerateQuote(false);
+              // }}
             >
-              Cancelar
+              Personalizar correo electrónico
             </Button>
             <Button variant="contained">Enviar</Button>
           </Stack>

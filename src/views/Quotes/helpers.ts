@@ -21,7 +21,7 @@ interface HelpersProps {
 
 export const useHelpers = ({ setOpen }: HelpersProps) => {
   const [isQuotez, setIsQuotez] = useState<boolean>(false);
-  // const [isConfigureData, setIsConfigureData] = useState<boolean>(true);
+  const [generateQuote, setGenerateQuote] = useState<boolean>(false);
   const [configureData, setConfigureData] = useState<
     PayloadConfigureData['data'] | null
   >(null);
@@ -33,6 +33,11 @@ export const useHelpers = ({ setOpen }: HelpersProps) => {
 
   const _getAllQuotes = useApi({
     endpoint: '/quotes-01/all',
+    method: 'get',
+  });
+
+  const _getQuoteFolio = useApi({
+    endpoint: '/quotes01',
     method: 'get',
   });
 
@@ -138,6 +143,25 @@ export const useHelpers = ({ setOpen }: HelpersProps) => {
     }
   };
 
+  const handleGetQuoteFolio = async (id: string): Promise<boolean> => {
+    try {
+      console.log('id', id);
+      const { payload, response }: any = await _getQuoteFolio({
+        urlParam: id,
+      });
+
+      const code: Response['code'] = response.code;
+
+      if (code === 200) {
+        console.log('RES', payload);
+        setGenerateQuote(true);
+      }
+      return true;
+    } catch (error) {
+      return false;
+    }
+  };
+
   const initialValues: FormValues = {
     rendimiento: '',
     combustible: '',
@@ -214,6 +238,9 @@ export const useHelpers = ({ setOpen }: HelpersProps) => {
     // isConfigureData,
     dataQuotezTable,
     configureData,
+    generateQuote,
     handleGetConfigDataById,
+    handleGetQuoteFolio,
+    setGenerateQuote,
   };
 };

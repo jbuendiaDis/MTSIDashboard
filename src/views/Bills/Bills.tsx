@@ -8,7 +8,7 @@ import { Column } from '../../models';
 import {
   Add,
   DeleteOutlineOutlined,
-  ModeEditOutlineOutlined,
+  // ModeEditOutlineOutlined,
   VisibilityOutlined,
 } from '@mui/icons-material';
 import { Box, Button } from '@mui/material';
@@ -32,7 +32,7 @@ const Bills = () => {
     initialValues,
     billsDataTable,
     handleGetAllBills,
-    handleGetBill,
+    // handleGetBill,
     handleOpenDeleteModal,
     handleSubmit,
     setDataEdit,
