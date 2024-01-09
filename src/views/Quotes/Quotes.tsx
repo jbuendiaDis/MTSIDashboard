@@ -10,8 +10,10 @@ import { FormValues } from './types';
 import { useModal } from '../../components/Modal';
 import { HeaderTitleModal } from '../../components/Modal/HeaderTitleModal';
 import DetailQuote from './DetailQuote';
+import { useNavigate } from 'react-router-dom';
 
 const Quotes = () => {
+  const navigate = useNavigate();
   const [open, setOpen] = useState<boolean>(false);
   const { handleOpenModal, handleCloseModal }: ModalContextType = useModal();
   const {
@@ -20,6 +22,7 @@ const Quotes = () => {
     dataQuotezTable,
     configureData,
     generateQuote,
+    dataQuote,
     handleGetConfigDataById,
     handleGetQuoteFolio,
     setGenerateQuote,
@@ -42,7 +45,7 @@ const Quotes = () => {
         {
           label: 'Generar',
           icon: <RequestQuoteOutlined sx={{ width: 20, height: 20 }} />,
-          // onClick: (rowData: any) => handleGetQuoteFolio(rowData._id),
+          // onClick: (rowData: any) => navigate(`/detail-quote/${rowData._id}`),
           onClick: (rowData: any) => handleGetQuoteFolio(rowData._id),
         },
       ],
@@ -64,7 +67,7 @@ const Quotes = () => {
       ),
       body: (
         <Grid>
-          <DetailQuote />
+          <DetailQuote dataQuote={dataQuote} />
           <Stack
             direction="row"
             spacing={2}

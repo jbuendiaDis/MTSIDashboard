@@ -4,8 +4,10 @@ import { useApi } from '../../hooks/useApi';
 import {
   FormValues,
   PayloadConfigureData,
+  PayloadDetailQuote,
   PayloadQuotez,
   ResponseConfigureData,
+  ResponseDetailQuote,
   ResponseQuotes,
 } from './types';
 import { Response } from '../../models';
@@ -28,6 +30,7 @@ export const useHelpers = ({ setOpen }: HelpersProps) => {
   const [dataQuotezTable, setDataQuotezTable] = useState<PayloadQuotez['data']>(
     []
   );
+  const [dataQuote, setDataQuote] = useState<PayloadDetailQuote['data']>([]);
 
   const { modalInformation, modalSuccess } = useModalConfirmation();
 
@@ -145,16 +148,17 @@ export const useHelpers = ({ setOpen }: HelpersProps) => {
 
   const handleGetQuoteFolio = async (id: string): Promise<boolean> => {
     try {
-      console.log('id', id);
-      const { payload, response }: any = await _getQuoteFolio({
-        urlParam: id,
+      const { payload, response }: ResponseDetailQuote = await _getQuoteFolio({
+        // urlParam: id,
+        urlParam: 2,
       });
+      const dataResponse: PayloadDetailQuote['data'] = payload.data;
 
       const code: Response['code'] = response.code;
 
       if (code === 200) {
-        console.log('RES', payload);
         setGenerateQuote(true);
+        setDataQuote(dataResponse);
       }
       return true;
     } catch (error) {
@@ -239,6 +243,7 @@ export const useHelpers = ({ setOpen }: HelpersProps) => {
     dataQuotezTable,
     configureData,
     generateQuote,
+    dataQuote,
     handleGetConfigDataById,
     handleGetQuoteFolio,
     setGenerateQuote,
