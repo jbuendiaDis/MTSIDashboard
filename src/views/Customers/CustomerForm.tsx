@@ -3,8 +3,6 @@ import Input from '../../components/Input/Input';
 import { PaylaodCustomers } from './types';
 import { AutoCompleteComponent } from '../../components/Input/AutoCompleteComponent';
 import { DataStates } from '../../models';
-import Select from '../../components/Input/Select';
-
 interface Props {
   handleToggleModal: () => void;
   dataEdit: PaylaodCustomers['data'] | null;
@@ -70,9 +68,6 @@ const CustomerForm = ({
             Datos Fiscales:
           </Typography>
         </Grid>
-        {/* <Grid xs={12} sm={4} md={4} item>
-          <Input fullWidth label="Código Cliente" name="codigoCliente" />
-        </Grid> */}
         <Grid xs={12} sm={4} md={6} item>
           <AutoCompleteComponent
             label="Seleccione un regimen fiscal"

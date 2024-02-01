@@ -1,26 +1,64 @@
-import { Divider, Grid, Stack, Typography } from '@mui/material';
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useEffect, useState } from 'react';
 import { QuotesStyles } from './QuotesStyles';
 import {
   PayloadDetailQuote,
+  ResponseDetailQuote,
   //  ResponseDetailQuote
 } from './types';
 import { formatToCurrency } from '../../utils/amountFormater';
-// import { useApi } from '../../hooks/useApi';
-// import { Response } from '../../models';
-// import { useParams } from 'react-router-dom';
-// import { Table } from '../../components/Table';
+import { useApi } from '../../hooks/useApi';
+import { Response } from '../../models';
+import { useParams } from 'react-router-dom';
+import { Table } from '../../components/Table';
 
-interface DetailQuoteProps {
-  dataQuote: PayloadDetailQuote['data'];
-}
+const DetailQuote = () => {
+  const { id } = useParams();
+  const [dataTable, setDataTable] = useState<PayloadDetailQuote['data']>([]);
+  const idQuote: string | undefined = id ? id : '';
 
-const DetailQuote = ({ dataQuote }: DetailQuoteProps) => {
+  const _getQuoteFolio = useApi({
+    endpoint: '/quotes01',
+    method: 'get',
+  });
+
+  useEffect(() => {
+    if (idQuote !== '') handleGetQuoteFolio(idQuote);
+  }, [idQuote]);
+
+  const handleGetQuoteFolio = async (id: string): Promise<boolean> => {
+    try {
+      console.log('id', id);
+      const { payload, response }: ResponseDetailQuote = await _getQuoteFolio({
+        // urlParam: id,
+        urlParam: 2,
+      });
+      const dataResponse: PayloadDetailQuote['data'] = payload.data;
+      const code: Response['code'] = response.code;
+
+      if (code === 200) {
+        setDataTable(dataResponse);
+      }
+      return true;
+    } catch (error) {
+      return false;
+    }
+  };
+
   const style = QuotesStyles;
-  console.log('>>>', dataQuote);
+
+  console.log('STATE', dataTable);
 
   return (
     <>
-      {dataQuote.map((item) => (
+      <Table
+        showCheckboxes={false}
+        tableHead
+        title="Cotizador"
+        data={[]}
+        columns={[]}
+      />
+      {/* {dataQuote.map((item) => (
         <>
           <Grid container spacing={2} sx={{ mt: 3 }}>
             <Grid item xs={12}>
@@ -254,9 +292,9 @@ const DetailQuote = ({ dataQuote }: DetailQuoteProps) => {
             </Grid>
           </Stack>
         </>
-      ))}
+      ))} */}
     </>
   );
 };
 
-export default DetailQuote;
+export { DetailQuote };

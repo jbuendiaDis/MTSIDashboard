@@ -10,7 +10,7 @@ import { Returns } from '../views/Returns';
 import { UserClients } from '../views/UserClients/UserClients';
 import { Routes as RoutesPage } from '../views/Routes';
 import { Quotes } from '../views/Quotes';
-// import DetailQuote from '../views/Quotes/DetailQuote';
+import { DetailQuote } from '../views/Quotes';
 
 const PrivateRoutes = () => {
   return (
@@ -25,7 +25,7 @@ const PrivateRoutes = () => {
         <Route path="/returns" element={<Returns />} />
         <Route path="/user-clients" element={<UserClients />} />
         <Route path="/quotes" element={<Quotes />} />
-        {/* <Route path="/detail-quote/:id" element={<DetailQuote />} /> */}
+        <Route path="/detail-quote/:id" element={<DetailQuote />} />
         <Route path="*" element={<Navigate to="/users" replace />} />
       </Routes>
     </BaseLayout>

@@ -4,10 +4,8 @@ import { useApi } from '../../hooks/useApi';
 import {
   FormValues,
   PayloadConfigureData,
-  PayloadDetailQuote,
   PayloadQuotez,
   ResponseConfigureData,
-  ResponseDetailQuote,
   ResponseQuotes,
 } from './types';
 import { Response } from '../../models';
@@ -23,24 +21,16 @@ interface HelpersProps {
 
 export const useHelpers = ({ setOpen }: HelpersProps) => {
   const [isQuotez, setIsQuotez] = useState<boolean>(false);
-  const [generateQuote, setGenerateQuote] = useState<boolean>(false);
   const [configureData, setConfigureData] = useState<
     PayloadConfigureData['data'] | null
   >(null);
   const [dataQuotezTable, setDataQuotezTable] = useState<PayloadQuotez['data']>(
     []
   );
-  const [dataQuote, setDataQuote] = useState<PayloadDetailQuote['data']>([]);
-
   const { modalInformation, modalSuccess } = useModalConfirmation();
 
   const _getAllQuotes = useApi({
     endpoint: '/quotes-01/all',
-    method: 'get',
-  });
-
-  const _getQuoteFolio = useApi({
-    endpoint: '/quotes01',
     method: 'get',
   });
 
@@ -146,26 +136,6 @@ export const useHelpers = ({ setOpen }: HelpersProps) => {
     }
   };
 
-  const handleGetQuoteFolio = async (id: string): Promise<boolean> => {
-    try {
-      const { payload, response }: ResponseDetailQuote = await _getQuoteFolio({
-        // urlParam: id,
-        urlParam: 2,
-      });
-      const dataResponse: PayloadDetailQuote['data'] = payload.data;
-
-      const code: Response['code'] = response.code;
-
-      if (code === 200) {
-        setGenerateQuote(true);
-        setDataQuote(dataResponse);
-      }
-      return true;
-    } catch (error) {
-      return false;
-    }
-  };
-
   const initialValues: FormValues = {
     rendimiento: '',
     combustible: '',
@@ -239,13 +209,8 @@ export const useHelpers = ({ setOpen }: HelpersProps) => {
   return {
     formikConfig,
     isQuotez,
-    // isConfigureData,
     dataQuotezTable,
     configureData,
-    generateQuote,
-    dataQuote,
     handleGetConfigDataById,
-    handleGetQuoteFolio,
-    setGenerateQuote,
   };
 };

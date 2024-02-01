@@ -27,6 +27,7 @@ import { useHelpers } from './helpers';
 import { useModalConfirmation } from '../../hooks/useModalConfirmation';
 import { UserStyles } from './UserStyles';
 import { PopInformation } from '../../components/PopInformation';
+import UploadFile from '../../components/Input/UploadFile/UploadFile';
 
 const Users = () => {
   const [openDrawer, setOpenDrawer] = useState<boolean>(false);
@@ -115,6 +116,10 @@ const Users = () => {
       ],
     },
   ];
+
+  const [values, setValues] = useState([]);
+
+  console.log('---', values);
 
   return (
     <>
@@ -325,6 +330,14 @@ const Users = () => {
                   formik.touched.signature && Boolean(formik.errors.signature)
                 }
                 helperText={formik.touched.signature && formik.errors.signature}
+              />
+            </Grid>
+            <Grid>
+              <UploadFile
+                setValues={setValues}
+                values={values}
+                multiple={true}
+                label="Cargar Imagen"
               />
             </Grid>
           </Grid>

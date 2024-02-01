@@ -2,35 +2,27 @@
 import { useEffect, useState } from 'react';
 import { Drawer } from '../../components/Drawer';
 import { Table } from '../../components/Table';
-import { Column, ModalContextType } from '../../models';
+import { Column } from '../../models';
 import { useHelpers } from './helpers';
 import { Grid, TextField, InputAdornment, Stack, Button } from '@mui/material';
 import { RequestQuoteOutlined } from '@mui/icons-material';
 import { FormValues } from './types';
-import { useModal } from '../../components/Modal';
-import { HeaderTitleModal } from '../../components/Modal/HeaderTitleModal';
-import DetailQuote from './DetailQuote';
 import { useNavigate } from 'react-router-dom';
 
 const Quotes = () => {
   const navigate = useNavigate();
   const [open, setOpen] = useState<boolean>(false);
-  const { handleOpenModal, handleCloseModal }: ModalContextType = useModal();
   const {
     formikConfig,
     isQuotez,
     dataQuotezTable,
     configureData,
-    generateQuote,
-    dataQuote,
     handleGetConfigDataById,
-    handleGetQuoteFolio,
-    setGenerateQuote,
   } = useHelpers({ setOpen });
 
-  useEffect(() => {
-    if (generateQuote) handleModal();
-  }, [generateQuote]);
+  // useEffect(() => {
+  //   if (generateQuote) handleModal();
+  // }, [generateQuote]);
 
   const columns: Column[] = [
     { id: 'folio', label: 'Folio', align: 'left' },
@@ -45,51 +37,50 @@ const Quotes = () => {
         {
           label: 'Generar',
           icon: <RequestQuoteOutlined sx={{ width: 20, height: 20 }} />,
-          // onClick: (rowData: any) => navigate(`/detail-quote/${rowData._id}`),
-          onClick: (rowData: any) => handleGetQuoteFolio(rowData._id),
+          onClick: (rowData: any) => navigate(`/detail-quote/${rowData._id}`),
         },
       ],
     },
   ];
 
-  const handleModal = () => {
-    handleOpenModal({
-      fullWidth: true,
-      maxWidth: 'lg',
-      title: (
-        <HeaderTitleModal
-          handleToggleModal={() => {
-            handleCloseModal();
-            setGenerateQuote(false);
-          }}
-          title="GENERAR COTIZACION"
-        />
-      ),
-      body: (
-        <Grid>
-          <DetailQuote dataQuote={dataQuote} />
-          <Stack
-            direction="row"
-            spacing={2}
-            justifyContent="end"
-            sx={{ mt: 3 }}
-          >
-            <Button
-              variant="outlined"
-              color="inherit"
-              // onClick={() => {
-              //   handleCloseModal();
-              //   setGenerateQuote(false);
-              // }}
-            >
-              Personalizar correo electrónico
-            </Button>
-            <Button variant="contained">Enviar</Button>
-          </Stack>
-        </Grid>
-      ),
-    });
-  };
+  // const handleModal = () => {
+  //   handleOpenModal({
+  //     fullWidth: true,
+  //     maxWidth: 'lg',
+  //     title: (
+  //       <HeaderTitleModal
+  //         handleToggleModal={() => {
+  //           handleCloseModal();
+  //           setGenerateQuote(false);
+  //         }}
+  //         title="GENERAR COTIZACION"
+  //       />
+  //     ),
+  //     body: (
+  //       <Grid>
+  //         <DetailQuote dataQuote={dataQuote} />
+  //         <Stack
+  //           direction="row"
+  //           spacing={2}
+  //           justifyContent="end"
+  //           sx={{ mt: 3 }}
+  //         >
+  //           <Button
+  //             variant="outlined"
+  //             color="inherit"
+  //             // onClick={() => {
+  //             //   handleCloseModal();
+  //             //   setGenerateQuote(false);
+  //             // }}
+  //           >
+  //             Personalizar correo electrónico
+  //           </Button>
+  //           <Button variant="contained">Enviar</Button>
+  //         </Stack>
+  //       </Grid>
+  //     ),
+  //   });
+  // };
 
   const getHelperText = (fieldName: keyof FormValues) => {
     if (formikConfig.errors[fieldName]) {
