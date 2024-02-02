@@ -9,8 +9,11 @@ interface UploadFileProps {
   values: any;
   max?: number;
   multiple: boolean;
-  color?: string;
   label: string;
+  name?: string;
+  error?: boolean;
+  helperText?: string | string[];
+  helperTextProps?: any;
 }
 
 const allowedTypes = ['image/png', 'image/jpg', 'image/jpeg'];
@@ -21,6 +24,10 @@ const UploadFile: React.FC<UploadFileProps> = ({
   multiple = true,
   max = 10,
   label,
+  name,
+  error,
+  helperText,
+  helperTextProps,
 }) => {
   const styles = {
     container: {
@@ -117,78 +124,94 @@ const UploadFile: React.FC<UploadFileProps> = ({
     }
   };
 
+  console.log('VALUES', values);
+
   return (
-    <Box sx={styles.container}>
-      {!values.length ? (
-        <Typography
-          component="label"
-          htmlFor="fileInput"
-          sx={styles.uploadImageButton}
-          className="ImagePicker-uploadImageButton"
-        >
-          <Upload sx={styles.uploadIcon} classes="ImagePicker-uploadIcon" />
-          <Typography
-            variant="caption"
-            sx={styles.uploadText}
-            className="ImagePicker-uploadText"
-          >
-            {label}
-          </Typography>
-        </Typography>
-      ) : (
-        <Fragment key="image-previews">
-          {values.map((value: any, index: number) => (
-            <ImagePreview
-              key={`imagepicker-image-${index}-${value.url}`}
-              index={index}
-              src={value.url}
-              onRemove={() =>
-                setValues(
-                  values.filter((_: any, index_: number) => !(index === index_))
-                )
-              }
-            />
-          ))}
+    <>
+      <Box sx={styles.container}>
+        {!values.length ? (
           <Typography
             component="label"
-            key={`imagepicker-upload-button`}
             htmlFor="fileInput"
-            sx={{
-              ...styles.uploadImageButton,
-              ...(values.length >= max && {
-                opacity: 0.5,
-                pointerEvents: 'none',
-              }),
-            }}
+            sx={styles.uploadImageButton}
+            className="ImagePicker-uploadImageButton"
           >
-            <Tooltip title={multiple ? 'Subir Imagen' : 'Remplazar Imagen'}>
-              {multiple ? (
-                <AddCircleOutline
-                  sx={styles.uploadMoreIcon}
-                  classes="ImagePicker-uploadMoreIcon"
-                />
-              ) : (
-                <Replay
-                  sx={styles.uploadMoreIcon}
-                  className="ImagePicker-uploadMoreIcon"
-                />
-              )}
-            </Tooltip>
+            <Upload sx={styles.uploadIcon} classes="ImagePicker-uploadIcon" />
+            <Typography
+              variant="caption"
+              sx={styles.uploadText}
+              className="ImagePicker-uploadText"
+            >
+              {label}
+            </Typography>
           </Typography>
-        </Fragment>
-      )}
+        ) : (
+          <Fragment key="image-previews">
+            {values.map((value: any, index: number) => (
+              <ImagePreview
+                key={`imagepicker-image-${index}-${value.url}`}
+                index={index}
+                src={value.url}
+                onRemove={() =>
+                  setValues(
+                    values.filter(
+                      (_: any, index_: number) => !(index === index_)
+                    )
+                  )
+                }
+              />
+            ))}
+            <Typography
+              component="label"
+              key={`imagepicker-upload-button`}
+              htmlFor="fileInput"
+              sx={{
+                ...styles.uploadImageButton,
+                ...(values.length >= max && {
+                  opacity: 0.5,
+                  pointerEvents: 'none',
+                }),
+              }}
+            >
+              <Tooltip title={multiple ? 'Subir Imagen' : 'Remplazar Imagen'}>
+                {multiple ? (
+                  <AddCircleOutline
+                    sx={styles.uploadMoreIcon}
+                    classes="ImagePicker-uploadMoreIcon"
+                  />
+                ) : (
+                  <Replay
+                    sx={styles.uploadMoreIcon}
+                    className="ImagePicker-uploadMoreIcon"
+                  />
+                )}
+              </Tooltip>
+            </Typography>
+          </Fragment>
+        )}
 
-      <Box
-        component="input"
-        accept={allowedTypes.join(', ')}
-        onChange={handleUploadImage}
-        type="file"
-        multiple
-        id="fileInput"
-        sx={{ display: 'none' }}
-        disabled={values.length >= max}
-      />
-    </Box>
+        <Box
+          component="input"
+          name={name}
+          accept={allowedTypes.join(', ')}
+          onChange={handleUploadImage}
+          type="file"
+          multiple
+          id="fileInput"
+          sx={{ display: 'none' }}
+          disabled={values.length >= max}
+        />
+      </Box>
+      {helperText && (
+        <Typography
+          variant="caption"
+          color={error ? 'error' : 'textSecondary'}
+          {...helperTextProps}
+        >
+          {helperText}
+        </Typography>
+      )}
+    </>
   );
 };
 

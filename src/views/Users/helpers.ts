@@ -13,6 +13,25 @@ import { get } from 'lodash';
 import { useState } from 'react';
 import { useLoader } from '../../components/Loader';
 import { LoaderContextType } from '../../models';
+import { convertFileToBase64 } from '../../utils/fileUtils';
+
+interface SignatureItem {
+  url: string;
+  file: File;
+  base64?: string;
+}
+
+interface FormDataWithBase64 {
+  _id: string;
+  name: string;
+  lastname: string;
+  age: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+  position: string;
+  signature: string;
+}
 
 interface HelpersProps {
   setOpenDrawer: (value: boolean) => void;
@@ -86,7 +105,7 @@ export const useHelpers = ({ setOpenDrawer }: HelpersProps) => {
           confirmPassword: '',
           email: dataResponse ? dataResponse?.email : '',
           position: dataResponse ? dataResponse?.position : '',
-          signature: dataResponse ? dataResponse?.signature : '',
+          signature: dataResponse ? dataResponse?.signature : [],
         });
         setOpenDrawer(true);
         setIdUserEdit(dataResponse._id);
@@ -106,7 +125,7 @@ export const useHelpers = ({ setOpenDrawer }: HelpersProps) => {
     password: '',
     confirmPassword: '',
     position: '',
-    signature: '',
+    signature: [],
   };
 
   const validationSchema = Yup.object().shape({
@@ -135,7 +154,11 @@ export const useHelpers = ({ setOpenDrawer }: HelpersProps) => {
       .required(requiredValue)
       .oneOf([Yup.ref('password')], noMatchPassword),
     position: Yup.string().required(requiredValue),
-    signature: Yup.string().required(requiredValue),
+    signature: Yup.array()
+      .of(Yup.object({ url: Yup.string() }))
+      .nullable()
+      .min(1, requiredValue)
+      .required(requiredValue),
   });
 
   const validationWithIdUser = Yup.object().shape({
@@ -147,7 +170,11 @@ export const useHelpers = ({ setOpenDrawer }: HelpersProps) => {
       .email('Ingrese un email válido.')
       .required(requiredValue),
     position: Yup.string().required(requiredValue),
-    signature: Yup.string().required(requiredValue),
+    signature: Yup.array()
+      .of(Yup.object({ url: Yup.string() }))
+      .nullable()
+      .min(1, requiredValue)
+      .required(requiredValue),
   });
 
   const formik = useFormik({
@@ -156,6 +183,22 @@ export const useHelpers = ({ setOpenDrawer }: HelpersProps) => {
       idUserEdit !== '' ? validationWithIdUser : validationSchema,
     onSubmit: async (values: FormCreateUserValues): Promise<boolean> => {
       try {
+        console.log('VALUES', values);
+        const convertedSignature = await Promise.all(
+          values.signature.map(async (signatureItem: SignatureItem) => {
+            const base64 = await convertFileToBase64(signatureItem.file);
+            return { ...signatureItem, base64 };
+          })
+        );
+
+        const formDataWithBase64: FormDataWithBase64 = {
+          ...values,
+          _id: values._id!,
+          signature: convertedSignature[0].base64,
+        };
+
+        console.log('Formulario con imágenes en base64:', formDataWithBase64);
+
         if (idUserEdit !== '') {
           const editValues = {
             name: values.name,
@@ -178,14 +221,17 @@ export const useHelpers = ({ setOpenDrawer }: HelpersProps) => {
             modalSuccess({ message });
           }
         } else {
-          const createValues: Omit<FormCreateUserValues, 'confirmPassword'> = {
-            name: values.name,
-            lastname: values.lastname,
-            age: values.age,
-            email: values.email,
-            password: values.password,
-            position: values.position,
-            signature: values.signature,
+          const createValues: Omit<
+            FormDataWithBase64,
+            'confirmPassword' | '_id'
+          > = {
+            name: formDataWithBase64.name,
+            lastname: formDataWithBase64.lastname,
+            age: formDataWithBase64.age,
+            email: formDataWithBase64.email,
+            password: formDataWithBase64.password,
+            position: formDataWithBase64.position,
+            signature: formDataWithBase64.signature,
           };
 
           const { response }: Payload = await _createUsers({

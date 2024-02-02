@@ -119,7 +119,12 @@ const Users = () => {
 
   const [values, setValues] = useState([]);
 
-  console.log('---', values);
+  useEffect(() => {
+    if (values.length > 0) {
+      console.log('IMAGE', values);
+      formik.setFieldValue('signature', values);
+    }
+  }, [values]);
 
   return (
     <>
@@ -152,6 +157,7 @@ const Users = () => {
           setShowConfirmPassword(false);
           setShowPassword(false);
           setIdUserEdit('');
+          setValues([]);
         }}
         title={idUserEdit !== '' ? 'Editar Usuario' : 'Crear Usuario'}
       >
@@ -215,6 +221,22 @@ const Users = () => {
                 onBlur={formik.handleBlur}
                 error={formik.touched.email && Boolean(formik.errors.email)}
                 helperText={formik.touched.email && formik.errors.email}
+              />
+            </Grid>
+            <Grid xs={12} item>
+              <TextField
+                fullWidth
+                label="Puesto"
+                id="position"
+                name="position"
+                type="text"
+                value={formik.values.position}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                error={
+                  formik.touched.position && Boolean(formik.errors.position)
+                }
+                helperText={formik.touched.position && formik.errors.position}
               />
             </Grid>
 
@@ -297,47 +319,23 @@ const Users = () => {
             ) : null}
             <Grid item xs={12} sx={{ mt: 1 }}>
               <Typography sx={style.textDescription}>
-                Datos Adicionales:
+                Carga de Imagen:
+              </Typography>
+              <Typography component="span" sx={{ fontSize: 14 }}>
+                Solo se permiten imagenes con formato .png, .jpg o .jpeg
               </Typography>
             </Grid>
-            <Grid xs={12} sm={6} item>
-              <TextField
-                fullWidth
-                label="Puesto"
-                id="position"
-                name="position"
-                type="text"
-                value={formik.values.position}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                error={
-                  formik.touched.position && Boolean(formik.errors.position)
-                }
-                helperText={formik.touched.position && formik.errors.position}
-              />
-            </Grid>
-            <Grid xs={12} sm={6} item>
-              <TextField
-                fullWidth
-                label="Firma"
-                id="signature"
+            <Grid item>
+              <UploadFile
+                setValues={setValues}
+                values={formik.values.signature}
+                multiple={false}
+                label="Cargar Imagen"
                 name="signature"
-                type="text"
-                value={formik.values.signature}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
                 error={
                   formik.touched.signature && Boolean(formik.errors.signature)
                 }
                 helperText={formik.touched.signature && formik.errors.signature}
-              />
-            </Grid>
-            <Grid>
-              <UploadFile
-                setValues={setValues}
-                values={values}
-                multiple={true}
-                label="Cargar Imagen"
               />
             </Grid>
           </Grid>
@@ -351,6 +349,7 @@ const Users = () => {
                 setShowConfirmPassword(false);
                 setShowPassword(false);
                 setIdUserEdit('');
+                setValues([]);
               }}
             >
               Cancelar

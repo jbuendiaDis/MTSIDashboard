@@ -6,7 +6,7 @@ export interface DataUsers {
   lastname: string;
   name: string;
   position: string;
-  signature: string;
+  signature: [];
   _id: string;
 }
 
@@ -28,5 +28,5 @@ export interface FormCreateUserValues {
   password: string;
   confirmPassword: string;
   position: string;
-  signature: string;
+  signature: [];
 }
