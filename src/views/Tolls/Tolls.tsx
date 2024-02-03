@@ -25,7 +25,6 @@ import { Formik } from 'formik';
 import { DataToll } from './types';
 import { useRootProvider } from '../../components/RootProvider/hooks/useRootProvider';
 import { useLoader } from '../../components/Loader';
-import { Helmet } from 'react-helmet-async';
 import { HeaderTitleModal } from '../../components/Modal/HeaderTitleModal';
 import { FormTolls } from './FormTolls';
 import { formatToCurrency } from '../../utils/amountFormater';
@@ -172,9 +171,6 @@ const Tolls = () => {
 
   return (
     <>
-      <Helmet>
-        <title>MTSI | Peajes</title>
-      </Helmet>
       <Grid
         sx={{
           display: 'flex',

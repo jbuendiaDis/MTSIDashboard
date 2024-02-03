@@ -8,24 +8,21 @@ import { AuthProvider } from './components/Auth/AuthProvider.tsx';
 import ThemeProvider from './components/Theme';
 import './global.css';
 import { RootProvider } from './components/RootProvider/RootProvider.tsx';
-import { HelmetProvider } from 'react-helmet-async';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <ThemeProvider>
-      <HelmetProvider>
-        <ModalProvider>
-          <LoaderProvider>
-            <RootProvider>
-              <AuthProvider>
-                <Suspense>
-                  <App />
-                </Suspense>
-              </AuthProvider>
-            </RootProvider>
-          </LoaderProvider>
-        </ModalProvider>
-      </HelmetProvider>
+      <ModalProvider>
+        <LoaderProvider>
+          <RootProvider>
+            <AuthProvider>
+              <Suspense>
+                <App />
+              </Suspense>
+            </AuthProvider>
+          </RootProvider>
+        </LoaderProvider>
+      </ModalProvider>
     </ThemeProvider>
   </React.StrictMode>
 );
