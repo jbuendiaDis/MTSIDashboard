@@ -7,28 +7,9 @@ export const UserStyles = {
     color: (theme: Theme) => theme.palette.grey[500],
   },
   contentButtons: {
-    mt: 10,
+    mt: 3,
     width: 1,
     display: 'flex',
     justifyContent: 'end',
   },
-  // contentInfoText: {
-  //   width: { xs: '35%', sm: '20%' },
-  //   display: 'flex',
-  //   alignItems: 'center',
-  //   cursor: 'pointer',
-  //   '&:hover': {
-  //     color: (theme: Theme) => theme.palette.primary.main,
-  //     textDecoration: 'underline',
-  //   },
-  // },
-  // infoText: {
-  //   letterSpacing: '0.8px',
-  //   mt: 0.5,
-  //   fontSize: '13px',
-  //   '&:hover': {
-  //     color: (theme: Theme) => theme.palette.primary.main,
-  //     //   textDecoration: 'underline',
-  //   },
-  // },
 };

@@ -3,23 +3,12 @@ import { Theme, Tooltip, Typography, Box } from '@mui/material';
 import { Upload, AddCircleOutline, Replay } from '@mui/icons-material';
 import ImagePreview from './ImagePreview';
 import { hexToRgba } from '../../../utils/colors';
-
-interface UploadFileProps {
-  setValues: (value: any) => void;
-  values: any;
-  max?: number;
-  multiple: boolean;
-  label: string;
-  name?: string;
-  error?: boolean;
-  helperText?: string | string[];
-  helperTextProps?: any;
-}
+import { UploadFileProps } from './types';
 
 const allowedTypes = ['image/png', 'image/jpg', 'image/jpeg'];
 
 const UploadFile: React.FC<UploadFileProps> = ({
-  setValues,
+  onChange,
   values = [],
   multiple = true,
   max = 10,
@@ -108,7 +97,7 @@ const UploadFile: React.FC<UploadFileProps> = ({
   }: React.ChangeEvent<HTMLInputElement>) => {
     if (files && files.length) {
       if (multiple) {
-        setValues([
+        onChange([
           ...values,
           ...[...files]
             .filter((file) => allowedTypes.includes(file.type))
@@ -116,7 +105,7 @@ const UploadFile: React.FC<UploadFileProps> = ({
         ]);
       } else {
         if (files.length === 1) {
-          setValues([{ url: URL.createObjectURL(files[0]), file: files[0] }]);
+          onChange([{ url: URL.createObjectURL(files[0]), file: files[0] }]);
         } else {
           console.error('Solo se permite cargar un archivo.');
         }
@@ -153,7 +142,7 @@ const UploadFile: React.FC<UploadFileProps> = ({
                 index={index}
                 src={value.url}
                 onRemove={() =>
-                  setValues(
+                  onChange(
                     values.filter(
                       (_: any, index_: number) => !(index === index_)
                     )

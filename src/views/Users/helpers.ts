@@ -3,8 +3,10 @@ import * as Yup from 'yup';
 import {
   DataUsers,
   FormCreateUserValues,
+  FormDataWithBase64,
   PaylaodUsers,
   Payload,
+  SignatureItem,
 } from './types';
 import { useModalConfirmation } from '../../hooks/useModalConfirmation';
 import { Response } from '../../models/responseApi';
@@ -14,24 +16,6 @@ import { useState } from 'react';
 import { useLoader } from '../../components/Loader';
 import { LoaderContextType } from '../../models';
 import { convertFileToBase64 } from '../../utils/fileUtils';
-
-interface SignatureItem {
-  url: string;
-  file: File;
-  base64?: string;
-}
-
-interface FormDataWithBase64 {
-  _id: string;
-  name: string;
-  lastname: string;
-  age: string;
-  email: string;
-  password: string;
-  confirmPassword: string;
-  position: string;
-  signature: string;
-}
 
 interface HelpersProps {
   setOpenDrawer: (value: boolean) => void;
@@ -74,7 +58,13 @@ export const useHelpers = ({ setOpenDrawer }: HelpersProps) => {
 
       if (headerResponse.code === 200) {
         handleShowLoader(false);
-        setUsersTable(dataResponse);
+        const formatData = dataResponse.map((item) => {
+          return {
+            ...item,
+            confirmSignature: item.signature ? 'Si' : 'No',
+          };
+        });
+        setUsersTable(formatData);
       }
 
       return true;
@@ -94,8 +84,10 @@ export const useHelpers = ({ setOpenDrawer }: HelpersProps) => {
         'password' | 'confirmPassword'
       > = payload.data;
 
+      const signatureValue = dataResponse.signature;
+      const array = [{ url: signatureValue }];
+
       if (code === 200) {
-        console.log('Response', dataResponse);
         formik.setValues({
           _id: dataResponse ? dataResponse._id : '',
           name: dataResponse ? dataResponse?.name : '',
@@ -105,7 +97,7 @@ export const useHelpers = ({ setOpenDrawer }: HelpersProps) => {
           confirmPassword: '',
           email: dataResponse ? dataResponse?.email : '',
           position: dataResponse ? dataResponse?.position : '',
-          signature: dataResponse ? dataResponse?.signature : [],
+          signature: dataResponse && array.length > 0 ? array : [],
         });
         setOpenDrawer(true);
         setIdUserEdit(dataResponse._id);
@@ -183,29 +175,24 @@ export const useHelpers = ({ setOpenDrawer }: HelpersProps) => {
       idUserEdit !== '' ? validationWithIdUser : validationSchema,
     onSubmit: async (values: FormCreateUserValues): Promise<boolean> => {
       try {
-        console.log('VALUES', values);
-        const convertedSignature = await Promise.all(
-          values.signature.map(async (signatureItem: SignatureItem) => {
-            const base64 = await convertFileToBase64(signatureItem.file);
-            return { ...signatureItem, base64 };
-          })
-        );
-
-        const formDataWithBase64: FormDataWithBase64 = {
-          ...values,
-          _id: values._id!,
-          signature: convertedSignature[0].base64,
-        };
-
-        console.log('Formulario con imágenes en base64:', formDataWithBase64);
-
         if (idUserEdit !== '') {
+          const urlSignature = await Promise.all(
+            values.signature.map(async (signatureItem: any) => {
+              if (signatureItem.file) {
+                const fileContent = signatureItem.file;
+                const base64Signature = await convertFileToBase64(fileContent);
+                return { ...signatureItem, url: base64Signature };
+              }
+              return signatureItem;
+            })
+          );
+
           const editValues = {
             name: values.name,
             lastname: values.lastname,
             age: values.age,
             email: values.email,
-            signature: values.signature,
+            signature: urlSignature[0].url,
           };
 
           const response: DataUsers = await _updateUser({
@@ -221,6 +208,19 @@ export const useHelpers = ({ setOpenDrawer }: HelpersProps) => {
             modalSuccess({ message });
           }
         } else {
+          const convertedSignature = await Promise.all(
+            values.signature.map(async (signatureItem: SignatureItem) => {
+              const base64 = await convertFileToBase64(signatureItem.file);
+              return { ...signatureItem, base64 };
+            })
+          );
+
+          const formDataWithBase64: FormDataWithBase64 = {
+            ...values,
+            _id: values._id!,
+            signature: convertedSignature[0].base64,
+          };
+
           const createValues: Omit<
             FormDataWithBase64,
             'confirmPassword' | '_id'
@@ -247,7 +247,6 @@ export const useHelpers = ({ setOpenDrawer }: HelpersProps) => {
             modalInformation({ message });
           }
         }
-
         return true;
       } catch (error) {
         return false;

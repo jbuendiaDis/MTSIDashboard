@@ -93,7 +93,7 @@ const Users = () => {
     { id: 'age', label: 'Edad', align: 'left' },
     { id: 'email', label: 'Email', align: 'left' },
     { id: 'position', label: 'Puesto', align: 'left' },
-    { id: 'signature', label: 'Firma', align: 'left' },
+    { id: 'confirmSignature', label: 'Firma', align: 'left' },
     {
       id: 'actions',
       label: 'Acciones',
@@ -116,15 +116,6 @@ const Users = () => {
       ],
     },
   ];
-
-  const [values, setValues] = useState([]);
-
-  useEffect(() => {
-    if (values.length > 0) {
-      console.log('IMAGE', values);
-      formik.setFieldValue('signature', values);
-    }
-  }, [values]);
 
   return (
     <>
@@ -157,7 +148,7 @@ const Users = () => {
           setShowConfirmPassword(false);
           setShowPassword(false);
           setIdUserEdit('');
-          setValues([]);
+          // setValues([]);
         }}
         title={idUserEdit !== '' ? 'Editar Usuario' : 'Crear Usuario'}
       >
@@ -327,7 +318,9 @@ const Users = () => {
             </Grid>
             <Grid item>
               <UploadFile
-                setValues={setValues}
+                onChange={(values: any) =>
+                  formik.setFieldValue('signature', values)
+                }
                 values={formik.values.signature}
                 multiple={false}
                 label="Cargar Imagen"
@@ -349,7 +342,7 @@ const Users = () => {
                 setShowConfirmPassword(false);
                 setShowPassword(false);
                 setIdUserEdit('');
-                setValues([]);
+                // setValues([]);
               }}
             >
               Cancelar

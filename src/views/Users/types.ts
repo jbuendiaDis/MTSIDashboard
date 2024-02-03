@@ -1,12 +1,22 @@
 import { Response } from '../../models';
 
-export interface DataUsers {
+export interface DataFormatUsers {
   age: string;
   email: string;
   lastname: string;
   name: string;
   position: string;
   signature: [];
+  _id: string;
+}
+export interface DataUsers {
+  age: string;
+  email: string;
+  lastname: string;
+  name: string;
+  position: string;
+  signature: [] | string;
+  confirmSignature?: string;
   _id: string;
 }
 
@@ -28,5 +38,23 @@ export interface FormCreateUserValues {
   password: string;
   confirmPassword: string;
   position: string;
-  signature: [];
+  signature?: any;
+}
+
+export interface SignatureItem {
+  url: string;
+  file: File;
+  base64?: string;
+}
+
+export interface FormDataWithBase64 {
+  _id: string;
+  name: string;
+  lastname: string;
+  age: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+  position: string;
+  signature: string;
 }

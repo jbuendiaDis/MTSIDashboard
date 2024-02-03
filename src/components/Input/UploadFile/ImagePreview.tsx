@@ -2,15 +2,9 @@ import { Close } from '@mui/icons-material';
 import { Avatar, Grid, IconButton, Theme, Tooltip } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { hexToRgba } from '../../../utils/colors';
+import { ImagePreviewProps } from './types';
 
-interface Props {
-  src: any;
-  onRemove: any;
-  color?: any;
-  index: any;
-}
-
-const ImagePreview = ({ src, onRemove, index }: Props) => {
+const ImagePreview = ({ src, onRemove, index }: ImagePreviewProps) => {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
@@ -105,7 +99,7 @@ const ImagePreview = ({ src, onRemove, index }: Props) => {
         src={src}
         alt={`file-preview-${index}`}
         sx={styles.avatar}
-        className={`${styles.avatar} ${visible && 'visible'}`}
+        className={`${visible && 'visible'}`}
         variant="rounded"
       />
       <Tooltip title="Quitar">
