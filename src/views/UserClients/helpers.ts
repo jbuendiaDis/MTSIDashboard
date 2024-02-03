@@ -11,7 +11,6 @@ import { DataCustomer, PaylaodCustomers, Payload } from '../Customers/types';
 import { get } from 'lodash';
 
 interface ValuesForm {
-  // state?: null;
   direccion?: string;
   email: string;
   genero: string;
@@ -205,7 +204,6 @@ export const useHelpers = ({ setOpenDrawer }: HelpersProps) => {
     validationSchema:
       dataEdit !== null ? validationSchemaDataEdit : validationSchema,
     onSubmit: async (values: ValuesForm) => {
-      console.log('VALUES', values);
       if (dataEdit !== null) {
         const newDataEdit = {
           idCliente: get(values, 'nombreCliente._id'),

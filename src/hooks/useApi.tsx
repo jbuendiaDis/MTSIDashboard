@@ -60,16 +60,12 @@ Props) {
 
     try {
       config.showLoader && handleShowLoader(true);
-
       const response = await instance[method](url, body);
-
       return response.data;
     } catch (error: any) {
       if (get(error, 'response.status') === 400) {
         return auth.logout();
       }
-
-      console.log('error', error);
 
       const errorMessage = get(error, 'message', '');
       const statusError = get(error, 'response.status', '');

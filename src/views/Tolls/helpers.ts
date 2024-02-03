@@ -186,7 +186,6 @@ export const useHelpers = ({ valueState, setValueState }: PropsHelpers) => {
 
         if (code === 200) {
           handleResetCountriesByState();
-          console.log('res', response);
           handleGetCountrie(newValues.estado);
           modalSuccess({ message });
         } else {

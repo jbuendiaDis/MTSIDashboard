@@ -67,7 +67,6 @@ const Card = ({
   });
 
   const handleOpenDeleteModal = (data: any) => {
-    console.log('data', data);
     const message: string = '¿Seguro que desea eliminar este cliente:';
     const dataValue = `${data.nombreCliente}`;
     modalDelete({

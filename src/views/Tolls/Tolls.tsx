@@ -87,7 +87,6 @@ const Tolls = () => {
 
   useEffect(() => {
     if (countriesByState?.length > 0) {
-      console.log('YES');
       const formatData: CountriesData[] = countriesByState.map((item: any) => {
         const costoNumber =
           typeof item.costo === 'number'

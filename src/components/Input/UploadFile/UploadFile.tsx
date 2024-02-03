@@ -113,8 +113,6 @@ const UploadFile: React.FC<UploadFileProps> = ({
     }
   };
 
-  console.log('VALUES', values);
-
   return (
     <>
       <Box sx={styles.container}>
