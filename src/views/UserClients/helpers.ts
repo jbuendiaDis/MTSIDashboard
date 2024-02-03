@@ -6,7 +6,6 @@ import { LoaderContextType, Response } from '../../models';
 import { ResponseUserClient, dataUserClient } from './types';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { useAuth } from '../../components/Auth';
 import { useModalConfirmation } from '../../hooks/useModalConfirmation';
 import { DataCustomer, PaylaodCustomers, Payload } from '../Customers/types';
 import { get } from 'lodash';
@@ -35,7 +34,6 @@ interface HelpersProps {
 }
 
 export const useHelpers = ({ setOpenDrawer }: HelpersProps) => {
-  const { user } = useAuth();
   const { modalInformation, modalSuccess } = useModalConfirmation();
   const { handleShowLoader }: LoaderContextType = useLoader();
   const [userClientsData, setUserClientsData] = useState<

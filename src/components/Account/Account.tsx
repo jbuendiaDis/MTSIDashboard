@@ -11,21 +11,6 @@ import {
 import { useAuth } from '../Auth';
 import { AccountStyles } from './AccountStyles';
 
-const MENU_OPTIONS = [
-  {
-    label: 'Home',
-    icon: 'eva:home-fill',
-  },
-  {
-    label: 'Profile',
-    icon: 'eva:person-fill',
-  },
-  {
-    label: 'Settings',
-    icon: 'eva:settings-2-fill',
-  },
-];
-
 const Account = () => {
   const [open, setOpen] = useState<null>(null);
   const style = AccountStyles({ open });
@@ -68,14 +53,6 @@ const Account = () => {
             {user?.email}
           </Typography>
         </Box>
-
-        {/* <Divider sx={{ borderStyle: 'dashed' }} />
-
-        {MENU_OPTIONS.map((option) => (
-          <MenuItem key={option.label} onClick={handleClose}>
-            {option.label}
-          </MenuItem>
-        ))} */}
 
         <Divider sx={{ borderStyle: 'dashed', m: 0 }} />
 

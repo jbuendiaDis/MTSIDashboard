@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Drawer } from '../../components/Drawer';
 import { Table } from '../../components/Table';
 import { Column } from '../../models';
@@ -20,10 +20,6 @@ const Quotes = () => {
     handleGetConfigDataById,
   } = useHelpers({ setOpen });
 
-  // useEffect(() => {
-  //   if (generateQuote) handleModal();
-  // }, [generateQuote]);
-
   const columns: Column[] = [
     { id: 'folio', label: 'Folio', align: 'left' },
     { id: 'clientName', label: 'Cliente', align: 'left' },
@@ -42,45 +38,6 @@ const Quotes = () => {
       ],
     },
   ];
-
-  // const handleModal = () => {
-  //   handleOpenModal({
-  //     fullWidth: true,
-  //     maxWidth: 'lg',
-  //     title: (
-  //       <HeaderTitleModal
-  //         handleToggleModal={() => {
-  //           handleCloseModal();
-  //           setGenerateQuote(false);
-  //         }}
-  //         title="GENERAR COTIZACION"
-  //       />
-  //     ),
-  //     body: (
-  //       <Grid>
-  //         <DetailQuote dataQuote={dataQuote} />
-  //         <Stack
-  //           direction="row"
-  //           spacing={2}
-  //           justifyContent="end"
-  //           sx={{ mt: 3 }}
-  //         >
-  //           <Button
-  //             variant="outlined"
-  //             color="inherit"
-  //             // onClick={() => {
-  //             //   handleCloseModal();
-  //             //   setGenerateQuote(false);
-  //             // }}
-  //           >
-  //             Personalizar correo electrónico
-  //           </Button>
-  //           <Button variant="contained">Enviar</Button>
-  //         </Stack>
-  //       </Grid>
-  //     ),
-  //   });
-  // };
 
   const getHelperText = (fieldName: keyof FormValues) => {
     if (formikConfig.errors[fieldName]) {

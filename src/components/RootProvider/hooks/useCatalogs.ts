@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import { useApi } from '../../../hooks/useApi';
 import {
   PayloadCatalogs,
@@ -14,6 +13,7 @@ export const useCatalogs = ({ rootState, rootDispatch }: any) => {
   const _getCatalogs = useApi({
     endpoint: '/catalogs/parents',
     method: 'get',
+
   });
   const _getCatalogChildren = useApi({
     endpoint: '/catalogs/children',

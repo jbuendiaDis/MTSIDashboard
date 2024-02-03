@@ -12,7 +12,6 @@ import {
 import { formatToCurrency } from '../../utils/amountFormater';
 import { useModalConfirmation } from '../../hooks/useModalConfirmation';
 import { useAuth } from '../../components/Auth';
-import { get } from 'lodash';
 import * as Yup from 'yup';
 import { useRootProvider } from '../../components/RootProvider/hooks/useRootProvider';
 
@@ -38,10 +37,10 @@ export const useHelpers = () => {
     method: 'get',
   });
 
-  const _createBill = useApi({
-    endpoint: '/gastos',
-    method: 'post',
-  });
+  // const _createBill = useApi({
+  //   endpoint: '/gastos',
+  //   method: 'post',
+  // });
 
   const _deleteBill = useApi({
     endpoint: '/gastos',
@@ -53,12 +52,11 @@ export const useHelpers = () => {
     method: 'get',
   });
 
-  const _updateBill = useApi({
-    endpoint: '/gastos',
-    method: 'put',
-  });
+  // const _updateBill = useApi({
+  //   endpoint: '/gastos',
+  //   method: 'put',
+  // });
 
-  // console.log('locations', countriesByState, countriesByStateSecond);
 
   useEffect(() => {
     if (

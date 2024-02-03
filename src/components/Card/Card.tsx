@@ -33,7 +33,6 @@ import {
   dataUserClient,
 } from '../../views/UserClients/types';
 import { Response } from '../../models';
-import { get } from 'lodash';
 
 interface CardProps {
   data: any;
