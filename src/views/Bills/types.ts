@@ -16,6 +16,15 @@ export interface FormValues {
   hoteles: number | string;
   pasajeOrigen: number | string;
   pasajeDestino: number | string;
+  ferri: number | string;
+  flight: number | string;
+  stayPayment: number | string;
+  transferInsurance: number | string; //SEguro de traslado
+  taxi: number | string;
+  portRelease: number | string; //Liberacion de puerto
+  talachas: number | string;
+  phytoSanitary: number | string;
+  urea: number | string;
 }
 
 interface Points {

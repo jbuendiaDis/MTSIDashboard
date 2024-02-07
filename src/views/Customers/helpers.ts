@@ -7,29 +7,27 @@ import {
   Payload,
   PayloadCatalogs,
 } from './types';
-import { useLoader } from '../../components/Loader';
-import { LoaderContextType, ModalContextType } from '../../models';
+import { ModalContextType } from '../../models';
 import { useEffect, useState } from 'react';
 import { Response } from '../../models/responseApi';
 import { useModalConfirmation } from '../../hooks/useModalConfirmation';
 import { useModal } from '../../components/Modal';
 import * as Yup from 'yup';
+import { useRootProvider } from '../../components/RootProvider/hooks/useRootProvider';
 
 export const useHelpers = () => {
   const [dataEdit, setDataEdit] = useState<PaylaodCustomers['data'] | null>(
     null
   );
-  const [customersData, setCustomersTable] = useState<
-    PaylaodCustomers['data'][]
-  >([]);
   const [dataCfdi, setDataCfdi] = useState<DataCatalogs['data']>([]);
   const [dataRegimenFiscal, setdataRegimenFiscal] = useState<
     DataCatalogs['data']
   >([]);
   const { handleCloseModal }: ModalContextType = useModal();
-  const { handleShowLoader }: LoaderContextType = useLoader();
   const { modalInformation, modalSuccess, modalDelete } =
     useModalConfirmation();
+  const { actionsCustomers }: any = useRootProvider();
+  const { customers, handleGetCustomers } = actionsCustomers;
   const requiredField: string = 'Este campo es obligatorio.';
 
   const _getCatalogsCfdi = useApi({
@@ -39,11 +37,6 @@ export const useHelpers = () => {
 
   const _getCatalogsRegimenFiscal = useApi({
     endpoint: '/catalogs/children/6577f9f5a3b49e34400ca6b6',
-    method: 'get',
-  });
-
-  const _getCustomers = useApi({
-    endpoint: '/clientes',
     method: 'get',
   });
 
@@ -65,6 +58,7 @@ export const useHelpers = () => {
   useEffect(() => {
     handleGetCatalogs();
     handleGetCatalogsRegimenFiscal();
+    handleGetCustomers();
   }, []);
 
   const handleGetCatalogs = async (): Promise<boolean> => {
@@ -92,24 +86,6 @@ export const useHelpers = () => {
 
       if (code === 200) {
         setdataRegimenFiscal(dataResponse);
-      }
-
-      return true;
-    } catch (error) {
-      return false;
-    }
-  };
-
-  const handleGetCustomers = async (): Promise<boolean> => {
-    try {
-      const response: Payload = await _getCustomers();
-      const payload = get(response, 'payload', {});
-      const dataResponse: PaylaodCustomers['data'][] = get(payload, 'data', []);
-      const headerResponse: Payload['response'] = get(response, 'response');
-
-      if (headerResponse.code === 200) {
-        handleShowLoader(false);
-        setCustomersTable(dataResponse);
       }
 
       return true;
@@ -239,12 +215,11 @@ export const useHelpers = () => {
   return {
     dataEdit,
     initialValuesForm,
-    customersData,
     dataCfdi,
     dataRegimenFiscal,
     validationSchema,
+    customers,
     setDataEdit,
-    handleGetCustomers,
     handleOpenModalDelete,
     handleSubmit,
   };

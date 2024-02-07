@@ -1,24 +1,37 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Drawer } from '../../components/Drawer';
 import { Table } from '../../components/Table';
 import { Column } from '../../models';
 import { useHelpers } from './helpers';
 import { Grid, TextField, InputAdornment, Stack, Button } from '@mui/material';
-import { RequestQuoteOutlined } from '@mui/icons-material';
+import {
+  RequestQuoteOutlined,
+  RemoveRedEyeOutlined,
+} from '@mui/icons-material';
 import { FormValues } from './types';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { useRootProvider } from '../../components/RootProvider/hooks/useRootProvider';
 
 const Quotes = () => {
+  const location = useLocation();
+  const { pathname } = location;
   const navigate = useNavigate();
   const [open, setOpen] = useState<boolean>(false);
+  const [valueState, setValueState] = useState<any | null>(null);
   const {
     formikConfig,
-    isQuotez,
     dataQuotezTable,
     configureData,
     handleGetConfigDataById,
+    handleGetQuotezByClient,
   } = useHelpers({ setOpen });
+  const { actionsCustomers }: any = useRootProvider();
+  const { customers, handleGetCustomers } = actionsCustomers;
+
+  useEffect(() => {
+    handleGetCustomers();
+  }, []);
 
   const columns: Column[] = [
     { id: 'folio', label: 'Folio', align: 'left' },
@@ -30,14 +43,25 @@ const Quotes = () => {
       label: 'Acciones',
       align: 'center',
       actions: [
-        {
-          label: 'Generar',
-          icon: <RequestQuoteOutlined sx={{ width: 20, height: 20 }} />,
-          onClick: (rowData: any) => navigate(`/detail-quote/${rowData._id}`),
-        },
+        pathname === '/quotes'
+          ? {
+              label: 'Generar',
+              icon: <RequestQuoteOutlined sx={{ width: 20, height: 20 }} />,
+              onClick: (rowData: any) =>
+                handleNavigate(rowData.folio, rowData.clientName),
+            }
+          : {
+              label: 'Ver',
+              icon: <RemoveRedEyeOutlined sx={{ width: 20, height: 20 }} />,
+              onClick: (rowData: any) => alert('Ver'),
+            },
       ],
     },
   ];
+
+  const handleNavigate = (folio: number, client: string) => {
+    navigate(`/detail-quote/${folio}`, { state: { clientName: client } });
+  };
 
   const getHelperText = (fieldName: keyof FormValues) => {
     if (formikConfig.errors[fieldName]) {
@@ -51,13 +75,20 @@ const Quotes = () => {
     setOpen(false);
   };
 
+  useEffect(() => {
+    if (valueState) {
+      handleGetQuotezByClient(valueState._id);
+    } else setValueState(null);
+  }, [valueState]);
+
   return (
     <div>
       <Table
-        isQuotez={isQuotez}
         showCheckboxes={false}
         tableHead
-        title="Cotizaciones"
+        title={
+          pathname === '/quotes' ? 'Cotizaciones' : 'Historial de Cotizaciones'
+        }
         columns={columns}
         data={dataQuotezTable}
         handleQuotez={() =>
@@ -65,6 +96,9 @@ const Quotes = () => {
             ? handleGetConfigDataById(configureData._id)
             : setOpen(!open)
         }
+        setValueState={setValueState}
+        valueState={valueState}
+        optionsData={customers || []}
       />
       <Drawer
         open={open}

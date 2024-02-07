@@ -1,6 +1,5 @@
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { BaseLayout } from '../layouts';
-// import { Home } from '../views/Home';
 import { Users } from '../views/Users';
 import { Customers } from '../views/Customers';
 import { Transfers } from '../views/Transfers';
@@ -25,7 +24,8 @@ const PrivateRoutes = () => {
         <Route path="/returns" element={<Returns />} />
         <Route path="/user-clients" element={<UserClients />} />
         <Route path="/quotes" element={<Quotes />} />
-        <Route path="/detail-quote/:id" element={<DetailQuote />} />
+        <Route path="/detail-quote/:folio" element={<DetailQuote />} />
+        <Route path="/quote-history" element={<Quotes />} />
         <Route path="*" element={<Navigate to="/users" replace />} />
       </Routes>
     </BaseLayout>

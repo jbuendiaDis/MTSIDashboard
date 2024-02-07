@@ -10,7 +10,9 @@ import {
   Diversity3Outlined,
   WarehouseOutlined,
   RequestQuoteOutlined,
+  HistoryOutlined,
 } from '@mui/icons-material';
+
 export interface Menu {
   title: string;
   path: string;
@@ -62,5 +64,10 @@ export const navConfig: Menu[] = [
     title: 'Cotizaciones',
     path: '/quotes',
     icon: <RequestQuoteOutlined />,
+  },
+  {
+    title: 'Historial Cotizaciones',
+    path: '/quote-history',
+    icon: <HistoryOutlined />,
   },
 ];

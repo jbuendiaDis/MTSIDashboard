@@ -57,7 +57,6 @@ export const useHelpers = () => {
   //   method: 'put',
   // });
 
-
   useEffect(() => {
     if (
       dataTemp !== null &&
@@ -210,6 +209,15 @@ export const useHelpers = () => {
     hoteles: Yup.number().nullable(),
     pasajeDestino: Yup.number().nullable(),
     pasajeOrigen: Yup.number().nullable(),
+    ferri: Yup.number().nullable(),
+    flight: Yup.number().nullable(),
+    stayPayment: Yup.number().nullable(),
+    transferInsurance: Yup.number().nullable(),
+    taxi: Yup.number().nullable(),
+    portRelease: Yup.number().nullable(),
+    talachas: Yup.number().nullable(),
+    phytoSanitary: Yup.number().nullable(),
+    urea: Yup.number().nullable(),
   });
 
   const initialValues: FormValues = {
@@ -222,6 +230,15 @@ export const useHelpers = () => {
     hoteles: '',
     pasajeDestino: '',
     pasajeOrigen: '',
+    ferri: '',
+    flight: '',
+    stayPayment: '',
+    transferInsurance: '',
+    taxi: '',
+    portRelease: '',
+    talachas: '',
+    phytoSanitary: '',
+    urea: '',
   };
 
   const handleSubmit = async (values: any): Promise<boolean> => {

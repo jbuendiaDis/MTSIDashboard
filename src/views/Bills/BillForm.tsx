@@ -137,6 +137,132 @@ const BillForm = ({ handleToggleModal, states, dataEdit }: BillFormProps) => {
             }}
           />
         </Grid>
+        <Grid item xs={12} sm={6}>
+          <Input
+            fullWidth
+            label="Ferri"
+            placeholder="0.00"
+            name="ferri"
+            type="number"
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">$</InputAdornment>
+              ),
+            }}
+          />
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <Input
+            fullWidth
+            label="Vuelo"
+            placeholder="0.00"
+            name="flight"
+            type="number"
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">$</InputAdornment>
+              ),
+            }}
+          />
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <Input
+            fullWidth
+            label="Pago de estadia"
+            placeholder="0.00"
+            name="stayPayment"
+            type="number"
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">$</InputAdornment>
+              ),
+            }}
+          />
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <Input
+            fullWidth
+            label="Seguro de traslado"
+            placeholder="0.00"
+            name="transferInsurance"
+            type="number"
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">$</InputAdornment>
+              ),
+            }}
+          />
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <Input
+            fullWidth
+            label="Taxi"
+            placeholder="0.00"
+            name="taxi"
+            type="number"
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">$</InputAdornment>
+              ),
+            }}
+          />
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <Input
+            fullWidth
+            label="Liberación de puerto"
+            placeholder="0.00"
+            name="portRelease"
+            type="number"
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">$</InputAdornment>
+              ),
+            }}
+          />
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <Input
+            fullWidth
+            label="Talachas"
+            placeholder="0.00"
+            name="talachas"
+            type="number"
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">$</InputAdornment>
+              ),
+            }}
+          />
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <Input
+            fullWidth
+            label="Fito sanitarias"
+            placeholder="0.00"
+            name="phytoSanitary"
+            type="number"
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">$</InputAdornment>
+              ),
+            }}
+          />
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <Input
+            fullWidth
+            label="Urea"
+            placeholder="0.00"
+            name="urea"
+            type="number"
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">$</InputAdornment>
+              ),
+            }}
+          />
+        </Grid>
       </Grid>
       <Stack
         direction="row"

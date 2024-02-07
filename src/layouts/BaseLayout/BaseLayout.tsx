@@ -9,7 +9,7 @@ import { Splash } from '../../views/Splash';
 import { useAuth } from '../../components/Auth';
 
 interface Props {
-  children: ReactNode;
+  children?: ReactNode;
 }
 
 const BaseLayout = ({ children }: Props) => {

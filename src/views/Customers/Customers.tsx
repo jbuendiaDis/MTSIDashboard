@@ -25,22 +25,21 @@ export const Customers = () => {
   const { handleOpenModal, handleCloseModal }: ModalContextType = useModal();
   const { actionsState }: any = useRootProvider();
   const { states, handleGetStates } = actionsState;
+
   const {
     dataEdit,
     initialValuesForm,
-    customersData,
     dataCfdi,
     dataRegimenFiscal,
     validationSchema,
+    customers,
     setDataEdit,
-    handleGetCustomers,
     handleOpenModalDelete,
     handleSubmit,
   } = useHelpers();
 
   useEffect(() => {
     handleShowLoader(true);
-    handleGetCustomers();
     setDataEdit(null);
     handleGetStates();
   }, []);
@@ -174,7 +173,7 @@ export const Customers = () => {
         tableHead
         title="Clientes"
         columns={columns}
-        data={customersData}
+        data={customers}
         customButton
         renderCustomButton={
           <Button

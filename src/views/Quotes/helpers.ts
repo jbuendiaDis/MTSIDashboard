@@ -14,13 +14,15 @@ import { useFormik } from 'formik';
 import { useModalConfirmation } from '../../hooks/useModalConfirmation';
 import * as Yup from 'yup';
 import { get } from 'lodash';
+import { useLocation } from 'react-router-dom';
 
 interface HelpersProps {
   setOpen: (value: boolean) => void;
 }
 
 export const useHelpers = ({ setOpen }: HelpersProps) => {
-  const [isQuotez, setIsQuotez] = useState<boolean>(false);
+  const location = useLocation();
+  const { pathname } = location;
   const [configureData, setConfigureData] = useState<
     PayloadConfigureData['data'] | null
   >(null);
@@ -30,7 +32,7 @@ export const useHelpers = ({ setOpen }: HelpersProps) => {
   const { modalInformation, modalSuccess } = useModalConfirmation();
 
   const _getAllQuotes = useApi({
-    endpoint: '/quotes-01/all',
+    endpoint: '/quotes-01/byclienteId',
     method: 'get',
   });
 
@@ -55,24 +57,18 @@ export const useHelpers = ({ setOpen }: HelpersProps) => {
   });
 
   useEffect(() => {
-    handleGetconfigureData();
-    setIsQuotez(true);
-  }, []);
+    if (pathname === '/quotes') handleGetconfigureData();
+  }, [pathname]);
 
-  useEffect(() => {
-    if (configureData !== null) {
-      // setIsConfigureData(true);
-      handleGetAllQuotez();
-    }
-  }, [configureData]);
-
-  const handleGetAllQuotez = async (): Promise<boolean> => {
+  const handleGetQuotezByClient = async (id: string): Promise<boolean> => {
     try {
-      const { payload, response }: ResponseQuotes = await _getAllQuotes();
+      const { payload, response }: ResponseQuotes = await _getAllQuotes({
+        urlParam: id,
+      });
       const code: Response['code'] = response.code;
       const dataResponse = payload.data;
 
-      if (code === 200) {
+      if (code === 200 && dataResponse.length > 0) {
         const formatData = dataResponse.map((item) => {
           return {
             ...item,
@@ -84,6 +80,8 @@ export const useHelpers = ({ setOpen }: HelpersProps) => {
         });
 
         setDataQuotezTable(formatData);
+      } else {
+        setDataQuotezTable([]);
       }
       return true;
     } catch (error) {
@@ -103,7 +101,6 @@ export const useHelpers = ({ setOpen }: HelpersProps) => {
       } else if (code === 204) {
         const message: string = `${messageResponse} Configure las variables antes de continuar`;
         modalInformation({ message });
-        // setIsConfigureData(false);
       }
       return true;
     } catch (error) {
@@ -208,9 +205,9 @@ export const useHelpers = ({ setOpen }: HelpersProps) => {
 
   return {
     formikConfig,
-    isQuotez,
     dataQuotezTable,
     configureData,
     handleGetConfigDataById,
+    handleGetQuotezByClient,
   };
 };

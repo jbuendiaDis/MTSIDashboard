@@ -20,11 +20,14 @@ import {
   Card,
   Paper,
   Button,
+  Autocomplete,
+  TextField,
 } from '@mui/material';
 import { MoreVert, InsertChartOutlinedOutlined } from '@mui/icons-material';
 import { Tabletoolbar } from './TableToolbar';
 import { TableNoData } from './TableNoData';
 import { Action, Row, SortData, TableProps } from '../../models/table';
+import { useLocation } from 'react-router-dom';
 
 const Table = ({
   title,
@@ -34,9 +37,14 @@ const Table = ({
   tableHead,
   customButton,
   renderCustomButton,
-  isQuotez,
   handleQuotez,
+  valueState,
+  setValueState,
+  optionsData,
 }: TableProps) => {
+  const location = useLocation();
+  const { pathname } = location;
+
   const [sortData, setSortData] = useState<SortData>({
     activeColumn: '',
     direction: 'asc',
@@ -76,9 +84,9 @@ const Table = ({
   };
 
   const handleDeleteSelected = () => {
-    // Implementa tu lógica para eliminar las filas seleccionadas aquí
+    //lógica para eliminar las filas seleccionadas aquí
     console.log('Eliminando filas seleccionadas:', selectedRows);
-    // Después de la eliminación, limpia las filas seleccionadas
+    //Después de la eliminación, limpia las filas seleccionadas
     setSelectedRows([]);
   };
 
@@ -171,7 +179,6 @@ const Table = ({
         </Grid>
       )}
       <Card>
-        {/* {data.length > 0 &&} */}
         <Grid
           container
           sx={{
@@ -181,7 +188,12 @@ const Table = ({
             pb: { xs: 2, sm: 0 },
           }}
         >
-          <Grid item xs={12} sm={6}>
+          <Grid
+            item
+            xs={12}
+            sm={6}
+            md={pathname === '/quotes' || pathname === '/quote-history' ? 4 : 6}
+          >
             <Tabletoolbar
               showCheckboxes={showCheckboxes}
               searchTerm={searchTerm}
@@ -190,15 +202,41 @@ const Table = ({
               handleDeleteSelected={handleDeleteSelected}
             />
           </Grid>
-
-          {isQuotez && (
+          {(pathname === '/quotes' || pathname === '/quote-history') && (
             <Grid
               item
               xs={12}
               sm={6}
+              md={4}
+              sx={{ pl: { xs: 3, sm: 0 }, pr: { xs: 1, sm: 0 } }}
+            >
+              <Autocomplete
+                value={valueState}
+                onChange={(_event: any, newValue: any | null) => {
+                  if (setValueState) {
+                    setValueState(newValue);
+                  }
+                }}
+                options={optionsData || []}
+                getOptionLabel={(option) => option.razonSocial}
+                renderInput={(params) => (
+                  <TextField {...params} label="Seleccione cliente" />
+                )}
+              />
+            </Grid>
+          )}
+
+          {pathname === '/quotes' && (
+            <Grid
+              item
+              xs={12}
+              sm={12}
+              md={4}
               sx={{
                 display: 'flex',
                 justifyContent: 'end',
+                mt: { xs: 2, sm: 0 },
+                mb: { xs: 0, sm: 2, md: 0 },
               }}
             >
               <Button

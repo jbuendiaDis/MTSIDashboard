@@ -55,36 +55,53 @@ export interface FormValues {
 }
 
 interface DataDetailQuote {
-  _id: string;
-  origenId: number;
-  destinoId: number;
-  tipoUnidad: number;
-  tipoTraslado: number;
-  tipoViaje: number;
-  estatus: string;
+  id: string;
   folio: number;
-  userId: string;
-  fechaCreacion: string;
-  __v: 0;
   origen: string;
   destino: string;
   kms: number;
-  rend: number;
-  lts: number;
-  hoteles: number;
-  totalLitros: number;
-  precioDiesel: number;
-  costoComidas: number;
-  costoPasajes: number;
-  costoPeajes: number;
-  costoSueldo: number;
-  subtotal: number;
-  gastosAdministrativos: number;
+  rendimiento: number;
+  litros: number;
+  diesel: number;
+  comidas: number;
+  pasajeOrigen: number;
+  pasajeDestino: number;
+  peajesViapass: number;
+  seguroTraslado: number;
+  sueldo: number;
+  pagoEstadia: number;
+  subTotal: number;
+  admon: number;
   total: number;
-  costoInflacion: number;
+  inflacion: number;
   financiamiento: number;
   ganancia: number;
-  costoTotal: number;
+  costo: number;
+}
+
+export interface FormatDataDetailQuote {
+  id: string;
+  folio: number;
+  origen: string;
+  destino: string;
+  kms: string;
+  rendimiento: string;
+  litros: string;
+  diesel: string;
+  comidas: string;
+  pasajeOrigen: string;
+  pasajeDestino: string;
+  peajesViapass: string;
+  seguroTraslado: string;
+  sueldo: string;
+  pagoEstadia: string;
+  subTotal: string;
+  admon: string;
+  total: string;
+  inflacion: string;
+  financiamiento: string;
+  ganancia: string;
+  costo: string;
 }
 
 export interface PayloadDetailQuote {

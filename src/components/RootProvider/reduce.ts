@@ -8,11 +8,6 @@ interface ActionValues {
 
 export const reducer = (state: Values, action: ActionValues) => {
   switch (action.type) {
-    case 'customers':
-      return {
-        ...state,
-        customers: _.get(action, ['payload'], []),
-      };
     case 'states':
       return {
         ...state,
@@ -67,6 +62,11 @@ export const reducer = (state: Values, action: ActionValues) => {
       return {
         ...state,
         unitTypes: _.get(action, ['payload'], []),
+      };
+    case 'customers':
+      return {
+        ...state,
+        customers: _.get(action, ['payload'], []),
       };
     case 'resetCountriesByState':
       return {
