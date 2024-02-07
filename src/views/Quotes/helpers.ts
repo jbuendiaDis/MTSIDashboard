@@ -58,6 +58,7 @@ export const useHelpers = ({ setOpen }: HelpersProps) => {
 
   useEffect(() => {
     if (pathname === '/quotes') handleGetconfigureData();
+    else setDataQuotezTable([]);
   }, [pathname]);
 
   const handleGetQuotezByClient = async (id: string): Promise<boolean> => {

@@ -31,7 +31,8 @@ const Quotes = () => {
 
   useEffect(() => {
     handleGetCustomers();
-  }, []);
+    setValueState(null);
+  }, [pathname]);
 
   const columns: Column[] = [
     { id: 'folio', label: 'Folio', align: 'left' },
@@ -53,7 +54,7 @@ const Quotes = () => {
           : {
               label: 'Ver',
               icon: <RemoveRedEyeOutlined sx={{ width: 20, height: 20 }} />,
-              onClick: (rowData: any) => alert('Ver'),
+              onClick: (rowData: any) => console.log(rowData),
             },
       ],
     },
@@ -76,9 +77,9 @@ const Quotes = () => {
   };
 
   useEffect(() => {
-    if (valueState) {
+    if (valueState !== null) {
       handleGetQuotezByClient(valueState._id);
-    } else setValueState(null);
+    }
   }, [valueState]);
 
   return (
@@ -98,7 +99,7 @@ const Quotes = () => {
         }
         setValueState={setValueState}
         valueState={valueState}
-        optionsData={customers || []}
+        optionsData={customers}
       />
       <Drawer
         open={open}
