@@ -5,10 +5,7 @@ import { Table } from '../../components/Table';
 import { Column } from '../../models';
 import { useHelpers } from './helpers';
 import { Grid, TextField, InputAdornment, Stack, Button } from '@mui/material';
-import {
-  RequestQuoteOutlined,
-  RemoveRedEyeOutlined,
-} from '@mui/icons-material';
+import { RequestQuoteOutlined } from '@mui/icons-material';
 import { FormValues } from './types';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useRootProvider } from '../../components/RootProvider/hooks/useRootProvider';
@@ -39,26 +36,23 @@ const Quotes = () => {
     { id: 'clientName', label: 'Cliente', align: 'left' },
     { id: 'estatus', label: 'Estatus', align: 'left' },
     { id: 'fechaCreacion', label: 'Fecha Creación', align: 'left' },
-    {
+  ];
+
+  if (pathname === '/quotes') {
+    columns.push({
       id: 'actions',
       label: 'Acciones',
       align: 'center',
       actions: [
-        pathname === '/quotes'
-          ? {
-              label: 'Generar',
-              icon: <RequestQuoteOutlined sx={{ width: 20, height: 20 }} />,
-              onClick: (rowData: any) =>
-                handleNavigate(rowData.folio, rowData.clientName),
-            }
-          : {
-              label: 'Ver',
-              icon: <RemoveRedEyeOutlined sx={{ width: 20, height: 20 }} />,
-              onClick: (rowData: any) => console.log(rowData),
-            },
+        {
+          label: 'Generar',
+          icon: <RequestQuoteOutlined sx={{ width: 20, height: 20 }} />,
+          onClick: (rowData: any) =>
+            handleNavigate(rowData.folio, rowData.clientName),
+        },
       ],
-    },
-  ];
+    });
+  }
 
   const handleNavigate = (folio: number, client: string) => {
     navigate(`/detail-quote/${folio}`, { state: { clientName: client } });
