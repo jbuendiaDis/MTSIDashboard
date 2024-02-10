@@ -1,5 +1,10 @@
 import { Response } from './responseApi';
 
+export enum Roles {
+  ADMIN = 'admin',
+  PUBLIC = 'public',
+}
+
 export interface FormValues {
   email: string;
   password: string;
@@ -13,6 +18,8 @@ export interface UserValue {
   position: string;
   signature: string;
   isLogger: boolean;
+
+  rol: Roles;
 }
 
 export interface AuthContextType {

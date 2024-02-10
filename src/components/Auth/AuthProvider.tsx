@@ -28,7 +28,7 @@ const AuthProvider = ({ children }: Props) => {
         body: values,
       });
       const code: Response['code'] = response.code;
-      const user = payload.user;
+      const user = { ...payload.user, rol: 'admin' };
       const token = payload.token;
 
       if (code === 200) {
@@ -37,9 +37,9 @@ const AuthProvider = ({ children }: Props) => {
           token,
         };
 
+        setUser({ ...session.user, isLogger: true });
         setItem('session', session.user);
         setItem('token', session.token);
-        setUser({ ...session.user, isLogger: true });
       }
 
       return true;
@@ -50,7 +50,7 @@ const AuthProvider = ({ children }: Props) => {
 
   const logout: AuthContextType['logout'] = (): void => {
     localStorage.removeItem('session');
-
+    localStorage.removeItem('token');
     setUser(undefined);
   };
 

@@ -25,49 +25,49 @@ export const navConfig: Menu[] = [
     path: '/users',
     icon: <GroupAddOutlined />,
   },
-  {
-    title: 'Clientes usuario',
-    path: '/user-clients',
-    icon: <Diversity3Outlined />,
-  },
-  {
-    title: 'Clientes',
-    path: '/customers',
-    icon: <Groups2Outlined />,
-  },
-  {
-    title: 'Rutas',
-    path: '/routes',
-    icon: <RouteOutlined />,
-  },
-  {
-    title: 'Traslados',
-    path: '/transfers',
-    icon: <LocalShippingOutlined />,
-  },
-  {
-    title: 'Peajes',
-    path: '/tolls',
-    icon: <WarehouseOutlined />,
-  },
-  {
-    title: 'Gastos',
-    path: '/bills',
-    icon: <AttachMoneyOutlined />,
-  },
-  {
-    title: 'Rendimientos',
-    path: '/returns',
-    icon: <TrendingUpOutlined />,
-  },
-  {
-    title: 'Cotizaciones',
-    path: '/quotes',
-    icon: <RequestQuoteOutlined />,
-  },
-  {
-    title: 'Historial Cotizaciones',
-    path: '/quote-history',
-    icon: <HistoryOutlined />,
-  },
+  // {
+  //   title: 'Clientes usuario',
+  //   path: '/user-clients',
+  //   icon: <Diversity3Outlined />,
+  // },
+  // {
+  //   title: 'Clientes',
+  //   path: '/customers',
+  //   icon: <Groups2Outlined />,
+  // },
+  // {
+  //   title: 'Rutas',
+  //   path: '/routes',
+  //   icon: <RouteOutlined />,
+  // },
+  // {
+  //   title: 'Traslados',
+  //   path: '/transfers',
+  //   icon: <LocalShippingOutlined />,
+  // },
+  // {
+  //   title: 'Peajes',
+  //   path: '/tolls',
+  //   icon: <WarehouseOutlined />,
+  // },
+  // {
+  //   title: 'Gastos',
+  //   path: '/bills',
+  //   icon: <AttachMoneyOutlined />,
+  // },
+  // {
+  //   title: 'Rendimientos',
+  //   path: '/returns',
+  //   icon: <TrendingUpOutlined />,
+  // },
+  // {
+  //   title: 'Cotizaciones',
+  //   path: '/quotes',
+  //   icon: <RequestQuoteOutlined />,
+  // },
+  // {
+  //   title: 'Historial Cotizaciones',
+  //   path: '/quote-history',
+  //   icon: <HistoryOutlined />,
+  // },
 ];
