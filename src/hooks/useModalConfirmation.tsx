@@ -64,7 +64,8 @@ export const useModalConfirmation = () => {
 
   const modalInformation = ({
     message,
-  }: Omit<ModalSuccessProps, 'callbackConfirm'>) => {
+    callbackConfirm,
+  }: ModalSuccessProps) => {
     handleOpenModal({
       fullWidth: true,
       maxWidth: 'xs',
@@ -80,7 +81,7 @@ export const useModalConfirmation = () => {
             color="primary"
             sx={{ fontSize: '20px', fontWeight: 700, letterSpacing: '1.2px' }}
           >
-            Hubo un problema
+            Oops!
           </Typography>
         </Grid>
       ),
@@ -95,7 +96,15 @@ export const useModalConfirmation = () => {
         >
           <Typography sx={{ mb: 2 }}>{message}</Typography>
           <Grid sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
-            <Button variant="contained" onClick={() => handleCloseModal()}>
+            <Button
+              variant="contained"
+              onClick={() => {
+                handleCloseModal();
+                if (callbackConfirm) {
+                  callbackConfirm();
+                }
+              }}
+            >
               Aceptar
             </Button>
           </Grid>

@@ -63,24 +63,29 @@ export const useHelpers = ({ setOpen }: HelpersProps) => {
 
   const handleGetQuotezByClient = async (id: string): Promise<boolean> => {
     try {
+      console.log('id', id)
       const { payload, response }: ResponseQuotes = await _getAllQuotes({
         urlParam: id,
       });
       const code: Response['code'] = response.code;
       const dataResponse = payload.data;
 
-      if (code === 200 && dataResponse.length > 0) {
-        const formatData = dataResponse.map((item) => {
-          return {
-            ...item,
-            fechaCreacion:
-              typeof item.fechaCreacion === 'string'
-                ? format(parseISO(item.fechaCreacion), 'dd/MM/yyyy')
-                : format(item.fechaCreacion, 'dd/MM/yyyy'),
-          };
-        });
+      console.log('res', dataResponse)
 
-        setDataQuotezTable(formatData);
+      if (code === 200) {
+        // const formatData = dataResponse.map((item) => {
+        //   return {
+        //     ...item,
+        //     createdAt:
+        //       typeof item.createdAt === 'string'
+        //         ? format(parseISO(item.createdAt), 'dd/MM/yyyy')
+        //         : format(item.createdAt, 'dd/MM/yyyy'),
+        //   };
+        // });
+
+        // console.log('>>>', dataResponse)
+
+        setDataQuotezTable(dataResponse);
       } else {
         setDataQuotezTable([]);
       }

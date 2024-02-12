@@ -81,7 +81,6 @@ interface DataDetailQuote {
 
 export interface FormatDataDetailQuote {
   id: string;
-  folio: number;
   origen: string;
   destino: string;
   kms: string;
@@ -110,5 +109,10 @@ export interface PayloadDetailQuote {
 
 export interface ResponseDetailQuote {
   payload: PayloadDetailQuote;
+  response: Response;
+}
+
+export interface ResponseSendEmail {
+  payload: any;
   response: Response;
 }

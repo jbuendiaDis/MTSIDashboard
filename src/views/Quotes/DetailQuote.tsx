@@ -14,6 +14,7 @@ import {
   FormatDataDetailQuote,
   PayloadDetailQuote,
   ResponseDetailQuote,
+  ResponseSendEmail,
 } from './types';
 import { useApi } from '../../hooks/useApi';
 import { Column, ModalContextType, Response } from '../../models';
@@ -22,27 +23,32 @@ import { Table } from '../../components/Table';
 import { formatToCurrency } from '../../utils/amountFormater';
 import { useModal } from '../../components/Modal';
 import { HeaderTitleModal } from '../../components/Modal/HeaderTitleModal';
-import { Form, Formik } from 'formik';
+import { Field, Form, Formik } from 'formik';
 import * as Yup from 'yup';
-import Input from '../../components/Input/Input';
 import { ArrowBack } from '@mui/icons-material';
+import { useModalConfirmation } from '../../hooks/useModalConfirmation';
+import { get } from 'lodash';
+import { CKEditor } from '@ckeditor/ckeditor5-react';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import '@ckeditor/ckeditor5-build-classic/build/translations/es';
 
 const DetailQuote = () => {
   const location = useLocation();
   const { state } = location;
   const { folio } = useParams();
   const { handleOpenModal, handleCloseModal }: ModalContextType = useModal();
+  const { modalInformation, modalSuccess } = useModalConfirmation();
   const [dataTable, setDataTable] = useState<FormatDataDetailQuote[]>([]);
   const isFolio: string | undefined = folio ? folio : '';
   const navigation = useNavigate();
 
   const _getQuoteFolio = useApi({
-    endpoint: '/quotes01',
+    endpoint: '/v2/cotizacion',
     method: 'get',
   });
 
   const _sendQuote = useApi({
-    endpoint: '/v1/emails/quote/details/send',
+    endpoint: '/v1/solicitud/details/send',
     method: 'post',
   });
 
@@ -57,6 +63,7 @@ const DetailQuote = () => {
       });
       const dataResponse: PayloadDetailQuote['data'] = payload.data;
       const code: Response['code'] = response.code;
+      const message: Response['message'] = response.message;
 
       if (code === 200) {
         const formatData: FormatDataDetailQuote[] = dataResponse.map((item) => {
@@ -84,24 +91,12 @@ const DetailQuote = () => {
         });
 
         setDataTable(formatData);
-      }
-      return true;
-    } catch (error) {
-      return false;
-    }
-  };
+      } else
+        modalInformation({
+          message,
+          callbackConfirm: () => navigation('/routes'),
+        });
 
-  const handleCreateQuote = async (message?: string): Promise<boolean> => {
-    try {
-      const data = {
-        folio: folio ? parseInt(folio) : 0,
-        mensaje: message !== '' ? message : '',
-      };
-      const response = await _sendQuote({
-        body: data,
-      });
-
-      console.log('RES', response);
       return true;
     } catch (error) {
       return false;
@@ -109,7 +104,6 @@ const DetailQuote = () => {
   };
 
   const columns: Column[] = [
-    { id: 'folio', label: 'Folio', align: 'left' },
     { id: 'origen', label: 'Origen', align: 'left' },
     { id: 'destino', label: 'Destino', align: 'left' },
     { id: 'kms', label: 'Kms', align: 'left' },
@@ -128,7 +122,6 @@ const DetailQuote = () => {
     { id: 'financiamiento', label: 'Financiamiento', align: 'left' },
     { id: 'ganancia', label: 'Ganancia', align: 'left' },
     { id: 'costo', label: 'Costo', align: 'left' },
-    { id: 'cliente', label: 'Cliente', align: 'left' },
   ];
 
   const validationSchema = Yup.object().shape({
@@ -141,8 +134,20 @@ const DetailQuote = () => {
 
   const handleSubmit = async (values: { description: string }) => {
     try {
-      console.log('VALUES', values);
-      handleCreateQuote(values.description);
+      const data = {
+        folio: folio ? parseInt(folio) : 0,
+        mensaje: values.description !== '' ? values.description : '',
+      };
+      const response: ResponseSendEmail = await _sendQuote({
+        body: data,
+      });
+      const code: Response['code'] = get(response, 'response.code');
+      const message: Response['message'] = get(response, 'response.message');
+
+      if (code === 200) {
+        handleCloseModal();
+        modalSuccess({ message });
+      } else modalInformation({ message });
       return true;
     } catch (error) {
       return false;
@@ -152,7 +157,7 @@ const DetailQuote = () => {
   const handleConfigMail = () => {
     handleOpenModal({
       fullWidth: true,
-      maxWidth: 'sm',
+      maxWidth: 'md',
       title: (
         <HeaderTitleModal
           title="Configurar Email"
@@ -166,13 +171,46 @@ const DetailQuote = () => {
           onSubmit={handleSubmit}
         >
           <Form>
-            <Input
-              fullWidth
-              multiline
-              rows={4}
-              placeholder="Descripción..."
-              name="description"
-            />
+            <Field name="description">
+              {({ field, form }: any) => (
+                <Box component="div">
+                  <CKEditor
+                    editor={ClassicEditor}
+                    data={field.value}
+                    onChange={(_event, editor) => {
+                      const data = editor.getData();
+                      form.setFieldValue(field.name, data);
+                    }}
+                    config={{
+                      language: 'es',
+                      toolbar: {
+                        items: [
+                          'undo',
+                          'redo',
+                          'heading',
+                          '|',
+                          'bold',
+                          'italic',
+                          'link',
+                          'insertTable',
+                          'numberedList',
+                          'bulletedList',
+                          '|',
+                        ],
+                      },
+                    }}
+                  />
+                  {form.errors.description && form.touched.description && (
+                    <Typography
+                      component="p"
+                      sx={{ color: 'red', mt: 2, fontSize: '0.8rem' }}
+                    >
+                      {form.errors.description}
+                    </Typography>
+                  )}
+                </Box>
+              )}
+            </Field>
             <Box sx={{ mt: 3, display: 'flex', justifyContent: 'end' }}>
               <Button variant="contained" type="submit">
                 Generar Cotización
