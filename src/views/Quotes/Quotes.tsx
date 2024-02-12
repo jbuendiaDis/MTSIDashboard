@@ -35,7 +35,7 @@ const Quotes = () => {
     { id: 'folio', label: 'Folio', align: 'left' },
     { id: 'clientName', label: 'Cliente', align: 'left' },
     { id: 'estatus', label: 'Estatus', align: 'left' },
-    { id: 'fechaCreacion', label: 'Fecha Creación', align: 'left' },
+    { id: 'createdAt', label: 'Fecha Creación', align: 'left' },
   ];
 
   if (pathname === '/quotes') {

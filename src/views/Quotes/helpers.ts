@@ -9,7 +9,6 @@ import {
   ResponseQuotes,
 } from './types';
 import { Response } from '../../models';
-import { format, parseISO } from 'date-fns';
 import { useFormik } from 'formik';
 import { useModalConfirmation } from '../../hooks/useModalConfirmation';
 import * as Yup from 'yup';
@@ -63,32 +62,15 @@ export const useHelpers = ({ setOpen }: HelpersProps) => {
 
   const handleGetQuotezByClient = async (id: string): Promise<boolean> => {
     try {
-      console.log('id', id)
       const { payload, response }: ResponseQuotes = await _getAllQuotes({
         urlParam: id,
       });
       const code: Response['code'] = response.code;
       const dataResponse = payload.data;
 
-      console.log('res', dataResponse)
+      if (code === 200) setDataQuotezTable(dataResponse);
+      else setDataQuotezTable([]);
 
-      if (code === 200) {
-        // const formatData = dataResponse.map((item) => {
-        //   return {
-        //     ...item,
-        //     createdAt:
-        //       typeof item.createdAt === 'string'
-        //         ? format(parseISO(item.createdAt), 'dd/MM/yyyy')
-        //         : format(item.createdAt, 'dd/MM/yyyy'),
-        //   };
-        // });
-
-        // console.log('>>>', dataResponse)
-
-        setDataQuotezTable(dataResponse);
-      } else {
-        setDataQuotezTable([]);
-      }
       return true;
     } catch (error) {
       return false;

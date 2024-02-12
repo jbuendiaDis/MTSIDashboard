@@ -4,7 +4,7 @@ interface DataQuotez {
   clientName: string;
   destinoId: number;
   estatus: string;
-  fechaCreacion: string;
+  createdAt: string;
   folio: number;
   origenId: number;
   tipoTraslado: number;
