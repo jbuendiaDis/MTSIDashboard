@@ -103,6 +103,28 @@ const DetailQuote = () => {
     }
   };
 
+  const handleCreateQuote = async (messageValue?: string): Promise<boolean> => {
+    try {
+      const data = {
+        folio: folio ? parseInt(folio) : 0,
+        mensaje: messageValue !== '' ? messageValue : '',
+      };
+      const response: ResponseSendEmail = await _sendQuote({
+        body: data,
+      });
+      const code: Response['code'] = get(response, 'response.code');
+      const message: Response['message'] = get(response, 'response.message');
+
+      if (code === 200) {
+        handleCloseModal();
+        modalSuccess({ message });
+      } else modalInformation({ message });
+      return true;
+    } catch (error) {
+      return false;
+    }
+  };
+
   const columns: Column[] = [
     { id: 'origen', label: 'Origen', align: 'left' },
     { id: 'destino', label: 'Destino', align: 'left' },
@@ -134,20 +156,7 @@ const DetailQuote = () => {
 
   const handleSubmit = async (values: { description: string }) => {
     try {
-      const data = {
-        folio: folio ? parseInt(folio) : 0,
-        mensaje: values.description !== '' ? values.description : '',
-      };
-      const response: ResponseSendEmail = await _sendQuote({
-        body: data,
-      });
-      const code: Response['code'] = get(response, 'response.code');
-      const message: Response['message'] = get(response, 'response.message');
-
-      if (code === 200) {
-        handleCloseModal();
-        modalSuccess({ message });
-      } else modalInformation({ message });
+      handleCreateQuote(values.description);
       return true;
     } catch (error) {
       return false;
