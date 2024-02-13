@@ -1,9 +1,12 @@
-import { useEffect, useState } from 'react';
+import {
+  // useEffect,
+  useState,
+} from 'react';
 import { useLoader } from '../../components/Loader';
 import { useApi } from '../../hooks/useApi';
 import { LoaderContextType, Response } from '../../models';
 import {
-  DataTollExpenses,
+  // DataTollExpenses,
   FormValues,
   PayloadTollExpenses,
   ResponseTollExpenses,
@@ -13,82 +16,84 @@ import { formatToCurrency } from '../../utils/amountFormater';
 import { useModalConfirmation } from '../../hooks/useModalConfirmation';
 import { useAuth } from '../../components/Auth';
 import * as Yup from 'yup';
-import { useRootProvider } from '../../components/RootProvider/hooks/useRootProvider';
+// import { useRootProvider } from '../../components/RootProvider/hooks/useRootProvider';
+import { get } from 'lodash';
 
 export const useHelpers = () => {
   const { user } = useAuth();
   const { handleShowLoader }: LoaderContextType = useLoader();
   const { modalDelete, modalInformation, modalSuccess } =
     useModalConfirmation();
-  const { actionsCountries, actionsState }: any = useRootProvider();
-  const { states } = actionsState;
-  const {
-    countriesByState,
-    countriesByStateSecond,
-    handleGetCountrie,
-    handleGetCountrieSecond,
-  } = actionsCountries;
+  // const { actionsCountries, actionsState }: any = useRootProvider();
+  // const { states } = actionsState;
+  // const {
+  //   countriesByState,
+  //   countriesByStateSecond,
+  //   // handleGetCountrie,
+  //   // handleGetCountrieSecond,
+  // } = actionsCountries;
   const [billsDataTable, setBillsDataTable] = useState<any[]>([]);
   const [dataEdit, setDataEdit] = useState<any | null>(null);
-  const [dataTemp, setDataTemp] = useState<DataTollExpenses | null>(null);
+  // const [dataTemp, setDataTemp] = useState<DataTollExpenses | null>(null);
+  const positiveNumber: string = 'Solo se permiten cantidades positivas.';
 
   const _getAllTollExpenses = useApi({
     endpoint: '/gastosPeajes',
     method: 'get',
   });
 
-  // const _createBill = useApi({
-  //   endpoint: '/gastos',
-  //   method: 'post',
-  // });
+  const _createBill = useApi({
+    endpoint: '/gastos',
+    method: 'post',
+  });
 
   const _deleteBill = useApi({
     endpoint: '/gastos',
     method: 'delete',
   });
 
-  const _getBillByid = useApi({
-    endpoint: '/gastos',
-    method: 'get',
-  });
+  // const _getBillByid = useApi({
+  //   endpoint: '/gastos',
+  //   method: 'get',
+  // });
 
   // const _updateBill = useApi({
   //   endpoint: '/gastos',
   //   method: 'put',
   // });
 
-  useEffect(() => {
-    if (
-      dataTemp !== null &&
-      countriesByState.length > 0 &&
-      countriesByStateSecond.length > 0
-    ) {
-      console.log('RENDER', dataTemp, countriesByState, countriesByStateSecond);
-      const filterOriginState = states.find(
-        (item: any) => item.codigo === parseInt(dataTemp.estadoOrigen)
-      );
-      const filterDestinationState = states.find(
-        (item: any) => item.codigo === parseInt(dataTemp.estadoDestino)
-      );
-      // const filterOriginLocality = countriesByState.find(
-      //   (item: any) => item.codigo === dataTemp.codigo
-      // );
+  // useEffect(() => {
+  //   if (
+  //     dataTemp !== null &&
+  //     countriesByState.length > 0 &&
+  //     countriesByStateSecond.length > 0
+  //   ) {
+  //     console.log('RENDER', dataTemp, countriesByState, countriesByStateSecond);
+  //     const filterOriginState = states.find(
+  //       (item: any) => item.codigo === parseInt(dataTemp.estadoOrigen)
+  //     );
+  //     const filterDestinationState = states.find(
+  //       (item: any) => item.codigo === parseInt(dataTemp.estadoDestino)
+  //     );
+  //     const filterOriginLocality = countriesByState.find(
+  //       (item: any) => item.codigo === dataTemp.codigo
+  //     );
 
-      console.log('filter', filterOriginState, filterDestinationState);
-      // const filterCountrie = countriesByState.find(
-      //   (item: any) => item.codigo === dataTemp.codigo
-      // );
-      // const newDataEdit: FormValues = {
-      //   state: filterState,
-      //   nombre: filterCountrie,
-      //   costo: dataTemp.costo,
-      //   unitType: dataTemp.tipoUnidad,
-      //   codigo: dataTemp.codigo,
-      // };
-      // setDataEdit(newDataEdit);
-      // setDataTemp(null);
-    }
-  }, [dataTemp, countriesByState, countriesByStateSecond]);
+  //     console.log('filter', filterOriginState, filterDestinationState);
+  //     const filterCountrie = countriesByState.find(
+  //       (item: any) => item.codigo === dataTemp.codigo
+  //     );
+  //     const newDataEdit: FormValues = {
+  //       state: filterState,
+  //       nombre: filterCountrie,
+  //       costo: dataTemp.costo,
+  //       unitType: dataTemp.tipoUnidad,
+  //       codigo: dataTemp.codigo,
+  //     };
+  //     setDataEdit(newDataEdit);
+  //     setDataTemp(null);
+  //   }
+  // }, [dataTemp, countriesByState, countriesByStateSecond]);
 
   const handleGetAllBills = async (): Promise<boolean> => {
     try {
@@ -145,22 +150,23 @@ export const useHelpers = () => {
 
   const handleGetBill = async (id: string): Promise<boolean> => {
     try {
-      const { payload, response }: ResponseTollExpenses = await _getBillByid({
-        urlParam: id,
-      });
-      const code: Response['code'] = response.code;
-      const dataResponse: DataTollExpenses = Array.isArray(payload.data)
-        ? payload.data[0]
-        : payload.data;
+      console.log('ID', id);
+      // const { payload, response }: ResponseTollExpenses = await _getBillByid({
+      //   urlParam: id,
+      // });
+      // const code: Response['code'] = response.code;
+      // const dataResponse: DataTollExpenses = Array.isArray(payload.data)
+      //   ? payload.data[0]
+      //   : payload.data;
 
-      const originState: number = parseInt(dataResponse.estadoOrigen);
-      const destinationState: number = parseInt(dataResponse.estadoDestino);
+      // const originState: number = parseInt(dataResponse.estadoOrigen);
+      // const destinationState: number = parseInt(dataResponse.estadoDestino);
 
-      if (code === 200) {
-        handleGetCountrie(originState);
-        handleGetCountrieSecond(destinationState);
-        setDataTemp(dataResponse);
-      }
+      // if (code === 200) {
+      //   handleGetCountrie(originState);
+      //   handleGetCountrieSecond(destinationState);
+      //   setDataTemp(dataResponse);
+      // }
       return true;
     } catch (error) {
       return false;
@@ -200,32 +206,25 @@ export const useHelpers = () => {
   };
 
   const validationSchema = Yup.object().shape({
-    unitType: Yup.string(),
-    originState: Yup.object().nullable().required(),
-    destinationState: Yup.object().nullable().required(),
-    originLocality: Yup.object().nullable().required(),
-    destinationLocality: Yup.object().nullable().required(),
-    comidas: Yup.number().nullable(),
-    hoteles: Yup.number().nullable(),
-    pasajeDestino: Yup.number().nullable(),
-    pasajeOrigen: Yup.number().nullable(),
-    ferri: Yup.number().nullable(),
-    flight: Yup.number().nullable(),
-    stayPayment: Yup.number().nullable(),
-    transferInsurance: Yup.number().nullable(),
-    taxi: Yup.number().nullable(),
-    portRelease: Yup.number().nullable(),
-    talachas: Yup.number().nullable(),
-    phytoSanitary: Yup.number().nullable(),
-    urea: Yup.number().nullable(),
+    routes: Yup.object().nullable().required('Este campo es obligatorio'),
+    comidas: Yup.number().nullable().positive(positiveNumber),
+    hoteles: Yup.number().nullable().positive(positiveNumber),
+    pasajeDestino: Yup.number().nullable().positive(positiveNumber),
+    pasajeOrigen: Yup.number().nullable().positive(positiveNumber),
+    ferri: Yup.number().nullable().positive(positiveNumber),
+    flight: Yup.number().nullable().positive(positiveNumber),
+    stayPayment: Yup.number().nullable().positive(positiveNumber),
+    transferInsurance: Yup.number().nullable().positive(positiveNumber),
+    taxi: Yup.number().nullable().positive(positiveNumber),
+    portRelease: Yup.number().nullable().positive(positiveNumber),
+    talachas: Yup.number().nullable().positive(positiveNumber),
+    phytoSanitary: Yup.number().nullable().positive(positiveNumber),
+    urea: Yup.number().nullable().positive(positiveNumber),
+    UDSUSA: Yup.number().nullable().positive(positiveNumber),
   });
 
   const initialValues: FormValues = {
-    unitType: '',
-    originState: null,
-    destinationState: null,
-    originLocality: null,
-    destinationLocality: null,
+    routes: null,
     comidas: '',
     hoteles: '',
     pasajeDestino: '',
@@ -239,39 +238,46 @@ export const useHelpers = () => {
     talachas: '',
     phytoSanitary: '',
     urea: '',
+    UDSUSA: '',
   };
 
   const handleSubmit = async (values: any): Promise<boolean> => {
     try {
-      console.log('VALUES', values);
       const newValues = {
         idCliente: user?.id,
-        estadoOrigen: values.originState.codigo,
-        localidadOrigen: values.originLocality.codigo,
-        estadoDestino: values.destinationState.codigo,
-        localidadDestino: values.destinationLocality.codigo,
-        origen: values.originState.label,
-        destino: values.destinationState.label,
-        pasajeOrigen: values.pasajeOrigen,
-        pasajeDestino: values.pasajeDestino,
-        comidas: values.comidas,
-        hoteles: values.hoteles,
+        rutaId: values.routes?._id,
+        pasajeOrigen: values?.pasajeOrigen ? values?.pasajeOrigen : 0,
+        pasajeDestino: values?.pasajeDestino ? values?.pasajeDestino : 0,
+        comidas: values?.comidas ? values?.comidas : 0,
+        hoteles: values?.hoteles ? values?.hoteles : 0,
+        ferri: values?.ferri ? values?.ferri : 0,
+        vuelo: values?.flight ? values?.flight : 0,
+        pagoEstadia: values?.stayPayment ? values?.stayPayment : 0,
+        seguroTraslado: values?.transferInsurance
+          ? values?.transferInsurance
+          : 0,
+        taxi: values?.taxi ? values?.taxi : 0,
+        puerto: values?.portRelease ? values?.portRelease : 0,
+        talachas: values?.talachas ? values?.talachas : 0,
+        fitosanitarias: values?.phytoSanitary ? values?.phytoSanitary : 0,
+        urea: values?.urea ? values?.urea : 0,
+        UDSUSA: values?.UDSUSA ? values?.UDSUSA : 0,
       };
 
       console.log('newValues', newValues);
 
-      // const response: ResponseTollExpenses = await _createBill({
-      //   body: newValues,
-      // });
-      // const code: Response['code'] = get(response, 'response.code');
-      // const message: Response['message'] = get(response, 'response.message');
+      const response: ResponseTollExpenses = await _createBill({
+        body: newValues,
+      });
+      const code: Response['code'] = get(response, 'response.code');
+      const message: Response['message'] = get(response, 'response.message');
 
-      // if (code === 200) {
-      //   modalSuccess({ message });
-      //   handleGetAllBills();
-      // } else {
-      //   modalInformation({ message });
-      // }
+      if (code === 200) {
+        modalSuccess({ message });
+        handleGetAllBills();
+      } else {
+        modalInformation({ message });
+      }
       return true;
     } catch (error) {
       return false;

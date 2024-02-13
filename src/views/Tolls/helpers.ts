@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from 'react';
 import { useApi } from '../../hooks/useApi';
-import { Response } from '../../models';
+import { FormatDataState, Response } from '../../models';
 import { DataToll, FormValues, ResponseTolls } from './types';
 import * as Yup from 'yup';
 import { useModalConfirmation } from '../../hooks/useModalConfirmation';
@@ -9,7 +9,7 @@ import { useRootProvider } from '../../components/RootProvider/hooks/useRootProv
 import { get } from 'lodash';
 
 interface PropsHelpers {
-  valueState: any;
+  valueState: FormatDataState | null;
   setValueState: (value: null) => void;
 }
 
@@ -167,7 +167,7 @@ export const useHelpers = ({ valueState, setValueState }: PropsHelpers) => {
         );
         if (code === 200) {
           modalSuccess({ message });
-          handleGetCountrie(valueState.codigo);
+          handleGetCountrie(valueState?.codigo);
         } else {
           modalInformation({ message });
         }

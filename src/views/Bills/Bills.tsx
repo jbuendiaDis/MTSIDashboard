@@ -23,10 +23,6 @@ import { useRootProvider } from '../../components/RootProvider/hooks/useRootProv
 const Bills = () => {
   const { handleOpenModal, handleCloseModal }: ModalContextType = useModal();
   const { handleShowLoader }: LoaderContextType = useLoader();
-  const { actionsState, actionsCountries }: any = useRootProvider();
-  const { states, handleGetStates } = actionsState;
-  const { handleResetLocalidades, handleResetLocalidadesSecond } =
-    actionsCountries;
   const {
     dataEdit,
     initialValues,
@@ -40,11 +36,8 @@ const Bills = () => {
   } = useHelpers();
 
   useEffect(() => {
-    handleResetLocalidades();
-    handleResetLocalidadesSecond();
     handleShowLoader(true);
     handleGetAllBills();
-    handleGetStates();
   }, []);
 
   useEffect(() => {
@@ -130,7 +123,6 @@ const Bills = () => {
           >
             <BillForm
               handleToggleModal={handleToggleModal}
-              states={states}
               dataEdit={dataEdit}
             />
           </Formik>

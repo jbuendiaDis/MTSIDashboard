@@ -1,17 +1,6 @@
 import { Response } from '../../models/responseApi';
-
-interface State {
-  codigo: number;
-  label: string;
-  _id: string;
-}
-
 export interface FormValues {
-  unitType: string;
-  originState: State | null;
-  destinationState: State | null;
-  originLocality: any;
-  destinationLocality: any;
+  routes: any;
   comidas: number | string;
   hoteles: number | string;
   pasajeOrigen: number | string;
@@ -25,15 +14,14 @@ export interface FormValues {
   talachas: number | string;
   phytoSanitary: number | string;
   urea: number | string;
+  UDSUSA: number | string;
 }
-
 interface Points {
   casetas: string;
   costo: number;
   nombreCaseta: string;
   _id: string;
 }
-
 interface Tolls {
   idgasto: string;
   kms: number;
@@ -45,7 +33,6 @@ interface Tolls {
   __v: number;
   _id: string;
 }
-
 export interface FormaterDataTollExpenses {
   comidas: string;
   destino: string;
@@ -64,7 +51,6 @@ export interface FormaterDataTollExpenses {
   __v: number;
   _id: string;
 }
-
 export interface TollExpensesData {
   data: {
     comidas: number;
@@ -83,7 +69,6 @@ export interface TollExpensesData {
     _id: string;
   };
 }
-
 export interface DataTollExpenses {
   comidas: number;
   hoteles: number;
@@ -100,11 +85,9 @@ export interface DataTollExpenses {
   __v?: number;
   _id: string;
 }
-
 export interface PayloadTollExpenses {
   data: DataTollExpenses[];
 }
-
 export interface ResponseTollExpenses {
   payload: PayloadTollExpenses;
   response: Response;

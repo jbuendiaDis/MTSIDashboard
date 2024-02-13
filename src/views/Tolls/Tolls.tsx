@@ -65,6 +65,8 @@ const Tolls = () => {
     handleGetCatalogs();
     setDataEdit(null);
     setDataTemp(null);
+    setValueState(null);
+    setCountriesByStateData([]);
     handleResetCountriesByState();
     handleResetCountriesByStateUnitType();
   }, []);
@@ -85,7 +87,9 @@ const Tolls = () => {
   }, [valueState]);
 
   useEffect(() => {
+    console.log('ANTES', countriesByState);
     if (countriesByState?.length > 0) {
+      console.log('RENDER_TOLLS', countriesByState);
       const formatData: CountriesData[] = countriesByState.map((item: any) => {
         const costoNumber =
           typeof item.costo === 'number'
@@ -193,7 +197,6 @@ const Tolls = () => {
               setDataEdit(null);
             }}
             startIcon={<Add />}
-            // disabled={countriesByState?.length > 0 ? false : true}
           >
             Agregar Peaje
           </Button>

@@ -38,8 +38,16 @@ const AutoCompleteComponent: React.FC<AutoCompleteFieldProps> = ({
     <Autocomplete
       {...field}
       options={options}
+      // getOptionLabel={(option) =>
+      //   option ? (option[labelField] as string) : ''
+      // }
       getOptionLabel={(option) =>
-        option ? (option[labelField] as string) : ''
+        option
+          ? labelField
+              .split('-')
+              .map((field) => option[field] as string)
+              .join(' - ')
+          : ''
       }
       onChange={handleChange}
       value={field.value || null}

@@ -13,6 +13,7 @@ export interface Values {
   localidadesSecond: [];
   catalogs: [];
   unitTypes: [];
+  routes: [];
 }
 
 export const initialState: Values = {
@@ -28,6 +29,7 @@ export const initialState: Values = {
   localidadesSecond: [],
   catalogs: [],
   unitTypes: [],
+  routes: [],
 };
 
 export const RootProviderContext: Context<any> | any = createContext(null);
