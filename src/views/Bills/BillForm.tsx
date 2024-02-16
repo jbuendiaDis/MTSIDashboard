@@ -31,7 +31,7 @@ const BillForm = ({ handleToggleModal, dataEdit }: BillFormProps) => {
             labelField="nombreOrigen-nombreDestino"
           />
         </Grid>
-        <Grid item xs={12} sm={6}>
+        <Grid item xs={12} sm={6} md={4}>
           <Input
             fullWidth
             label="Pasaje Origen"
@@ -45,7 +45,7 @@ const BillForm = ({ handleToggleModal, dataEdit }: BillFormProps) => {
             }}
           />
         </Grid>
-        <Grid item xs={12} sm={6}>
+        <Grid item xs={12} sm={6} md={4}>
           <Input
             fullWidth
             label="Pasaje Destino"
@@ -59,7 +59,7 @@ const BillForm = ({ handleToggleModal, dataEdit }: BillFormProps) => {
             }}
           />
         </Grid>
-        <Grid item xs={12} sm={6}>
+        <Grid item xs={12} sm={6} md={4}>
           <Input
             fullWidth
             label="Comidas"
@@ -73,7 +73,7 @@ const BillForm = ({ handleToggleModal, dataEdit }: BillFormProps) => {
             }}
           />
         </Grid>
-        <Grid item xs={12} sm={6}>
+        <Grid item xs={12} sm={6} md={4}>
           <Input
             fullWidth
             label="Hoteles"
@@ -87,7 +87,7 @@ const BillForm = ({ handleToggleModal, dataEdit }: BillFormProps) => {
             }}
           />
         </Grid>
-        <Grid item xs={12} sm={6}>
+        <Grid item xs={12} sm={6} md={4}>
           <Input
             fullWidth
             label="Ferri"
@@ -101,7 +101,7 @@ const BillForm = ({ handleToggleModal, dataEdit }: BillFormProps) => {
             }}
           />
         </Grid>
-        <Grid item xs={12} sm={6}>
+        <Grid item xs={12} sm={6} md={4}>
           <Input
             fullWidth
             label="Vuelo"
@@ -115,7 +115,7 @@ const BillForm = ({ handleToggleModal, dataEdit }: BillFormProps) => {
             }}
           />
         </Grid>
-        <Grid item xs={12} sm={6}>
+        <Grid item xs={12} sm={6} md={4}>
           <Input
             fullWidth
             label="Pago de estadia"
@@ -129,7 +129,7 @@ const BillForm = ({ handleToggleModal, dataEdit }: BillFormProps) => {
             }}
           />
         </Grid>
-        <Grid item xs={12} sm={6}>
+        <Grid item xs={12} sm={6} md={4}>
           <Input
             fullWidth
             label="Seguro de traslado"
@@ -143,7 +143,7 @@ const BillForm = ({ handleToggleModal, dataEdit }: BillFormProps) => {
             }}
           />
         </Grid>
-        <Grid item xs={12} sm={6}>
+        <Grid item xs={12} sm={6} md={4}>
           <Input
             fullWidth
             label="Taxi"
@@ -157,7 +157,7 @@ const BillForm = ({ handleToggleModal, dataEdit }: BillFormProps) => {
             }}
           />
         </Grid>
-        <Grid item xs={12} sm={6}>
+        <Grid item xs={12} sm={6} md={4}>
           <Input
             fullWidth
             label="Liberación de puerto"
@@ -171,7 +171,7 @@ const BillForm = ({ handleToggleModal, dataEdit }: BillFormProps) => {
             }}
           />
         </Grid>
-        <Grid item xs={12} sm={6}>
+        <Grid item xs={12} sm={6} md={4}>
           <Input
             fullWidth
             label="Talachas"
@@ -185,7 +185,7 @@ const BillForm = ({ handleToggleModal, dataEdit }: BillFormProps) => {
             }}
           />
         </Grid>
-        <Grid item xs={12} sm={6}>
+        <Grid item xs={12} sm={6} md={4}>
           <Input
             fullWidth
             label="Fito sanitarias"
@@ -199,7 +199,7 @@ const BillForm = ({ handleToggleModal, dataEdit }: BillFormProps) => {
             }}
           />
         </Grid>
-        <Grid item xs={12} sm={6}>
+        <Grid item xs={12} sm={6} md={4}>
           <Input
             fullWidth
             label="Urea"
@@ -213,12 +213,26 @@ const BillForm = ({ handleToggleModal, dataEdit }: BillFormProps) => {
             }}
           />
         </Grid>
-        <Grid item xs={12} sm={6}>
+        <Grid item xs={12} sm={6} md={4}>
           <Input
             fullWidth
             label="UDS/USA"
             placeholder="0.00"
-            name="UDSUSA"
+            name="udsUsa"
+            type="number"
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">$</InputAdornment>
+              ),
+            }}
+          />
+        </Grid>
+        <Grid item xs={12} sm={6} md={4}>
+          <Input
+            fullWidth
+            label="Extra"
+            placeholder="0.00"
+            name="extra"
             type="number"
             InputProps={{
               startAdornment: (

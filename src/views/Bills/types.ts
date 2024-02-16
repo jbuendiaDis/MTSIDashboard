@@ -14,7 +14,8 @@ export interface FormValues {
   talachas: number | string;
   phytoSanitary: number | string;
   urea: number | string;
-  UDSUSA: number | string;
+  udsUsa: number | string;
+  extra: string | number
 }
 interface Points {
   casetas: string;

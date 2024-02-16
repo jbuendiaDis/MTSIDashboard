@@ -221,6 +221,7 @@ export const useHelpers = () => {
     phytoSanitary: Yup.number().nullable().positive(positiveNumber),
     urea: Yup.number().nullable().positive(positiveNumber),
     UDSUSA: Yup.number().nullable().positive(positiveNumber),
+    extra: Yup.number().nullable().positive(positiveNumber),
   });
 
   const initialValues: FormValues = {
@@ -238,7 +239,8 @@ export const useHelpers = () => {
     talachas: '',
     phytoSanitary: '',
     urea: '',
-    UDSUSA: '',
+    udsUsa: '',
+    extra: '',
   };
 
   const handleSubmit = async (values: any): Promise<boolean> => {
@@ -261,10 +263,9 @@ export const useHelpers = () => {
         talachas: values?.talachas ? values?.talachas : 0,
         fitosanitarias: values?.phytoSanitary ? values?.phytoSanitary : 0,
         urea: values?.urea ? values?.urea : 0,
-        UDSUSA: values?.UDSUSA ? values?.UDSUSA : 0,
+        udsUsa: values?.udsUsa ? values?.udsUsa : 0,
+        extra: values?.extra ? values?.extra : 0,
       };
-
-      console.log('newValues', newValues);
 
       const response: ResponseTollExpenses = await _createBill({
         body: newValues,

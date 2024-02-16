@@ -107,7 +107,7 @@ const Bills = () => {
   const handleModal = () => {
     handleOpenModal({
       fullWidth: true,
-      maxWidth: 'sm',
+      maxWidth: 'md',
       title: (
         <HeaderTitleModal
           handleToggleModal={handleToggleModal}
