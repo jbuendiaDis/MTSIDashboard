@@ -228,7 +228,7 @@ const Tolls = () => {
             <TextField {...params} label="Seleccione un estado" />
           )}
         />
-        <Autocomplete
+        {/* <Autocomplete
           value={valueState}
           onChange={(_event: any, newValue: FormatDataState | null) => {
             setValueState(newValue);
@@ -238,7 +238,7 @@ const Tolls = () => {
           renderInput={(params) => (
             <TextField {...params} label="Seleccione un estado" />
           )}
-        />
+        /> */}
       </Stack>
       <Table
         tableHead
