@@ -12,7 +12,6 @@ interface BillFormProps {
 }
 
 const BillForm = ({ handleToggleModal, dataEdit }: BillFormProps) => {
-  // const { values, setValues } = useFormikContext<FormikValues>();
   const { actionsRoutes }: any = useRootProvider();
   const { handleGetTolls, routes } = actionsRoutes;
 

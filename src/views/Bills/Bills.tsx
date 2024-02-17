@@ -8,14 +8,14 @@ import { Column } from '../../models';
 import {
   Add,
   DeleteOutlineOutlined,
-  // ModeEditOutlineOutlined,
-  VisibilityOutlined,
+  ModeEditOutlineOutlined,
+  // VisibilityOutlined,
 } from '@mui/icons-material';
 import { Box, Button } from '@mui/material';
 import { useModal } from '../../components/Modal';
 import { Formik } from 'formik';
 import { TollExpensesData } from './types';
-import { DetailBills } from './DetailBills';
+// import { DetailBills } from './DetailBills';
 import { BillForm } from './BillForm';
 import { HeaderTitleModal } from '../../components/Modal/HeaderTitleModal';
 
@@ -27,7 +27,7 @@ const Bills = () => {
     initialValues,
     billsDataTable,
     handleGetAllBills,
-    // handleGetBill,
+    handleGetBill,
     handleOpenDeleteModal,
     handleSubmit,
     setDataEdit,
@@ -63,24 +63,24 @@ const Bills = () => {
     { id: 'extra', label: 'Extra', align: 'left' },
     { id: 'fitosanitarias', label: 'Fito Sanitarias', align: 'left' },
     { id: 'totalPeajes', label: 'Total Peajes', align: 'left' },
-    { id: 'totalKilometers', label: 'Total Kms', align: 'left' },
+    { id: 'kms', label: 'Total Kms', align: 'left' },
     {
       id: 'actions',
       label: 'Acciones',
       align: 'center',
       actions: [
-        // {
-        //   label: 'Editar',
-        //   icon: <ModeEditOutlineOutlined sx={{ width: 20, height: 20 }} />,
-        //   onClick: (rowData: TollExpensesData['data']) =>
-        //     handleGetBill(rowData._id),
-        // },
         {
-          label: 'Detalle',
-          icon: <VisibilityOutlined sx={{ width: 20, height: 20 }} />,
+          label: 'Editar',
+          icon: <ModeEditOutlineOutlined sx={{ width: 20, height: 20 }} />,
           onClick: (rowData: TollExpensesData['data']) =>
-            hanldeDetailBills(rowData),
+            handleGetBill(rowData._id),
         },
+        // {
+        //   label: 'Detalle',
+        //   icon: <VisibilityOutlined sx={{ width: 20, height: 20 }} />,
+        //   onClick: (rowData: TollExpensesData['data']) =>
+        //     hanldeDetailBills(rowData),
+        // },
         {
           label: 'Eliminar',
           icon: (
@@ -95,20 +95,20 @@ const Bills = () => {
     },
   ];
 
-  const hanldeDetailBills = (data: TollExpensesData['data']) => {
-    console.log('data', data);
-    handleOpenModal({
-      fullWidth: true,
-      maxWidth: 'md',
-      title: (
-        <HeaderTitleModal
-          handleToggleModal={() => handleCloseModal()}
-          title="DETALLE DE GASTOS"
-        />
-      ),
-      body: <DetailBills detailBillsData={data} />,
-    });
-  };
+  // const hanldeDetailBills = (data: TollExpensesData['data']) => {
+  // console.log('data', data);
+  // handleOpenModal({
+  //   fullWidth: true,
+  //   maxWidth: 'md',
+  //   title: (
+  //     <HeaderTitleModal
+  //       handleToggleModal={() => handleCloseModal()}
+  //       title="DETALLE DE GASTOS"
+  //     />
+  //   ),
+  //   body: <DetailBills detailBillsData={data} />,
+  // });
+  // };
 
   const handleModal = () => {
     handleOpenModal({

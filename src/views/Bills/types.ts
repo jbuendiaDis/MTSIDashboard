@@ -17,21 +17,26 @@ export interface FormValues {
   udsUsa: number | string;
   extra: string | number;
 }
-interface Points {
-  casetas: string;
-  costo: number;
-  nombreCaseta: string;
-  _id: string;
-}
+// interface Points {
+//   casetas: string;
+//   costo: number;
+//   nombreCaseta: string;
+//   _id: string;
+// }
 interface Tolls {
-  idgasto: string;
-  kms: number;
-  localidadDestino: string;
-  localidadOrigen: string;
-  puntos: Points[];
-  tipoUnidad: string;
-  totalPeajes: number;
-  __v: number;
+  // idgasto: string;
+  // kms: number;
+  // localidadDestino: string;
+  // localidadOrigen: string;
+  // puntos: Points[];
+  // tipoUnidad: string;
+  // totalPeajes: number;
+  // __v: number;
+  // _id: string;
+
+  casetas: string;
+  nombreCaseta: string;
+  costo: number;
   _id: string;
 }
 export interface FormaterDataTollExpenses {
@@ -84,6 +89,7 @@ export interface DataTollExpenses {
   origen: string;
   peajes: Tolls[];
   extra: number;
+  ferri: number;
   fitosanitarias: number;
   rutaId: string;
   talachas: number;
@@ -91,6 +97,7 @@ export interface DataTollExpenses {
   udsUsa: number;
   urea: number;
   vuelo: number;
+  kms: number;
   __v?: number;
   _id: string;
 }
