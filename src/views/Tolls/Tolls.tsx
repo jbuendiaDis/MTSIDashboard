@@ -5,6 +5,7 @@ import {
   Autocomplete,
   Button,
   Grid,
+  Stack,
   TextField,
   Typography,
 } from '@mui/material';
@@ -32,6 +33,7 @@ import { format, parseISO } from 'date-fns';
 
 const Tolls = () => {
   const [valueState, setValueState] = useState<FormatDataState | null>(null);
+  // const [valueUnitType, setValueUnitType] = useState<any | null>(null);
   const [countriesByStateData, setCountriesByStateData] = useState<
     CountriesData[]
   >([]);
@@ -210,9 +212,11 @@ const Tolls = () => {
             fontSize: '15px',
           }}
         >
-          Elija un estado para visualizar la información de las casetas en la
-          tabla.
+          Elija un tipo de unidad y estado para visualizar la información de las
+          casetas en la tabla.
         </Typography>
+      </Grid>
+      <Stack spacing={2} direction="row">
         <Autocomplete
           value={valueState}
           onChange={(_event: any, newValue: FormatDataState | null) => {
@@ -224,7 +228,18 @@ const Tolls = () => {
             <TextField {...params} label="Seleccione un estado" />
           )}
         />
-      </Grid>
+        <Autocomplete
+          value={valueState}
+          onChange={(_event: any, newValue: FormatDataState | null) => {
+            setValueState(newValue);
+          }}
+          options={states}
+          sx={{ width: '320px' }}
+          renderInput={(params) => (
+            <TextField {...params} label="Seleccione un estado" />
+          )}
+        />
+      </Stack>
       <Table
         tableHead
         showCheckboxes={false}

@@ -18,7 +18,6 @@ import { TollExpensesData } from './types';
 import { DetailBills } from './DetailBills';
 import { BillForm } from './BillForm';
 import { HeaderTitleModal } from '../../components/Modal/HeaderTitleModal';
-import { useRootProvider } from '../../components/RootProvider/hooks/useRootProvider';
 
 const Bills = () => {
   const { handleOpenModal, handleCloseModal }: ModalContextType = useModal();
