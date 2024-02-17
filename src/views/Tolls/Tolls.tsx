@@ -18,6 +18,7 @@ import { useHelpers } from './helpers';
 import {
   Column,
   CountriesData,
+  DataCatalogs,
   FormatDataState,
   LoaderContextType,
 } from '../../models';
@@ -33,7 +34,7 @@ import { format, parseISO } from 'date-fns';
 
 const Tolls = () => {
   const [valueState, setValueState] = useState<FormatDataState | null>(null);
-  // const [valueUnitType, setValueUnitType] = useState<any | null>(null);
+  const [valueUnitType, setValueUnitType] = useState<DataCatalogs | null>(null);
   const [countriesByStateData, setCountriesByStateData] = useState<
     CountriesData[]
   >([]);
@@ -43,10 +44,9 @@ const Tolls = () => {
     useRootProvider();
   const { states, handleGetStates } = actionsState;
   const {
-    countriesByState,
-    handleGetCountrie,
-    handleResetCountriesByStateUnitType,
-    handleResetCountriesByState,
+    countriesByStateUnitTypeOrigin,
+    handleGetCountriesByStateUnitTypeOrigin,
+    handleResetCountriesByStateUnitTypeOrigin,
   } = actionsCountries;
   const { catalogs, handleGetCatalogs, handleGetUnitType, unitTypes } =
     actionsCatalogs;
@@ -59,7 +59,11 @@ const Tolls = () => {
     handleGetToll,
     setDataEdit,
     setDataTemp,
-  } = useHelpers({ valueState, setValueState });
+  } = useHelpers({
+    unitTypes,
+    setValueState,
+    setValueUnitType,
+  });
 
   useEffect(() => {
     handleShowLoader(true);
@@ -68,9 +72,9 @@ const Tolls = () => {
     setDataEdit(null);
     setDataTemp(null);
     setValueState(null);
+    setValueUnitType(null);
     setCountriesByStateData([]);
-    handleResetCountriesByState();
-    handleResetCountriesByStateUnitType();
+    handleResetCountriesByStateUnitTypeOrigin();
   }, []);
 
   useEffect(() => {
@@ -82,40 +86,43 @@ const Tolls = () => {
   }, [dataEdit]);
 
   useEffect(() => {
-    if (valueState) {
-      handleResetCountriesByState();
-      handleGetCountrie(valueState.codigo);
+    if (valueState && valueUnitType) {
+      handleResetCountriesByStateUnitTypeOrigin();
+      handleGetCountriesByStateUnitTypeOrigin(
+        valueState.codigo,
+        valueUnitType.descripcion
+      );
     }
-  }, [valueState]);
+  }, [valueState, valueUnitType]);
 
   useEffect(() => {
-    console.log('ANTES', countriesByState);
-    if (countriesByState?.length > 0) {
-      console.log('RENDER_TOLLS', countriesByState);
-      const formatData: CountriesData[] = countriesByState.map((item: any) => {
-        const costoNumber =
-          typeof item.costo === 'number'
-            ? item.costo
-            : parseFloat(item.costo || '0');
+    if (countriesByStateUnitTypeOrigin?.length > 0) {
+      const formatData: CountriesData[] = countriesByStateUnitTypeOrigin.map(
+        (item: any) => {
+          const costoNumber =
+            typeof item.costo === 'number'
+              ? item.costo
+              : parseFloat(item.costo || '0');
 
-        return {
-          ...item,
-          costo: item.costo
-            ? formatToCurrency(costoNumber)
-            : formatToCurrency(0),
-          fechaCreacion:
-            typeof item.fechaCreacion === 'string'
-              ? format(parseISO(item.fechaCreacion), 'dd/MM/yyyy')
-              : format(item.fechaCreacion, 'dd/MM/yyyy'),
-        };
-      });
-
+          return {
+            ...item,
+            costo: item.costo
+              ? formatToCurrency(costoNumber)
+              : formatToCurrency(0),
+            fechaCreacion:
+              typeof item.fechaCreacion === 'string'
+                ? format(parseISO(item.fechaCreacion), 'dd/MM/yyyy')
+                : format(item.fechaCreacion, 'dd/MM/yyyy'),
+          };
+        }
+      );
       setCountriesByStateData(formatData);
+    } else {
+      setCountriesByStateData([]);
     }
-  }, [countriesByState]);
+  }, [countriesByStateUnitTypeOrigin]);
 
   const columns: Column[] = [
-    { id: 'estadoNombre', label: 'Estado', align: 'left' },
     { id: 'nombre', label: 'Nombre Caseta/Peaje', align: 'left' },
     { id: 'tipoUnidad', label: 'Tipo de Unidad', align: 'left' },
     { id: 'costo', label: 'Costo', align: 'left' },
@@ -218,6 +225,18 @@ const Tolls = () => {
       </Grid>
       <Stack spacing={2} direction="row">
         <Autocomplete
+          value={valueUnitType}
+          onChange={(_event: any, newValue: DataCatalogs | null) => {
+            setValueUnitType(newValue);
+          }}
+          getOptionLabel={(option: any) => option.descripcion}
+          options={unitTypes}
+          sx={{ width: '320px' }}
+          renderInput={(params) => (
+            <TextField {...params} label="Seleccione un estado" />
+          )}
+        />
+        <Autocomplete
           value={valueState}
           onChange={(_event: any, newValue: FormatDataState | null) => {
             setValueState(newValue);
@@ -228,17 +247,6 @@ const Tolls = () => {
             <TextField {...params} label="Seleccione un estado" />
           )}
         />
-        {/* <Autocomplete
-          value={valueState}
-          onChange={(_event: any, newValue: FormatDataState | null) => {
-            setValueState(newValue);
-          }}
-          options={states}
-          sx={{ width: '320px' }}
-          renderInput={(params) => (
-            <TextField {...params} label="Seleccione un estado" />
-          )}
-        /> */}
       </Stack>
       <Table
         tableHead

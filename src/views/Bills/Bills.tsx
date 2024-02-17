@@ -55,6 +55,13 @@ const Bills = () => {
     { id: 'pasajeDestino', label: 'Pasaje Destino', align: 'left' },
     { id: 'comidas', label: 'Comidas', align: 'left' },
     { id: 'hoteles', label: 'Hoteles', align: 'left' },
+    { id: 'taxi', label: 'Taxi', align: 'left' },
+    { id: 'vuelo', label: 'Vuelo', align: 'left' },
+    { id: 'udsUsa', label: 'UDS/USA', align: 'left' },
+    { id: 'urea', label: 'Urea', align: 'left' },
+    { id: 'talachas', label: 'Talachas', align: 'left' },
+    { id: 'extra', label: 'Extra', align: 'left' },
+    { id: 'fitosanitarias', label: 'Fito Sanitarias', align: 'left' },
     { id: 'totalPeajes', label: 'Total Peajes', align: 'left' },
     { id: 'totalKilometers', label: 'Total Kms', align: 'left' },
     {

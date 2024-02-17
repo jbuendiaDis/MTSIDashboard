@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from 'react';
 import { useApi } from '../../hooks/useApi';
-import { FormatDataState, Response } from '../../models';
+import { DataCatalogs, FormatDataState, Response } from '../../models';
 import { DataToll, FormValues, ResponseTolls } from './types';
 import * as Yup from 'yup';
 import { useModalConfirmation } from '../../hooks/useModalConfirmation';
@@ -9,20 +9,24 @@ import { useRootProvider } from '../../components/RootProvider/hooks/useRootProv
 import { get } from 'lodash';
 
 interface PropsHelpers {
-  valueState: FormatDataState | null;
-  setValueState: (value: null) => void;
+  setValueState: (value: null | FormatDataState) => void;
+  setValueUnitType: (value: null | DataCatalogs) => void;
+  unitTypes: DataCatalogs[];
 }
 
-export const useHelpers = ({ valueState, setValueState }: PropsHelpers) => {
+export const useHelpers = ({
+  unitTypes,
+  setValueState,
+  setValueUnitType,
+}: PropsHelpers) => {
   const [dataEdit, setDataEdit] = useState<FormValues | null>(null);
   const [dataTemp, setDataTemp] = useState<any | null>(null);
   const { actionsCountries, actionsState }: any = useRootProvider();
   const {
-    handleGetAllCountries,
-    handleGetCountrie,
     countriesByStateUnitType,
     handleGetCountriesByStateUnitType,
-    handleResetCountriesByState,
+    handleGetCountriesByStateUnitTypeOrigin,
+    handleResetCountriesByStateUnitTypeOrigin,
   } = actionsCountries;
   const { states } = actionsState;
   const { modalDelete, modalSuccess, modalInformation } =
@@ -86,15 +90,32 @@ export const useHelpers = ({ valueState, setValueState }: PropsHelpers) => {
 
   const handleDeleteToll = async (id: string): Promise<boolean> => {
     try {
-      const response: ResponseTolls = await _delteCountrie({
+      const { payload, response }: ResponseTolls = await _delteCountrie({
         urlParam: id,
       });
-      const code: Response['code'] = response.response.code;
-      const message: Response['message'] = response.response.message;
+      const code: Response['code'] = response.code;
+      const message: Response['message'] = response.message;
+      const dataResponse: DataToll | DataToll[] = payload.data;
+
+      console.log('??', dataResponse);
+
+      console.log('RES', response);
 
       if (code === 200) {
         modalSuccess({ message });
-        handleGetAllCountries();
+        if (Array.isArray(dataResponse)) {
+          dataResponse.forEach((dataToll: DataToll) => {
+            handleGetCountriesByStateUnitTypeOrigin(
+              dataToll.estado,
+              dataToll.tipoUnidad
+            );
+          });
+        } else {
+          handleGetCountriesByStateUnitTypeOrigin(
+            dataResponse.estado,
+            dataResponse.tipoUnidad
+          );
+        }
       } else {
         modalInformation({ message });
       }
@@ -115,6 +136,7 @@ export const useHelpers = ({ valueState, setValueState }: PropsHelpers) => {
       const codeResponse: Response['code'] = response.code;
 
       if (codeResponse === 200) {
+        console.log('dataResponse', dataResponse);
         handleGetCountriesByStateUnitType(
           dataResponse.estado,
           dataResponse.tipoUnidad
@@ -154,6 +176,13 @@ export const useHelpers = ({ valueState, setValueState }: PropsHelpers) => {
         estado: values.state?.codigo,
       };
 
+      const filterDataUnitType: DataCatalogs | undefined = unitTypes?.find(
+        (item: any) => item.descripcion === values.unitType
+      );
+
+      setValueState(values.state);
+      setValueUnitType(filterDataUnitType ? filterDataUnitType : null);
+
       if (dataEdit) {
         const response: ResponseTolls = await _updateCountrie({
           urlParam: values._id,
@@ -167,26 +196,29 @@ export const useHelpers = ({ valueState, setValueState }: PropsHelpers) => {
         );
         if (code === 200) {
           modalSuccess({ message });
-          handleGetCountrie(valueState?.codigo);
+          handleGetCountriesByStateUnitTypeOrigin(
+            newValues.estado,
+            newValues.tipoUnidad
+          );
         } else {
           modalInformation({ message });
         }
       } else {
-        setValueState(null);
         const response: ResponseTolls = await _createCountrie({
           body: newValues,
         });
-
         const code: Response['code'] = get(response, 'response.code');
         const message: Response['message'] = get(
           response,
           'response.message',
           ''
         );
-
         if (code === 200) {
-          handleResetCountriesByState();
-          handleGetCountrie(newValues.estado);
+          handleResetCountriesByStateUnitTypeOrigin();
+          handleGetCountriesByStateUnitTypeOrigin(
+            newValues.estado,
+            newValues.tipoUnidad
+          );
           modalSuccess({ message });
         } else {
           modalInformation({ message });

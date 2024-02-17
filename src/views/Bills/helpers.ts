@@ -110,6 +110,27 @@ export const useHelpers = () => {
           const hotels = item.hoteles
             ? formatToCurrency(item.hoteles)
             : formatToCurrency(0);
+          const taxi = item.taxi
+            ? formatToCurrency(item.taxi)
+            : formatToCurrency(0);
+          const flight = item.vuelo
+            ? formatToCurrency(item.vuelo)
+            : formatToCurrency(0);
+          const udsUsa = item.udsUsa
+            ? formatToCurrency(item.udsUsa)
+            : formatToCurrency(0);
+          const urea = item.urea
+            ? formatToCurrency(item.urea)
+            : formatToCurrency(0);
+          const talachas = item.talachas
+            ? formatToCurrency(item.talachas)
+            : formatToCurrency(0);
+          const extra = item.extra
+            ? formatToCurrency(item.extra)
+            : formatToCurrency(0);
+          const phytoSanitary = item.fitosanitarias
+            ? formatToCurrency(item.fitosanitarias)
+            : formatToCurrency(0);
           const originPassage = item.pasajeOrigen
             ? formatToCurrency(item.pasajeOrigen)
             : formatToCurrency(0);
@@ -131,6 +152,13 @@ export const useHelpers = () => {
             ...item,
             comidas: foods,
             hoteles: hotels,
+            taxi: taxi,
+            vuelo: flight,
+            fitosanitarias: phytoSanitary,
+            udsUsa: udsUsa,
+            urea: urea,
+            talachas: talachas,
+            extra: extra,
             pasajeOrigen: originPassage,
             pasajeDestino: destinyPassage,
             totalKilometers: `${kilometers} kms`,

@@ -26,7 +26,7 @@ export interface DataToll {
   _id: string;
 }
 export interface PayloadTolls {
-  data: DataToll[];
+  data: DataToll[] | DataToll;
 }
 export interface ResponseTolls {
   response: Response;

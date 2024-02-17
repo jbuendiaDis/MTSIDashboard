@@ -15,7 +15,7 @@ export interface FormValues {
   phytoSanitary: number | string;
   urea: number | string;
   udsUsa: number | string;
-  extra: string | number
+  extra: string | number;
 }
 interface Points {
   casetas: string;
@@ -83,6 +83,14 @@ export interface DataTollExpenses {
   localidadOrigen: string;
   origen: string;
   peajes: Tolls[];
+  extra: number;
+  fitosanitarias: number;
+  rutaId: string;
+  talachas: number;
+  taxi: number;
+  udsUsa: number;
+  urea: number;
+  vuelo: number;
   __v?: number;
   _id: string;
 }
