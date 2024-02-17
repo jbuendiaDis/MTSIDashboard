@@ -1,8 +1,8 @@
 import { Divider, Grid, Stack, Typography } from '@mui/material';
-import { MoneyOffOutlined } from '@mui/icons-material';
+// import { MoneyOffOutlined } from '@mui/icons-material';
 import { TollExpensesData } from './types';
 import { BillsStyles } from './BillsStyles';
-import { formatToCurrency } from '../../utils/amountFormater';
+// import { formatToCurrency } from '../../utils/amountFormater';
 
 interface DetailBillsProps {
   detailBillsData: TollExpensesData['data'];
@@ -43,7 +43,7 @@ const DetailBills = ({ detailBillsData }: DetailBillsProps) => {
         </Grid>
       </Grid>
       <Divider sx={{ mt: 2, mb: 2 }} />
-      {detailBillsData.peajes.length > 0 ? (
+      {/* {detailBillsData.peajes.length > 0 ? (
         detailBillsData.peajes.map((peaje) => (
           <>
             <Grid container key={peaje._id}>
@@ -136,7 +136,7 @@ const DetailBills = ({ detailBillsData }: DetailBillsProps) => {
             No hay información por mostrar
           </Typography>
         </Grid>
-      )}
+      )} */}
     </>
   );
 };
