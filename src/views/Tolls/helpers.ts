@@ -23,8 +23,7 @@ export const useHelpers = ({
   const [dataTemp, setDataTemp] = useState<any | null>(null);
   const { actionsCountries, actionsState }: any = useRootProvider();
   const {
-    countriesByStateUnitType,
-    handleGetCountriesByStateUnitType,
+    countriesByStateUnitTypeOrigin,
     handleGetCountriesByStateUnitTypeOrigin,
     handleResetCountriesByStateUnitTypeOrigin,
   } = actionsCountries;
@@ -55,12 +54,12 @@ export const useHelpers = ({
   });
 
   useEffect(() => {
-    if (dataTemp !== null && countriesByStateUnitType?.length > 0) {
+    if (dataTemp !== null && countriesByStateUnitTypeOrigin?.length > 0) {
       const filterState = states.find(
         (item: any) => item.codigo === dataTemp.estado
       );
 
-      const filterCountrie = countriesByStateUnitType.find(
+      const filterCountrie = countriesByStateUnitTypeOrigin.find(
         (item: any) => item.codigo === dataTemp.codigo
       );
 
@@ -76,7 +75,7 @@ export const useHelpers = ({
       setDataEdit(newDataEdit);
       setDataTemp(null);
     }
-  }, [dataTemp, countriesByStateUnitType]);
+  }, [dataTemp, countriesByStateUnitTypeOrigin]);
 
   const handleOpenModalDelete = (data: DataToll): void => {
     const message: string = '¿Seguro que desea eliminar este peaje:';
@@ -96,10 +95,6 @@ export const useHelpers = ({
       const code: Response['code'] = response.code;
       const message: Response['message'] = response.message;
       const dataResponse: DataToll | DataToll[] = payload.data;
-
-      console.log('??', dataResponse);
-
-      console.log('RES', response);
 
       if (code === 200) {
         modalSuccess({ message });
@@ -136,8 +131,7 @@ export const useHelpers = ({
       const codeResponse: Response['code'] = response.code;
 
       if (codeResponse === 200) {
-        console.log('dataResponse', dataResponse);
-        handleGetCountriesByStateUnitType(
+        handleGetCountriesByStateUnitTypeOrigin(
           dataResponse.estado,
           dataResponse.tipoUnidad
         );
