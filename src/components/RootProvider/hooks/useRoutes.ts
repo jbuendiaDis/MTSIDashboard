@@ -14,10 +14,10 @@ export const useRoutes = ({ rootState, rootDispatch }: any) => {
     try {
       const { payload, response }: ResponseTolls = await _getTolls();
       const code: Response['code'] = response.code;
-      const dataResponse: DataToll[] = payload.data;
+      const dataResponse: DataToll[] | DataToll = payload.data;
 
       if (code === 200) {
-        const payload: DataToll[] = dataResponse;
+        const payload: DataToll[] | DataToll = dataResponse;
         rootDispatch({ type: 'routes', payload });
       }
       return true;
