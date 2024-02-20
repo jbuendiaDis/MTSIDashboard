@@ -13,10 +13,11 @@ interface BillFormProps {
 
 const BillForm = ({ handleToggleModal, dataEdit }: BillFormProps) => {
   const { actionsRoutes }: any = useRootProvider();
-  const { handleGetTolls, routes } = actionsRoutes;
+  const { handleGetTollsWithoutChgarges, routesWithoutExpenses } =
+    actionsRoutes;
 
   useEffect(() => {
-    handleGetTolls();
+    handleGetTollsWithoutChgarges();
   }, []);
 
   return (
@@ -25,7 +26,7 @@ const BillForm = ({ handleToggleModal, dataEdit }: BillFormProps) => {
         <Grid item xs={12}>
           <AutoCompleteComponent
             label="Seleccione una ruta"
-            options={routes}
+            options={routesWithoutExpenses}
             name="routes"
             labelField="nombreOrigen-nombreDestino"
           />
@@ -89,9 +90,9 @@ const BillForm = ({ handleToggleModal, dataEdit }: BillFormProps) => {
         <Grid item xs={12} sm={6} md={4}>
           <Input
             fullWidth
-            label="Ferri"
+            label="Ferry"
             placeholder="0.00"
-            name="ferri"
+            name="ferry"
             type="number"
             InputProps={{
               startAdornment: (

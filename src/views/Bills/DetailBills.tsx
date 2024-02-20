@@ -10,7 +10,7 @@ interface DetailBillsProps {
 
 const DetailBills = ({ detailBillsData }: DetailBillsProps) => {
   const style = BillsStyles;
-  console.log('DETAIL', detailBillsData);
+  // console.log('DETAIL', detailBillsData);
 
   return (
     <>

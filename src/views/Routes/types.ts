@@ -75,3 +75,25 @@ export interface FormValues {
   nombreCaseta?: null;
   _id?: string;
 }
+
+export interface DataRoutesWithoutExpenses {
+  _id: string;
+  localidadOrigen: string;
+  localidadDestino: string;
+  kms: number;
+  tipoUnidad: string;
+  puntos: Puntos[];
+  totalPeajes: number;
+  __v: number;
+  nombreOrigen: string;
+  nombreDestino: string;
+}
+
+export interface PayloadRoutesWithoutExpenses {
+  data: DataRoutesWithoutExpenses[];
+}
+
+export interface ResponseRoutesWithoutExpenses {
+  response: Response;
+  payload: PayloadRoutesWithoutExpenses;
+}

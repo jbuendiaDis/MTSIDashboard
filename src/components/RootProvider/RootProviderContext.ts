@@ -14,6 +14,7 @@ export interface Values {
   catalogs: [];
   unitTypes: [];
   routes: [];
+  routesWithoutExpenses: [];
 }
 
 export const initialState: Values = {
@@ -30,6 +31,7 @@ export const initialState: Values = {
   catalogs: [],
   unitTypes: [],
   routes: [],
+  routesWithoutExpenses: [],
 };
 
 export const RootProviderContext: Context<any> | any = createContext(null);

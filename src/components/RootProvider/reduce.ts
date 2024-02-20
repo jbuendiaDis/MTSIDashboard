@@ -73,6 +73,11 @@ export const reducer = (state: Values, action: ActionValues) => {
         ...state,
         routes: _.get(action, ['payload'], []),
       };
+    case 'routesWithoutExpenses':
+      return {
+        ...state,
+        routesWithoutExpenses: _.get(action, ['payload'], []),
+      };
     case 'resetCountriesByState':
       return {
         ...state,

@@ -4,7 +4,6 @@ import { useApi } from '../../hooks/useApi';
 import { LoaderContextType, Response } from '../../models';
 import {
   DataTollExpenses,
-  // DataTollExpenses,
   FormValues,
   PayloadTollExpenses,
   ResponseTollExpenses,
@@ -63,15 +62,15 @@ export const useHelpers = () => {
       const newDataEdit: FormValues = {
         comidas: dataTemp.comidas,
         extra: dataTemp.extra,
-        ferri: 0,
+        ferry: dataTemp.ferry,
         phytoSanitary: dataTemp.fitosanitarias,
         hoteles: dataTemp.hoteles,
-        stayPayment: 0,
+        stayPayment: dataTemp.pagoEstadia,
         pasajeDestino: dataTemp.pasajeDestino,
         pasajeOrigen: dataTemp.pasajeOrigen,
-        portRelease: 0, //Liberacion de puerto
+        portRelease: dataTemp.liberacionPuerto,
         routes: filterRoute,
-        transferInsurance: 0, //SEguro de traslado
+        transferInsurance: dataTemp.seguroTraslado,
         talachas: dataTemp.talachas,
         taxi: dataTemp.taxi,
         udsUsa: dataTemp.udsUsa,
@@ -101,6 +100,9 @@ export const useHelpers = () => {
           const taxi = item.taxi
             ? formatToCurrency(item.taxi)
             : formatToCurrency(0);
+          const ferry = item.ferry
+            ? formatToCurrency(item.ferry)
+            : formatToCurrency(0);
           const flight = item.vuelo
             ? formatToCurrency(item.vuelo)
             : formatToCurrency(0);
@@ -115,6 +117,15 @@ export const useHelpers = () => {
             : formatToCurrency(0);
           const extra = item.extra
             ? formatToCurrency(item.extra)
+            : formatToCurrency(0);
+          const transferInsurance = item.seguroTraslado
+            ? formatToCurrency(item.seguroTraslado)
+            : formatToCurrency(0);
+          const stayPayment = item.pagoEstadia
+            ? formatToCurrency(item.pagoEstadia)
+            : formatToCurrency(0);
+          const portRelease = item.liberacionPuerto
+            ? formatToCurrency(item.liberacionPuerto)
             : formatToCurrency(0);
           const phytoSanitary = item.fitosanitarias
             ? formatToCurrency(item.fitosanitarias)
@@ -136,16 +147,20 @@ export const useHelpers = () => {
             comidas: foods,
             hoteles: hotels,
             taxi: taxi,
+            ferry: ferry,
             vuelo: flight,
             fitosanitarias: phytoSanitary,
             udsUsa: udsUsa,
             urea: urea,
             talachas: talachas,
+            liberacionPuerto: portRelease,
             extra: extra,
             pasajeOrigen: originPassage,
             pasajeDestino: destinyPassage,
             kms: kilometers,
             totalPeajes: totalPeajes,
+            seguroTraslado: transferInsurance,
+            pagoEstadia: stayPayment,
           };
         });
 
@@ -217,7 +232,7 @@ export const useHelpers = () => {
     hoteles: Yup.number().nullable().positive(positiveNumber),
     pasajeDestino: Yup.number().nullable().positive(positiveNumber),
     pasajeOrigen: Yup.number().nullable().positive(positiveNumber),
-    ferri: Yup.number().nullable().positive(positiveNumber),
+    ferry: Yup.number().nullable().positive(positiveNumber),
     flight: Yup.number().nullable().positive(positiveNumber),
     stayPayment: Yup.number().nullable().positive(positiveNumber),
     transferInsurance: Yup.number().nullable().positive(positiveNumber),
@@ -236,12 +251,12 @@ export const useHelpers = () => {
     hoteles: dataEdit ? dataEdit?.hoteles : '',
     pasajeDestino: dataEdit ? dataEdit?.pasajeDestino : '',
     pasajeOrigen: dataEdit ? dataEdit?.pasajeOrigen : '',
-    ferri: dataEdit ? dataEdit?.ferri : '',
+    ferry: dataEdit ? dataEdit?.ferry : '',
     flight: dataEdit ? dataEdit?.flight : '',
-    stayPayment: '',
-    transferInsurance: '',
+    stayPayment: dataEdit ? dataEdit.stayPayment : '',
+    transferInsurance: dataEdit ? dataEdit?.transferInsurance : '',
     taxi: dataEdit ? dataEdit?.taxi : '',
-    portRelease: '',
+    portRelease: dataEdit ? dataEdit.portRelease : '',
     talachas: dataEdit ? dataEdit?.talachas : '',
     phytoSanitary: dataEdit ? dataEdit?.phytoSanitary : '',
     urea: dataEdit ? dataEdit?.urea : '',
@@ -258,14 +273,14 @@ export const useHelpers = () => {
         pasajeDestino: values?.pasajeDestino ? values?.pasajeDestino : 0,
         comidas: values?.comidas ? values?.comidas : 0,
         hoteles: values?.hoteles ? values?.hoteles : 0,
-        ferri: values?.ferri ? values?.ferri : 0,
+        ferry: values?.ferry ? values?.ferry : 0,
         vuelo: values?.flight ? values?.flight : 0,
         pagoEstadia: values?.stayPayment ? values?.stayPayment : 0,
         seguroTraslado: values?.transferInsurance
           ? values?.transferInsurance
           : 0,
         taxi: values?.taxi ? values?.taxi : 0,
-        puerto: values?.portRelease ? values?.portRelease : 0,
+        liberacionPuerto: values?.portRelease ? values?.portRelease : 0,
         talachas: values?.talachas ? values?.talachas : 0,
         fitosanitarias: values?.phytoSanitary ? values?.phytoSanitary : 0,
         urea: values?.urea ? values?.urea : 0,

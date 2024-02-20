@@ -9,13 +9,11 @@ import {
   Add,
   DeleteOutlineOutlined,
   ModeEditOutlineOutlined,
-  // VisibilityOutlined,
 } from '@mui/icons-material';
 import { Box, Button } from '@mui/material';
 import { useModal } from '../../components/Modal';
 import { Formik } from 'formik';
 import { TollExpensesData } from './types';
-// import { DetailBills } from './DetailBills';
 import { BillForm } from './BillForm';
 import { HeaderTitleModal } from '../../components/Modal/HeaderTitleModal';
 
@@ -55,8 +53,12 @@ const Bills = () => {
     { id: 'pasajeDestino', label: 'Pasaje Destino', align: 'left' },
     { id: 'comidas', label: 'Comidas', align: 'left' },
     { id: 'hoteles', label: 'Hoteles', align: 'left' },
+    { id: 'ferry', label: 'Ferry', align: 'left' },
     { id: 'taxi', label: 'Taxi', align: 'left' },
     { id: 'vuelo', label: 'Vuelo', align: 'left' },
+    { id: 'seguroTraslado', label: 'Seguro de Traslado', align: 'left' },
+    { id: 'liberacionPuerto', label: 'Liberacion de Puerto', align: 'left' },
+    { id: 'pagoEstadia', label: 'Pago de Estadia', align: 'left' },
     { id: 'udsUsa', label: 'UDS/USA', align: 'left' },
     { id: 'urea', label: 'Urea', align: 'left' },
     { id: 'talachas', label: 'Talachas', align: 'left' },
@@ -75,12 +77,6 @@ const Bills = () => {
           onClick: (rowData: TollExpensesData['data']) =>
             handleGetBill(rowData._id),
         },
-        // {
-        //   label: 'Detalle',
-        //   icon: <VisibilityOutlined sx={{ width: 20, height: 20 }} />,
-        //   onClick: (rowData: TollExpensesData['data']) =>
-        //     hanldeDetailBills(rowData),
-        // },
         {
           label: 'Eliminar',
           icon: (
@@ -94,21 +90,6 @@ const Bills = () => {
       ],
     },
   ];
-
-  // const hanldeDetailBills = (data: TollExpensesData['data']) => {
-  // console.log('data', data);
-  // handleOpenModal({
-  //   fullWidth: true,
-  //   maxWidth: 'md',
-  //   title: (
-  //     <HeaderTitleModal
-  //       handleToggleModal={() => handleCloseModal()}
-  //       title="DETALLE DE GASTOS"
-  //     />
-  //   ),
-  //   body: <DetailBills detailBillsData={data} />,
-  // });
-  // };
 
   const handleModal = () => {
     handleOpenModal({

@@ -5,7 +5,7 @@ export interface FormValues {
   hoteles: number | string;
   pasajeOrigen: number | string;
   pasajeDestino: number | string;
-  ferri: number | string;
+  ferry: number | string;
   flight: number | string;
   stayPayment: number | string;
   transferInsurance: number | string; //SEguro de traslado
@@ -17,23 +17,8 @@ export interface FormValues {
   udsUsa: number | string;
   extra: string | number;
 }
-// interface Points {
-//   casetas: string;
-//   costo: number;
-//   nombreCaseta: string;
-//   _id: string;
-// }
-interface Tolls {
-  // idgasto: string;
-  // kms: number;
-  // localidadDestino: string;
-  // localidadOrigen: string;
-  // puntos: Points[];
-  // tipoUnidad: string;
-  // totalPeajes: number;
-  // __v: number;
-  // _id: string;
 
+interface Tolls {
   casetas: string;
   nombreCaseta: string;
   costo: number;
@@ -80,16 +65,19 @@ export interface DataTollExpenses {
   hoteles: number;
   pasajeOrigen: number;
   pasajeDestino: number;
+  pagoEstadia: number;
   destino: string;
   estadoDestino: string;
   estadoOrigen: string;
   idCliente: string;
   localidadDestino: string;
   localidadOrigen: string;
+  seguroTraslado: number;
+  liberacionPuerto: number;
   origen: string;
   peajes: Tolls[];
   extra: number;
-  ferri: number;
+  ferry: number;
   fitosanitarias: number;
   rutaId: string;
   talachas: number;
