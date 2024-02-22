@@ -165,9 +165,9 @@ const DetailQuote = () => {
     { id: 'admon', label: 'Admon', align: 'left' },
     { id: 'total', label: 'Total', align: 'left' },
     { id: 'inflacion', label: 'Inflación', align: 'left' },
-    { id: 'costo', label: 'Costo', align: 'left' },
     { id: 'financiamiento', label: 'Financiamiento', align: 'left' },
     { id: 'ganancia', label: 'Ganancia', align: 'left' },
+    { id: 'costo', label: 'Costo', align: 'left' },
   ];
 
   const validationSchema = Yup.object().shape({
