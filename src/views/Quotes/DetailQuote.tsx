@@ -47,6 +47,11 @@ const DetailQuote = () => {
     method: 'get',
   });
 
+  const _cancelQuoteFolio = useApi({
+    endpoint: '/quotes01/cancel',
+    method: 'get',
+  });
+
   const _sendQuote = useApi({
     endpoint: '/v1/solicitud/details/send',
     method: 'post',
@@ -128,7 +133,7 @@ const DetailQuote = () => {
 
       if (code === 200) {
         handleCloseModal();
-        modalSuccess({ message });
+        modalSuccess({ message, callbackConfirm: () => navigation('/quotes') });
       } else modalInformation({ message });
       return true;
     } catch (error) {
@@ -168,6 +173,8 @@ const DetailQuote = () => {
     { id: 'financiamiento', label: 'Financiamiento', align: 'left' },
     { id: 'ganancia', label: 'Ganancia', align: 'left' },
     { id: 'costo', label: 'Costo', align: 'left' },
+    { id: 'trasladoTipo', label: 'Tipo de traslado', align: 'left' },
+    { id: 'dimensiones', label: 'Dimensiones', align: 'left' },
   ];
 
   const validationSchema = Yup.object().shape({
@@ -255,6 +262,29 @@ const DetailQuote = () => {
     });
   };
 
+  const handleCancelQuote = async (): Promise<boolean> => {
+    try {
+      const response = await _cancelQuoteFolio({
+        urlParam: isFolio,
+      });
+      const code: Response['code'] = get(response, 'response.code', 200);
+      const message: Response['message'] = get(
+        response,
+        'response.message',
+        ''
+      );
+
+      if (code === 200) {
+        modalSuccess({ message, callbackConfirm: () => navigation('/quotes') });
+      } else {
+        modalInformation({ message });
+      }
+      return true;
+    } catch (error) {
+      return false;
+    }
+  };
+
   return (
     <>
       <Container maxWidth="xl" sx={{ marginBottom: 2 }}>
@@ -292,6 +322,13 @@ const DetailQuote = () => {
         sx={{ mt: 5, display: 'flex', justifyContent: 'end' }}
       >
         <Stack spacing={3} direction="row">
+          <Button
+            variant="outlined"
+            color="inherit"
+            onClick={() => handleCancelQuote()}
+          >
+            Cancelar Cotización
+          </Button>
           <Button variant="contained" onClick={() => handleConfigMail()}>
             Enviar Cotización
           </Button>

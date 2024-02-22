@@ -88,6 +88,8 @@ interface DataDetailQuote {
   udsUsa: number;
   fitosanitarias: number;
   otros?: number;
+  dimensiones: string;
+  trasladoTipo: string;
 }
 
 export interface FormatDataDetailQuote {
@@ -123,6 +125,8 @@ export interface FormatDataDetailQuote {
   udsUsa: string;
   fitosanitarias: string;
   otros: string;
+  dimensiones: string;
+  trasladoTipo: string;
 }
 
 export interface PayloadDetailQuote {
