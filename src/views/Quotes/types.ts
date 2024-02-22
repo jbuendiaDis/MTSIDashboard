@@ -59,6 +59,7 @@ interface DataDetailQuote {
   folio: number;
   origen: string;
   destino: string;
+  hotel: number;
   kms: number;
   rendimiento: number;
   litros: number;
@@ -77,12 +78,22 @@ interface DataDetailQuote {
   financiamiento: number;
   ganancia: number;
   costo: number;
+  extra: number;
+  ferry: number;
+  vuelo: number;
+  talachas: number;
+  liberacionPuerto: number;
+  taxi: number;
+  urea: number;
+  udsUsa: number;
+  fitosanitarias: number;
 }
 
 export interface FormatDataDetailQuote {
   id: string;
   origen: string;
   destino: string;
+  hotel: string;
   kms: string;
   rendimiento: string;
   litros: string;
@@ -101,6 +112,15 @@ export interface FormatDataDetailQuote {
   financiamiento: string;
   ganancia: string;
   costo: string;
+  extra: string;
+  ferry: string;
+  vuelo: string;
+  talachas: string;
+  liberacionPuerto: string;
+  taxi: string;
+  urea: string;
+  udsUsa: string;
+  fitosanitarias: string;
 }
 
 export interface PayloadDetailQuote {
