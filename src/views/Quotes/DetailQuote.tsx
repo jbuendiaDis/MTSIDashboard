@@ -49,7 +49,7 @@ const DetailQuote = () => {
 
   const _cancelQuoteFolio = useApi({
     endpoint: '/quotes01/cancel',
-    method: 'get',
+    method: 'post',
   });
 
   const _sendQuote = useApi({
