@@ -190,7 +190,7 @@ const DetailQuote = () => {
   const handleConfigMail = () => {
     handleOpenModal({
       fullWidth: true,
-      maxWidth: 'md',
+      maxWidth: 'xl',
       title: (
         <HeaderTitleModal
           title="Configurar Email"
@@ -292,15 +292,8 @@ const DetailQuote = () => {
         sx={{ mt: 5, display: 'flex', justifyContent: 'end' }}
       >
         <Stack spacing={3} direction="row">
-          <Button
-            color="inherit"
-            variant="outlined"
-            onClick={() => handleConfigMail()}
-          >
-            Configurar email
-          </Button>
-          <Button variant="contained" onClick={() => handleCreateQuote()}>
-            Generar Cotización
+          <Button variant="contained" onClick={() => handleConfigMail()}>
+            Enviar Cotización
           </Button>
         </Stack>
       </Container>
