@@ -10,7 +10,7 @@ import './global.css';
 import { RootProvider } from './components/RootProvider/RootProvider.tsx';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
-  <React.StrictMode>
+  // <React.StrictMode>
     <ThemeProvider>
       <ModalProvider>
         <LoaderProvider>
@@ -24,5 +24,5 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
         </LoaderProvider>
       </ModalProvider>
     </ThemeProvider>
-  </React.StrictMode>
+  // </React.StrictMode>
 );

@@ -26,7 +26,7 @@ export const useHelpers = () => {
   const [billsDataTable, setBillsDataTable] = useState<any[]>([]);
   const [dataEdit, setDataEdit] = useState<any | null>(null);
   const [dataTemp, setDataTemp] = useState<DataTollExpenses | null>(null);
-  const positiveNumber: string = 'Solo se permiten cantidades positivas.';
+  const positiveNumber: string = 'La cantidad debe ser igual o mayor a 0.';
 
   const _getAllTollExpenses = useApi({
     endpoint: '/gastosPeajes',
@@ -228,21 +228,21 @@ export const useHelpers = () => {
 
   const validationSchema = Yup.object().shape({
     routes: Yup.object().nullable().required('Este campo es obligatorio'),
-    comidas: Yup.number().nullable().positive(positiveNumber),
-    hoteles: Yup.number().nullable().positive(positiveNumber),
-    pasajeDestino: Yup.number().nullable().positive(positiveNumber),
-    pasajeOrigen: Yup.number().nullable().positive(positiveNumber),
-    ferry: Yup.number().nullable().positive(positiveNumber),
-    flight: Yup.number().nullable().positive(positiveNumber),
-    stayPayment: Yup.number().nullable().positive(positiveNumber),
-    transferInsurance: Yup.number().nullable().positive(positiveNumber),
-    taxi: Yup.number().nullable().positive(positiveNumber),
-    portRelease: Yup.number().nullable().positive(positiveNumber),
-    talachas: Yup.number().nullable().positive(positiveNumber),
-    phytoSanitary: Yup.number().nullable().positive(positiveNumber),
-    urea: Yup.number().nullable().positive(positiveNumber),
-    UDSUSA: Yup.number().nullable().positive(positiveNumber),
-    extra: Yup.number().nullable().positive(positiveNumber),
+    comidas: Yup.number().nullable().min(0, positiveNumber),
+    hoteles: Yup.number().nullable().min(0, positiveNumber),
+    pasajeDestino: Yup.number().nullable().min(0, positiveNumber),
+    pasajeOrigen: Yup.number().nullable().min(0, positiveNumber),
+    ferry: Yup.number().nullable().min(0, positiveNumber),
+    flight: Yup.number().nullable().min(0, positiveNumber),
+    stayPayment: Yup.number().nullable().min(0, positiveNumber),
+    transferInsurance: Yup.number().nullable().min(0, positiveNumber),
+    taxi: Yup.number().nullable().min(0, positiveNumber),
+    portRelease: Yup.number().nullable().min(0, positiveNumber),
+    talachas: Yup.number().nullable().min(0, positiveNumber),
+    phytoSanitary: Yup.number().nullable().min(0, positiveNumber),
+    urea: Yup.number().nullable().min(0, positiveNumber),
+    udsUsa: Yup.number().nullable().min(0, positiveNumber),
+    extra: Yup.number().nullable().min(0, positiveNumber),
   });
 
   const initialValues: FormValues = {
