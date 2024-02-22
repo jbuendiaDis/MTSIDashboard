@@ -87,6 +87,7 @@ interface DataDetailQuote {
   urea: number;
   udsUsa: number;
   fitosanitarias: number;
+  otros?: number;
 }
 
 export interface FormatDataDetailQuote {
@@ -121,6 +122,7 @@ export interface FormatDataDetailQuote {
   urea: string;
   udsUsa: string;
   fitosanitarias: string;
+  otros: string;
 }
 
 export interface PayloadDetailQuote {

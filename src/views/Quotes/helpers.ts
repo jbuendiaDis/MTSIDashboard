@@ -146,13 +146,14 @@ export const useHelpers = ({ setOpen }: HelpersProps) => {
     onSubmit: async (values: FormValues) => {
       try {
         const newValues = {
-          rendimiento: values.rendimiento,
+          rendimiento: values.rendimiento === '' ? 0 : values.rendimiento,
           combustible: values.combustible,
           inflacion: values.inflacion,
           financiamiento: values.financiamiento,
-          otros: values.otros,
-          sucontrato: values.sucontrato,
+          otros: values.otros === '' ? 0 : values.otros,
+          sucontrato: values.sucontrato === '' ? 0 : values.sucontrato,
         };
+
         if (configureData) {
           const response = await _updateConfigureData({
             urlParam: values._id,
