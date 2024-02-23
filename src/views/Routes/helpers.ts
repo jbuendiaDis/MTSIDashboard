@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react';
 import { useApi } from '../../hooks/useApi';
 import { useLoader } from '../../components/Loader';
-import { FormatDataState, LoaderContextType, Response } from '../../models';
+import { LoaderContextType, Response } from '../../models';
 import {
   DataTolls,
   FormValues,
@@ -26,6 +26,9 @@ interface HelpersProps {
 }
 
 export const useHelpers = ({ setOpen }: HelpersProps) => {
+  const [pagoCasetas, setPagoCasetas] = useState<any>(null);
+  const [stateCaseta, setStateCaseta] = useState<any>(null);
+  const [nombreCaseta, setNombreCaseta] = useState<any>(null);
   const [tollsData, setTollsData] = useState<DataTolls[]>([]);
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [dataTemp, setDataTemp] = useState<any | null>(null);
@@ -94,14 +97,12 @@ export const useHelpers = ({ setOpen }: HelpersProps) => {
         countriesByStateUnitTypeDestination.find(
           (item: any) => item.codigo === parseInt(dataTemp.localidadDestino)
         );
-
       const formatDots = get(dataTemp, 'puntos', []).map((item: any) => {
         return {
           ...item,
           costo: formatToCurrency(item.costo),
         };
       });
-
       formik.setValues({
         stateOrigen: filterStateOrigin,
         stateDestino: filterStateDestination,
@@ -111,9 +112,7 @@ export const useHelpers = ({ setOpen }: HelpersProps) => {
         tipoUnidad: dataTemp.tipoUnidad,
         _id: dataTemp._id,
       });
-
       setIsEditing(true);
-      setDataTemp(null);
       setDataDotsTable(formatDots);
       setOpen(true);
     }
@@ -213,19 +212,16 @@ export const useHelpers = ({ setOpen }: HelpersProps) => {
 
   const handleAddDot = () => {
     const newDot: TableDots = {
-      casetas: formik.values.pagoCasetas,
-      nombreCaseta: get(formik.values, 'nombreCaseta.nombre', ''),
-      costo: formatToCurrency(get(formik.values, 'nombreCaseta.costo', 0)),
+      casetas: pagoCasetas,
+      nombreCaseta: get(nombreCaseta, 'nombre', ''),
+      costo: formatToCurrency(get(nombreCaseta, 'costo', 0)),
       _id: dataDotsTable.length + 1,
     };
-    setDataDotsTable((prevDots) => [...prevDots, newDot]);
 
-    formik.setValues({
-      ...formik.values,
-      pagoCasetas: '',
-      stateCaseta: null,
-      nombreCaseta: null,
-    });
+    setDataDotsTable((prevDots) => [...prevDots, newDot]);
+    setPagoCasetas(null);
+    setStateCaseta(null);
+    setNombreCaseta(null);
     handleResetCountriesByStateUnitType();
   };
 
@@ -248,9 +244,6 @@ export const useHelpers = ({ setOpen }: HelpersProps) => {
     stateOrigen: null,
     stateDestino: null,
 
-    pagoCasetas: '',
-    stateCaseta: null,
-    nombreCaseta: null,
     _id: '',
   };
 
@@ -281,7 +274,6 @@ export const useHelpers = ({ setOpen }: HelpersProps) => {
             casetas: item.casetas,
             nombreCaseta: item.nombreCaseta,
             costo: parseCurrencyStringToNumber(item.costo),
-            // _id: item._id.toString(),
           });
         });
 
@@ -289,12 +281,8 @@ export const useHelpers = ({ setOpen }: HelpersProps) => {
           estadoOrigen: values.stateOrigen!.codigo,
           estadoDestino: values.stateDestino!.codigo,
           tipoUnidad: values.tipoUnidad,
-          localidadOrigen: (
-            values.localidadOrigen as FormatDataState
-          ).codigo.toString(),
-          localidadDestino: (
-            values.localidadDestino as FormatDataState
-          ).codigo.toString(),
+          localidadOrigen: values.localidadOrigen?.codigo,
+          localidadDestino: values.localidadDestino?.codigo,
           kms: values.kms,
           puntos: arrayDots,
           totalPeajes: arrayDots.reduce((total, costTotal) => {
@@ -318,6 +306,7 @@ export const useHelpers = ({ setOpen }: HelpersProps) => {
             setOpen(false);
             modalSuccess({ message });
             handleGetTolls();
+            setDataTemp(null);
           } else {
             modalInformation({ message });
           }
@@ -366,11 +355,17 @@ export const useHelpers = ({ setOpen }: HelpersProps) => {
     dataDotsTable,
     isEditing,
     options,
+    pagoCasetas,
+    stateCaseta,
+    nombreCaseta,
     handleOpenModalDelete,
     handleGetToll,
     handleAddDot,
     handleRemoveDot,
     setDataDotsTable,
     setIsEditing,
+    setPagoCasetas,
+    setStateCaseta,
+    setNombreCaseta,
   };
 };

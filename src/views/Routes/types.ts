@@ -62,17 +62,27 @@ export interface ResponseUnidades {
   response: Response;
 }
 
+interface Localidad {
+  _id: string;
+  codigo: number;
+  estado: number;
+  coordenadas: [number, number];
+  nombre: string;
+  tipoUnidad: string;
+  fechaCreacion: string;
+  __v: number;
+  costo: number;
+  fechaActualizacion: string;
+}
+
 export interface FormValues {
   tipoUnidad: string;
-  localidadOrigen: number | null | FormatDataState;
-  localidadDestino: number | null | FormatDataState;
+  localidadOrigen: Localidad | null;
+  localidadDestino: Localidad | null;
   kms: null | string | number;
   stateOrigen: null | FormatDataState;
   stateDestino: null | FormatDataState;
 
-  pagoCasetas?: string;
-  stateCaseta?: null;
-  nombreCaseta?: null;
   _id?: string;
 }
 
