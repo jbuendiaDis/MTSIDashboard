@@ -54,17 +54,17 @@ export const Customers = () => {
   });
 
   const columns: Column[] = [
-    { id: 'calle', label: 'Calle', align: 'left' },
-    { id: 'codigoCliente', label: 'código cliente', align: 'left' },
-    { id: 'colonia', label: 'Colonia', align: 'left' },
-    { id: 'formaPago', label: 'Forma de Pago', align: 'left' },
-    { id: 'metodoPago', label: 'Método de Pago', align: 'left' },
-    { id: 'numeroExterior', label: 'No. Exterior', align: 'left' },
-    { id: 'numeroInterior', label: 'No. Interior', align: 'left' },
-    { id: 'razonSocial', label: 'Razón Social', align: 'left' },
-    { id: 'regimenFiscal', label: 'Regimen Fiscal', align: 'left' },
+    { id: 'codigoCliente', label: 'Código cliente', align: 'left' },
+    { id: 'razonSocial', label: 'Razón social', align: 'left' },
     { id: 'rfc', label: 'RFC', align: 'left' },
+    { id: 'calle', label: 'Calle', align: 'left' },
+    { id: 'colonia', label: 'Colonia', align: 'left' },
+    { id: 'numeroExterior', label: 'No. exterior', align: 'left' },
+    { id: 'numeroInterior', label: 'No. interior', align: 'left' },
     { id: 'telefono', label: 'Teléfono', align: 'left' },
+    { id: 'formaPago', label: 'Forma de pago', align: 'left' },
+    { id: 'metodoPago', label: 'Método de pago', align: 'left' },
+    { id: 'regimenFiscal', label: 'Regimen fiscal', align: 'left' },
     { id: 'usoCFDI', label: 'CFDI', align: 'left' },
     {
       id: 'actions',
