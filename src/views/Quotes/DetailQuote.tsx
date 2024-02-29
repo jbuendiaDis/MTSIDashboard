@@ -144,6 +144,8 @@ const DetailQuote = () => {
   const columns: Column[] = [
     { id: 'origen', label: 'Origen', align: 'left' },
     { id: 'destino', label: 'Destino', align: 'left' },
+    { id: 'dimensiones', label: 'Dimensiones', align: 'left' },
+    { id: 'trasladoTipo', label: 'Tipo de traslado', align: 'left' },
     { id: 'kms', label: 'Kms', align: 'left' },
     { id: 'rendimiento', label: 'Rendimiento', align: 'left' },
     { id: 'litros', label: 'Litros', align: 'left' },
@@ -173,8 +175,6 @@ const DetailQuote = () => {
     { id: 'financiamiento', label: 'Financiamiento', align: 'left' },
     { id: 'ganancia', label: 'Ganancia', align: 'left' },
     { id: 'costo', label: 'Costo', align: 'left' },
-    { id: 'trasladoTipo', label: 'Tipo de traslado', align: 'left' },
-    { id: 'dimensiones', label: 'Dimensiones', align: 'left' },
   ];
 
   const validationSchema = Yup.object().shape({
