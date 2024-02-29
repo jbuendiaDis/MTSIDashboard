@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from 'react';
 import { useLoader } from '../../components/Loader';
 import { LoaderContextType } from '../../models';
@@ -87,6 +86,12 @@ const Users = () => {
     }
   };
 
+  const handleCloseDrawer = () => {
+    setOpenDrawer(!openDrawer);
+    setShowConfirmPassword(false);
+    setShowPassword(false);
+  };
+
   const columns: Column[] = [
     { id: 'name', label: 'Nombre', align: 'left' },
     { id: 'lastname', label: 'Apellido', align: 'left' },
@@ -131,7 +136,11 @@ const Users = () => {
             variant="contained"
             color="inherit"
             sx={{ p: '10px 20px', letterSpacing: '1px' }}
-            onClick={() => setOpenDrawer(true)}
+            onClick={() => {
+              formik.resetForm();
+              setOpenDrawer(true);
+              setIdUserEdit('');
+            }}
             startIcon={<Add />}
           >
             Agregar Usuario
@@ -142,14 +151,7 @@ const Users = () => {
       <Drawer
         open={openDrawer}
         anchor="right"
-        onClose={() => {
-          setOpenDrawer(!openDrawer);
-          formik.resetForm();
-          setShowConfirmPassword(false);
-          setShowPassword(false);
-          setIdUserEdit('');
-          // setValues([]);
-        }}
+        onClose={() => handleCloseDrawer()}
         title={idUserEdit !== '' ? 'Editar Usuario' : 'Crear Usuario'}
       >
         <form onSubmit={formik.handleSubmit}>
@@ -212,6 +214,7 @@ const Users = () => {
                 onBlur={formik.handleBlur}
                 error={formik.touched.email && Boolean(formik.errors.email)}
                 helperText={formik.touched.email && formik.errors.email}
+                disabled={idUserEdit ? true : false}
               />
             </Grid>
             <Grid xs={12} item>
@@ -336,14 +339,7 @@ const Users = () => {
             <Button
               variant="outlined"
               color="inherit"
-              onClick={() => {
-                setOpenDrawer(!openDrawer);
-                formik.resetForm();
-                setShowConfirmPassword(false);
-                setShowPassword(false);
-                setIdUserEdit('');
-                // setValues([]);
-              }}
+              onClick={() => handleCloseDrawer()}
             >
               Cancelar
             </Button>

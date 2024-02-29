@@ -200,9 +200,9 @@ export const useHelpers = ({ setOpenDrawer }: HelpersProps) => {
             body: editValues,
           });
 
-          const message = `El usuario ${response.name} ${response.lastname} se ha editado correctamente`;
-
+          
           if (response) {
+            const message = `El usuario ${response.name} ${response.lastname} se ha editado correctamente`;
             handleGetUsers();
             setOpenDrawer(false);
             modalSuccess({ message });
