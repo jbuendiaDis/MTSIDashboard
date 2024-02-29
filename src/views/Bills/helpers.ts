@@ -62,6 +62,7 @@ export const useHelpers = () => {
       const newDataEdit: FormValues = {
         comidas: dataTemp.comidas,
         extra: dataTemp.extra,
+        diselExtra: dataTemp.diselExtra,
         ferry: dataTemp.ferry,
         phytoSanitary: dataTemp.fitosanitarias,
         hoteles: dataTemp.hoteles,
@@ -118,6 +119,9 @@ export const useHelpers = () => {
           const extra = item.extra
             ? formatToCurrency(item.extra)
             : formatToCurrency(0);
+          const dieselExtra = item.diselExtra
+            ? formatToCurrency(item.diselExtra)
+            : formatToCurrency(0);
           const transferInsurance = item.seguroTraslado
             ? formatToCurrency(item.seguroTraslado)
             : formatToCurrency(0);
@@ -155,6 +159,7 @@ export const useHelpers = () => {
             talachas: talachas,
             liberacionPuerto: portRelease,
             extra: extra,
+            diselExtra: dieselExtra,
             pasajeOrigen: originPassage,
             pasajeDestino: destinyPassage,
             kms: kilometers,
@@ -243,6 +248,7 @@ export const useHelpers = () => {
     urea: Yup.number().nullable().min(0, positiveNumber),
     udsUsa: Yup.number().nullable().min(0, positiveNumber),
     extra: Yup.number().nullable().min(0, positiveNumber),
+    diselExtra: Yup.number().nullable().min(0, positiveNumber),
   });
 
   const initialValues: FormValues = {
@@ -262,6 +268,7 @@ export const useHelpers = () => {
     urea: dataEdit ? dataEdit?.urea : '',
     udsUsa: dataEdit ? dataEdit?.udsUsa : '',
     extra: dataEdit ? dataEdit?.extra : '',
+    diselExtra: dataEdit ? dataEdit?.diselExtra : '',
   };
 
   const handleSubmit = async (values: any): Promise<boolean> => {
@@ -286,7 +293,9 @@ export const useHelpers = () => {
         urea: values?.urea ? values?.urea : 0,
         udsUsa: values?.udsUsa ? values?.udsUsa : 0,
         extra: values?.extra ? values?.extra : 0,
+        diselExtra: values?.diselExtra ? values?.diselExtra : 0,
       };
+
       if (dataEdit) {
         const response = await _updateBill({
           urlParam: dataTemp?._id,

@@ -241,6 +241,20 @@ const BillForm = ({ handleToggleModal, dataEdit }: BillFormProps) => {
             }}
           />
         </Grid>
+        <Grid item xs={12} sm={6} md={4}>
+          <Input
+            fullWidth
+            label="Diesel extra"
+            placeholder="0.00"
+            name="diselExtra"
+            type="number"
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">$</InputAdornment>
+              ),
+            }}
+          />
+        </Grid>
       </Grid>
       <Stack
         direction="row"

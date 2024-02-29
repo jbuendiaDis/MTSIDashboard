@@ -63,6 +63,7 @@ const Bills = () => {
     { id: 'urea', label: 'Urea', align: 'left' },
     { id: 'talachas', label: 'Talachas', align: 'left' },
     { id: 'extra', label: 'Extra', align: 'left' },
+    { id: 'diselExtra', label: 'Diesel extra', align: 'left' },
     { id: 'fitosanitarias', label: 'Fito Sanitarias', align: 'left' },
     { id: 'totalPeajes', label: 'Total Peajes', align: 'left' },
     { id: 'kms', label: 'Total Kms', align: 'left' },

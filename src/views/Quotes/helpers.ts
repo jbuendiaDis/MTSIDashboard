@@ -35,6 +35,11 @@ export const useHelpers = ({ setOpen }: HelpersProps) => {
     method: 'get',
   });
 
+  const _getHistorialQuotes = useApi({
+    endpoint: '/quotes-01/byclienteId',
+    method: 'get',
+  });
+
   const _getConfigureData = useApi({
     endpoint: '/configureData/active',
     method: 'get',
@@ -71,6 +76,28 @@ export const useHelpers = ({ setOpen }: HelpersProps) => {
       if (code === 200) setDataQuotezTable(dataResponse);
       else setDataQuotezTable([]);
 
+      return true;
+    } catch (error) {
+      return false;
+    }
+  };
+
+  const handleGetHistorialQuotezByClient = async (
+    id: string
+  ): Promise<boolean> => {
+    try {
+      const { payload, response }: ResponseQuotes = await _getHistorialQuotes({
+        urlParam: id,
+      });
+      const code: Response['code'] = response.code;
+      const message: Response['message'] = response.message;
+      const dataResponse = payload.data;
+
+      if (code === 200) {
+        setDataQuotezTable(dataResponse);
+      } else {
+        modalInformation({ message });
+      }
       return true;
     } catch (error) {
       return false;
@@ -198,5 +225,6 @@ export const useHelpers = ({ setOpen }: HelpersProps) => {
     configureData,
     handleGetConfigDataById,
     handleGetQuotezByClient,
+    handleGetHistorialQuotezByClient,
   };
 };

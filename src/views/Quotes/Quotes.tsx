@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from 'react';
 import { Drawer } from '../../components/Drawer';
 import { Table } from '../../components/Table';
@@ -22,6 +21,7 @@ const Quotes = () => {
     configureData,
     handleGetConfigDataById,
     handleGetQuotezByClient,
+    handleGetHistorialQuotezByClient,
   } = useHelpers({ setOpen });
   const { actionsCustomers }: any = useRootProvider();
   const { customers, handleGetCustomers } = actionsCustomers;
@@ -72,7 +72,8 @@ const Quotes = () => {
 
   useEffect(() => {
     if (valueState !== null) {
-      handleGetQuotezByClient(valueState._id);
+      if (pathname === '/quotes') handleGetQuotezByClient(valueState._id);
+      else handleGetHistorialQuotezByClient(valueState._id);
     }
   }, [valueState]);
 

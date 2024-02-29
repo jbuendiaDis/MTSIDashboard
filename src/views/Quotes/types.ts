@@ -79,6 +79,7 @@ interface DataDetailQuote {
   ganancia: number;
   costo: number;
   extra: number;
+  dieselExtra: number;
   ferry: number;
   vuelo: number;
   talachas: number;
@@ -116,6 +117,7 @@ export interface FormatDataDetailQuote {
   ganancia: string;
   costo: string;
   extra: string;
+  dieselExtra: string,
   ferry: string;
   vuelo: string;
   talachas: string;

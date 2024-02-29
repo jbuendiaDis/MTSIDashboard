@@ -16,6 +16,7 @@ export interface FormValues {
   urea: number | string;
   udsUsa: number | string;
   extra: string | number;
+  diselExtra?: string | number;
 }
 
 interface Tolls {
@@ -77,6 +78,7 @@ export interface DataTollExpenses {
   origen: string;
   peajes: Tolls[];
   extra: number;
+  diselExtra: number;
   ferry: number;
   fitosanitarias: number;
   rutaId: string;

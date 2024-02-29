@@ -103,6 +103,7 @@ const DetailQuote = () => {
             udsUsa: formatToCurrency(item.udsUsa),
             fitosanitarias: formatToCurrency(item.fitosanitarias),
             otros: formatToCurrency(item.otros ? item.otros : 0),
+            dieselExtra: formatToCurrency(item.dieselExtra ? item.dieselExtra : 0),
           };
         });
 
@@ -150,7 +151,8 @@ const DetailQuote = () => {
     { id: 'rendimiento', label: 'Rendimiento', align: 'left' },
     { id: 'litros', label: 'Litros', align: 'left' },
     { id: 'diesel', label: 'Diesel', align: 'left' },
-    { id: 'extra', label: 'Diesel extra', align: 'left' },
+    { id: 'dieselExtra', label: 'Diesel extra', align: 'left' },
+    { id: 'extra', label: 'Extra', align: 'left' },
     { id: 'comidas', label: 'Comidas', align: 'left' },
     { id: 'pasajeOrigen', label: 'Pasaje origen', align: 'left' },
     { id: 'pasajeDestino', label: 'Pasaje destino', align: 'left' },
@@ -167,7 +169,7 @@ const DetailQuote = () => {
     { id: 'talachas', label: 'Talachas', align: 'left' },
     { id: 'fitosanitarias', label: 'Fitosanitarias', align: 'left' },
     { id: 'urea', label: 'Urea', align: 'left' },
-    { id: 'otros', label: 'Extra', align: 'left' },
+    { id: 'otros', label: 'Otros', align: 'left' },
     { id: 'subTotal', label: 'Subtotal', align: 'left' },
     { id: 'admon', label: 'Admon', align: 'left' },
     { id: 'total', label: 'Total', align: 'left' },
