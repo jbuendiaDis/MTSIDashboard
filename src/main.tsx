@@ -1,4 +1,3 @@
-import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { Suspense } from 'react';
 import { App } from './App.tsx';
@@ -10,19 +9,17 @@ import './global.css';
 import { RootProvider } from './components/RootProvider/RootProvider.tsx';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
-  // <React.StrictMode>
-    <ThemeProvider>
-      <ModalProvider>
-        <LoaderProvider>
-          <RootProvider>
-            <AuthProvider>
-              <Suspense>
-                <App />
-              </Suspense>
-            </AuthProvider>
-          </RootProvider>
-        </LoaderProvider>
-      </ModalProvider>
-    </ThemeProvider>
-  // </React.StrictMode>
+  <ThemeProvider>
+    <ModalProvider>
+      <LoaderProvider>
+        <RootProvider>
+          <AuthProvider>
+            <Suspense>
+              <App />
+            </Suspense>
+          </AuthProvider>
+        </RootProvider>
+      </LoaderProvider>
+    </ModalProvider>
+  </ThemeProvider>
 );
