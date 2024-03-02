@@ -1,9 +1,7 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect } from 'react';
 import { Box, Stack, Drawer, Avatar, Typography } from '@mui/material';
 import ListItemButton from '@mui/material/ListItemButton';
-// import navConfig from './navConfig';
-import { Menu, navConfig } from './navConfig';
+import { Menu, getMenuForUserRole } from './navConfig';
 import MemoizedScrollbar from '../ScrollBar/ScrollBar';
 import { useResponsive } from '../../hooks/useResponsive';
 import { useLocation } from 'react-router-dom';
@@ -38,11 +36,16 @@ const Nav = ({ openNav, onCloseNav }: NavProps) => {
           sx={{ color: '#fff' }}
         >{`${user?.name} ${user?.lastname}`}</Typography>
         <Typography variant="body2" sx={{ color: '#fff' }}>
-          {user?.position}
+          {user?.role === 'operacion' ? 'Operacion' : user?.position}
         </Typography>
       </Box>
     </Box>
   );
+
+  let menuForUserRole: any[] | null = null;
+  if (user) {
+    menuForUserRole = getMenuForUserRole(user);
+  }
 
   const renderContent = (
     <MemoizedScrollbar
@@ -58,10 +61,9 @@ const Nav = ({ openNav, onCloseNav }: NavProps) => {
       }}
     >
       {/* <Logo sx={{ mt: 3, ml: 4 }} /> */}
-
       {renderAccount}
       <Stack component="nav" spacing={0.5} sx={{ px: 2 }}>
-        {navConfig.map((item) => (
+        {menuForUserRole?.map((item: any) => (
           <NavItem key={item.title} {...item} />
         ))}
       </Stack>

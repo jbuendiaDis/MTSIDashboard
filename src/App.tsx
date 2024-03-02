@@ -13,7 +13,6 @@ export const App = () => {
         ) : (
           <Route path="/*" element={<PublicRoutes />} />
         )}
-
         <Route path="*" element={<Navigate to="/login" replace />} />
       </Routes>
     </BrowserRouter>

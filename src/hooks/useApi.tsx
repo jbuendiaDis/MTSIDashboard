@@ -1,11 +1,9 @@
-/* eslint-disable no-throw-literal */
 import { get, isEmpty, isObject } from 'lodash';
 import { Box, Button } from '@mui/material';
 import { useLoader } from '../components/Loader';
 import { useModal } from '../components/Modal';
 import { toQueryString } from '../utils/https';
 import { instance } from '../providers/api';
-// import { useTranslation } from '../hooks/useTranslations';
 import { useAuth } from '../components/Auth';
 
 interface Props {
@@ -19,7 +17,6 @@ function useApi<U = null>({
   method,
 }: // customMessagesKey
 Props) {
-  // const { t } = useTranslation();
   const { handleOpenModal, handleCloseModal } = useModal();
   const { handleShowLoader } = useLoader();
   const auth = useAuth();
@@ -67,7 +64,7 @@ Props) {
         return auth.logout();
       }
 
-      const errorMessage = get(error, 'message', '');
+      const errorMessage = get(error, 'response.data.message', '');
       const statusError = get(error, 'response.status', '');
 
       // let errorMessage = t(
@@ -81,6 +78,7 @@ Props) {
       // errorMessage = errorMessage.includes('httpErrors')
       //   ? t('errorPages.unexpectedDescription')
       //   : errorMessage;
+      handleCloseModal();
 
       config.showErrorModal &&
         handleOpenModal({
@@ -91,7 +89,7 @@ Props) {
             <Box component="div">
               {errorMessage}
               <Box sx={{ display: 'flex', justifyContent: 'end' }}>
-                <span>status: {statusError}</span>
+                <span>Error: {statusError}</span>
               </Box>
             </Box>
           ),

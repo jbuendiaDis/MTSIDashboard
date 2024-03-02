@@ -10,6 +10,7 @@ import {
   IconButton,
   Tooltip,
 } from '@mui/material';
+import { DownloadOutlined, ModeEditOutlineOutlined } from '@mui/icons-material';
 import {
   FormatDataDetailQuote,
   PayloadDetailQuote,
@@ -177,6 +178,27 @@ const DetailQuote = () => {
     { id: 'financiamiento', label: 'Financiamiento', align: 'left' },
     { id: 'ganancia', label: 'Ganancia', align: 'left' },
     { id: 'costo', label: 'Costo', align: 'left' },
+    {
+      id: 'actions',
+      label: 'Acciones',
+      align: 'center',
+      actions: [
+        {
+          label: 'Descargar Manual',
+          icon: <DownloadOutlined sx={{ width: 20, height: 20 }} />,
+          onClick: (rowData: any) => console.log('>>>', rowData)
+          // onClick: (rowData: any) =>
+          //   handleNavigate(rowData.folio, rowData.clientName),
+        },
+        {
+          label: 'Editar',
+          icon: <ModeEditOutlineOutlined sx={{ width: 20, height: 20 }} />,
+          onClick: (rowData: any) => console.log('>>>', rowData)
+          // onClick: (rowData: any) =>
+          //   handleNavigate(rowData.folio, rowData.clientName),
+        },
+      ],
+    }
   ];
 
   const validationSchema = Yup.object().shape({

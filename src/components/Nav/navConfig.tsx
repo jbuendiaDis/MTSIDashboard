@@ -1,4 +1,3 @@
-// import Icon from '../SvgColor/Icon';
 import { ReactNode } from 'react';
 import {
   GroupAddOutlined,
@@ -19,7 +18,12 @@ export interface Menu {
   icon: ReactNode | JSX.Element;
 }
 
-export const navConfig: Menu[] = [
+export const getMenuForUserRole = (user: any) => {
+  if (user.role === 'admin') return navConfigAdmin;
+  else return navConfigOperation;
+};
+
+const navConfigAdmin: Menu[] = [
   {
     title: 'Usuarios',
     path: '/users',
@@ -69,5 +73,28 @@ export const navConfig: Menu[] = [
     title: 'Historial Cotizaciones',
     path: '/quote-history',
     icon: <HistoryOutlined />,
+  },
+];
+
+const navConfigOperation: Menu[] = [
+  {
+    title: 'Rutas',
+    path: '/routes',
+    icon: <RouteOutlined />,
+  },
+  {
+    title: 'Traslados',
+    path: '/transfers',
+    icon: <LocalShippingOutlined />,
+  },
+  {
+    title: 'Peajes',
+    path: '/tolls',
+    icon: <WarehouseOutlined />,
+  },
+  {
+    title: 'Rendimientos',
+    path: '/returns',
+    icon: <TrendingUpOutlined />,
   },
 ];

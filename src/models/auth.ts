@@ -13,6 +13,7 @@ export interface UserValue {
   position: string;
   signature: string;
   isLogger: boolean;
+  role: string;
 }
 
 export interface AuthContextType {
