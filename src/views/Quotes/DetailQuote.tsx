@@ -58,6 +58,11 @@ const DetailQuote = () => {
     method: 'post',
   });
 
+  // const _updateDetailQuote = useApi({
+  //   endpoint: 'v2/actualizarendimiento',
+  //   method: 'put',
+  // });
+
   useEffect(() => {
     if (isFolio !== '') handleGetQuoteFolio(isFolio);
   }, [isFolio]);
@@ -104,7 +109,9 @@ const DetailQuote = () => {
             udsUsa: formatToCurrency(item.udsUsa),
             fitosanitarias: formatToCurrency(item.fitosanitarias),
             otros: formatToCurrency(item.otros ? item.otros : 0),
-            dieselExtra: formatToCurrency(item.dieselExtra ? item.dieselExtra : 0),
+            dieselExtra: formatToCurrency(
+              item.dieselExtra ? item.dieselExtra : 0
+            ),
           };
         });
 
@@ -186,20 +193,29 @@ const DetailQuote = () => {
         {
           label: 'Descargar Manual',
           icon: <DownloadOutlined sx={{ width: 20, height: 20 }} />,
-          onClick: (rowData: any) => console.log('>>>', rowData)
+          onClick: (rowData: any) => console.log('>>>', rowData),
           // onClick: (rowData: any) =>
           //   handleNavigate(rowData.folio, rowData.clientName),
         },
         {
           label: 'Editar',
           icon: <ModeEditOutlineOutlined sx={{ width: 20, height: 20 }} />,
-          onClick: (rowData: any) => console.log('>>>', rowData)
+          onClick: (rowData: any) => handleUpdateDetailQuote(rowData),
           // onClick: (rowData: any) =>
           //   handleNavigate(rowData.folio, rowData.clientName),
         },
       ],
-    }
+    },
   ];
+
+  const handleUpdateDetailQuote = async (data: any): Promise<boolean> => {
+    try {
+      console.log('>>>', data);
+      return true;
+    } catch (error) {
+      return false;
+    }
+  };
 
   const validationSchema = Yup.object().shape({
     description: Yup.string().required('Este campo es obligatorio.'),

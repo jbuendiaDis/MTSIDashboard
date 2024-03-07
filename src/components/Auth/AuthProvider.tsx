@@ -29,6 +29,7 @@ const AuthProvider = ({ children }: Props) => {
       });
       const code: Response['code'] = response.code;
       const user = { ...payload.user, role: 'admin' };
+      // const user = payload.user;
       const token = payload.token;
 
       if (code === 200) {
@@ -50,7 +51,7 @@ const AuthProvider = ({ children }: Props) => {
 
   const logout: AuthContextType['logout'] = (): void => {
     localStorage.removeItem('session');
-
+    localStorage.removeItem('token');
     setUser(undefined);
   };
 
