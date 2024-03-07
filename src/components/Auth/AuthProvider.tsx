@@ -28,8 +28,7 @@ const AuthProvider = ({ children }: Props) => {
         body: values,
       });
       const code: Response['code'] = response.code;
-      const user = { ...payload.user, role: 'admin' };
-      // const user = payload.user;
+      const user = payload.user;
       const token = payload.token;
 
       if (code === 200) {
