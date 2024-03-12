@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from 'react';
 import {
+  Autocomplete,
   Box,
   Button,
   Container,
@@ -9,8 +10,12 @@ import {
   Grid,
   IconButton,
   Tooltip,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  TextField,
 } from '@mui/material';
-import { DownloadOutlined, ModeEditOutlineOutlined } from '@mui/icons-material';
+import { DownloadOutlined, EditOutlined, Close } from '@mui/icons-material';
 import {
   FormatDataDetailQuote,
   PayloadDetailQuote,
@@ -18,9 +23,8 @@ import {
   ResponseSendEmail,
 } from './types';
 import { useApi } from '../../hooks/useApi';
-import { Column, ModalContextType, Response } from '../../models';
+import { ModalContextType, Response } from '../../models';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
-import { Table } from '../../components/Table';
 import { formatToCurrency } from '../../utils/amountFormater';
 import { useModal } from '../../components/Modal';
 import { HeaderTitleModal } from '../../components/Modal/HeaderTitleModal';
@@ -32,6 +36,7 @@ import { get } from 'lodash';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import '@ckeditor/ckeditor5-build-classic/build/translations/es';
+import CustomTable from '../../components/Table/TableRender';
 
 const DetailQuote = () => {
   const location = useLocation();
@@ -39,7 +44,19 @@ const DetailQuote = () => {
   const { folio } = useParams();
   const { handleOpenModal, handleCloseModal }: ModalContextType = useModal();
   const { modalInformation, modalSuccess } = useModalConfirmation();
+  const [inputValue, setInputValue] = useState<any>('');
+  const [openDialog, setOpenDialog] = useState<boolean>(false);
   const [dataTable, setDataTable] = useState<FormatDataDetailQuote[]>([]);
+  const [updateData, setUpdateData] = useState<any | null>(null);
+
+  const [marca, setMarca] = useState<any[]>([]);
+  const [modelo, setModelo] = useState<any[]>([]);
+  const [selectedValueMarca, setSelectedValueMarca] = useState<any | null>(
+    null
+  );
+  const [selectedValueModelo, setSelectedValueModelo] = useState<any | null>(
+    null
+  );
   const isFolio: string | undefined = folio ? folio : '';
   const navigation = useNavigate();
 
@@ -58,14 +75,50 @@ const DetailQuote = () => {
     method: 'post',
   });
 
-  // const _updateDetailQuote = useApi({
-  //   endpoint: 'v2/actualizarendimiento',
-  //   method: 'put',
-  // });
+  const _updateDetailQuote = useApi({
+    endpoint: 'v2/actualizarendimiento',
+    method: 'put',
+  });
+
+  const _getRendimientoMarcas = useApi({
+    endpoint: 'rendimiento/marcas',
+    method: 'get',
+  });
+
+  const _getRendimientoModelos = useApi({
+    endpoint: 'rendimiento/modelos',
+    method: 'get',
+  });
 
   useEffect(() => {
     if (isFolio !== '') handleGetQuoteFolio(isFolio);
   }, [isFolio]);
+
+  useEffect(() => {
+    if (selectedValueMarca !== null) {
+      handleGetModelo(selectedValueMarca.label);
+    }
+  }, [selectedValueMarca]);
+
+  const handleGetModelo = async (marca: any): Promise<boolean> => {
+    try {
+      const { payload, response }: any = await _getRendimientoModelos({
+        urlParam: marca,
+      });
+      const code: Response['code'] = response.code;
+      const message: Response['message'] = response.message;
+      const dataResponse: any[] = payload.data;
+
+      if (code === 200) {
+        setModelo(dataResponse);
+      } else {
+        modalInformation({ message });
+      }
+      return true;
+    } catch (error) {
+      return false;
+    }
+  };
 
   const handleGetQuoteFolio = async (valueFolio: string): Promise<boolean> => {
     try {
@@ -87,7 +140,7 @@ const DetailQuote = () => {
             ganancia: formatToCurrency(item.ganancia),
             inflacion: formatToCurrency(item.inflacion),
             kms: `${item.kms} kms`,
-            litros: `${item.litros} Lts`,
+            litros: `${item.litros ? item.litros : '0'} Lts`,
             admon: formatToCurrency(item.admon),
             ferry: formatToCurrency(item.ferry),
             vuelo: formatToCurrency(item.vuelo),
@@ -150,71 +203,66 @@ const DetailQuote = () => {
     }
   };
 
-  const columns: Column[] = [
-    { id: 'origen', label: 'Origen', align: 'left' },
-    { id: 'destino', label: 'Destino', align: 'left' },
-    { id: 'dimensiones', label: 'Dimensiones', align: 'left' },
-    { id: 'trasladoTipo', label: 'Tipo de traslado', align: 'left' },
-    { id: 'kms', label: 'Kms', align: 'left' },
-    { id: 'rendimiento', label: 'Rendimiento', align: 'left' },
-    { id: 'litros', label: 'Litros', align: 'left' },
-    { id: 'diesel', label: 'Diesel', align: 'left' },
-    { id: 'dieselExtra', label: 'Diesel extra', align: 'left' },
-    { id: 'extra', label: 'Extra', align: 'left' },
-    { id: 'comidas', label: 'Comidas', align: 'left' },
-    { id: 'pasajeOrigen', label: 'Pasaje origen', align: 'left' },
-    { id: 'pasajeDestino', label: 'Pasaje destino', align: 'left' },
-    { id: 'peajesViapass', label: 'Peajes viapass', align: 'left' },
-    { id: 'seguroTraslado', label: 'Seguro traslado', align: 'left' },
-    { id: 'sueldo', label: 'Sueldo', align: 'left' },
-    { id: 'pagoEstadia', label: 'Pago de estadia', align: 'left' },
-    { id: 'ferry', label: 'Ferry', align: 'left' },
-    { id: 'hotel', label: 'Hotel', align: 'left' },
-    { id: 'vuelo', label: 'Vuelo', align: 'left' },
-    { id: 'taxi', label: 'Taxi', align: 'left' },
-    { id: 'udsUsa', label: 'UDS/USA', align: 'left' },
-    { id: 'liberacionPuerto', label: 'Liberacion de puerto', align: 'left' },
-    { id: 'talachas', label: 'Talachas', align: 'left' },
-    { id: 'fitosanitarias', label: 'Fitosanitarias', align: 'left' },
-    { id: 'urea', label: 'Urea', align: 'left' },
-    { id: 'otros', label: 'Otros', align: 'left' },
-    { id: 'subTotal', label: 'Subtotal', align: 'left' },
-    { id: 'admon', label: 'Admon', align: 'left' },
-    { id: 'total', label: 'Total', align: 'left' },
-    { id: 'inflacion', label: 'Inflación', align: 'left' },
-    { id: 'financiamiento', label: 'Financiamiento', align: 'left' },
-    { id: 'ganancia', label: 'Ganancia', align: 'left' },
-    { id: 'costo', label: 'Costo', align: 'left' },
-    {
-      id: 'actions',
-      label: 'Acciones',
-      align: 'center',
-      actions: [
-        {
-          label: 'Descargar Manual',
-          icon: <DownloadOutlined sx={{ width: 20, height: 20 }} />,
-          onClick: (rowData: any) => console.log('>>>', rowData),
-          // onClick: (rowData: any) =>
-          //   handleNavigate(rowData.folio, rowData.clientName),
-        },
-        {
-          label: 'Editar',
-          icon: <ModeEditOutlineOutlined sx={{ width: 20, height: 20 }} />,
-          onClick: (rowData: any) => handleUpdateDetailQuote(rowData),
-          // onClick: (rowData: any) =>
-          //   handleNavigate(rowData.folio, rowData.clientName),
-        },
-      ],
-    },
-  ];
-
-  const handleUpdateDetailQuote = async (data: any): Promise<boolean> => {
+  const handleGetRendimientoMarca = async (): Promise<boolean> => {
     try {
-      console.log('>>>', data);
+      const { payload, response }: any = await _getRendimientoMarcas();
+      const code: Response['code'] = response.code;
+      const message: Response['message'] = response.message;
+      const dataResponse: any[] = payload.data;
+
+      if (code === 200) {
+        const marcasArreglo = Object.values(dataResponse);
+        const opciones = marcasArreglo.map((marca) => ({
+          label: marca,
+          value: marca,
+        }));
+        setMarca(opciones);
+      } else {
+        modalInformation({ message });
+      }
       return true;
     } catch (error) {
       return false;
     }
+  };
+
+  const downloadPdf = (base64Data: string, fileName: string) => {
+    if (!/^data:application\/pdf;base64,/.test(base64Data)) {
+      console.error('El formato de datos base64 no es válido.');
+      return;
+    }
+
+    const pdfData = base64Data.replace(/^data:application\/pdf;base64,/, '');
+
+    const byteCharacters = atob(pdfData);
+    const byteNumbers = new Array(byteCharacters.length);
+    for (let i = 0; i < byteCharacters.length; i++) {
+      byteNumbers[i] = byteCharacters.charCodeAt(i);
+    }
+    const byteArray = new Uint8Array(byteNumbers);
+    const blob = new Blob([byteArray], { type: 'application/pdf' });
+
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = fileName;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
+
+  const handleToggleModal = (): void => {
+    setOpenDialog(false);
+    setInputValue('');
+    setUpdateData(null);
+  };
+
+  const handleModal = (rowData: any) => {
+    setOpenDialog(!openDialog);
+    setInputValue(parseInt(rowData.rendimiento));
+    setUpdateData(rowData);
+    handleGetRendimientoMarca();
   };
 
   const validationSchema = Yup.object().shape({
@@ -325,6 +373,124 @@ const DetailQuote = () => {
     }
   };
 
+  const onUpdateRendimiento = async (): Promise<boolean> => {
+    try {
+      const newDataUpdate = {
+        unidadId: selectedValueModelo.id,
+        solicitudDetalleId: updateData.id,
+      };
+
+      const response = await _updateDetailQuote({
+        body: newDataUpdate,
+      });
+
+      const code: Response['code'] = get(response, 'response.code', 200);
+      const message: Response['message'] = get(
+        response,
+        'response.message',
+        ''
+      );
+      if (code === 200) {
+        setOpenDialog(false);
+        modalSuccess({
+          message,
+          callbackConfirm: () => handleGetQuoteFolio(isFolio),
+        });
+      } else {
+        modalInformation({ message });
+      }
+
+      return true;
+    } catch (error) {
+      return false;
+    }
+  };
+
+  const columnsTwo = [
+    {
+      name: 'Origen',
+      selector: (row: any) => row.origen,
+    },
+    {
+      name: 'Destino',
+      selector: (row: any) => row.destino,
+    },
+    {
+      name: 'Dimensiones',
+      selector: (row: any) => row.dimensiones,
+    },
+    {
+      name: 'Tipo de traslado',
+      selector: (row: any) => row.trasladoTipo,
+    },
+    {
+      name: 'Kms',
+      selector: (row: any) => row.kms,
+    },
+    {
+      name: 'Rendimiento',
+      selector: (row: any) => row.rendimiento,
+    },
+    {
+      name: 'Litros',
+      selector: (row: any) => row.litros,
+    },
+    { name: 'Diesel', selector: (row: any) => row.diesel },
+    { name: 'Diesel extra', selector: (row: any) => row.dieselExtra },
+    { name: 'Extra', selector: (row: any) => row.extra },
+    { name: 'Comidas', selector: (row: any) => row.comidas },
+    { name: 'Pasaje origen', selector: (row: any) => row.pasajeOrigen },
+    { name: 'Pasaje destino', selector: (row: any) => row.pasajeDestino },
+    { name: 'Peajes viapass', selector: (row: any) => row.peajesViapass },
+    { name: 'Seguro traslado', selector: (row: any) => row.seguroTraslado },
+    { name: 'Sueldo', selector: (row: any) => row.sueldo },
+    { name: 'Pago de estadia', selector: (row: any) => row.pagoEstadia },
+    { name: 'Ferry', selector: (row: any) => row.ferry },
+    { name: 'Hotel', selector: (row: any) => row.hotel },
+    { name: 'Vuelo', selector: (row: any) => row.vuelo },
+    { name: 'Taxi', selector: (row: any) => row.taxi },
+    { name: 'UDS/USA', selector: (row: any) => row.udsUsa },
+    {
+      name: 'Liberacion de puerto',
+      selector: (row: any) => row.liberacionPuerto,
+    },
+    { name: 'Talachas', selector: (row: any) => row.talachas },
+    { name: 'Fitosanitarias', selector: (row: any) => row.fitosanitarias },
+    { name: 'Urea', selector: (row: any) => row.urea },
+    { name: 'Otros', selector: (row: any) => row.otros },
+    { name: 'Subtotal', selector: (row: any) => row.subTotal },
+    { name: 'Admon', selector: (row: any) => row.admon },
+    { name: 'Total', selector: (row: any) => row.total },
+    { name: 'Inflación', selector: (row: any) => row.inflacion },
+    { name: 'Financiamiento', selector: (row: any) => row.financiamiento },
+    { name: 'Ganancia', selector: (row: any) => row.ganancia },
+    { name: 'Costo', selector: (row: any) => row.costo },
+    {
+      name: 'Acciones',
+      cell: (row: any) =>
+        row.rendimiento === '0 kms/Lt' && (
+          <Stack spacing={0} direction="row">
+            <Tooltip title="Descargar">
+              <IconButton
+                onClick={() =>
+                  downloadPdf(row.manual, `${row.clienteNombre}_manual.pdf`)
+                }
+              >
+                <DownloadOutlined />
+              </IconButton>
+            </Tooltip>
+            <Tooltip title="Editar Rendimiento">
+              <IconButton onClick={() => handleModal(row)}>
+                <EditOutlined />
+              </IconButton>
+            </Tooltip>
+          </Stack>
+        ),
+      grow: 1,
+      wrap: true,
+    },
+  ];
+
   return (
     <>
       <Container maxWidth="xl" sx={{ marginBottom: 2 }}>
@@ -356,7 +522,9 @@ const DetailQuote = () => {
           <Typography sx={{ fontSize: '18px' }}>{state.clientName}</Typography>
         </Stack>
       </Container>
-      <Table showCheckboxes={false} data={dataTable} columns={columns} />
+      {/* <Table showCheckboxes={false} data={dataTable} columns={columns} /> */}
+      <CustomTable columns={columnsTwo} data={dataTable} />
+
       <Container
         maxWidth="xl"
         sx={{ mt: 5, display: 'flex', justifyContent: 'end' }}
@@ -374,6 +542,58 @@ const DetailQuote = () => {
           </Button>
         </Stack>
       </Container>
+      <Dialog open={openDialog}>
+        <Box sx={{ padding: 1 }}>
+          <Box sx={{ width: 1, display: 'flex', justifyContent: 'end' }}>
+            <IconButton onClick={() => handleToggleModal()}>
+              <Close />
+            </IconButton>
+          </Box>
+          <DialogTitle
+            sx={{ width: 1, display: 'flex', justifyContent: 'center' }}
+          >
+            EDITAR RENDIEMIENTO
+          </DialogTitle>
+          <DialogContent sx={{ mb: 2 }}>
+            <Box sx={{ mt: 2 }}>
+              <Stack spacing={2}>
+                <Autocomplete
+                  value={selectedValueMarca}
+                  onChange={(_event: any, newValue: any | null) => {
+                    setSelectedValueMarca(newValue);
+                  }}
+                  options={marca}
+                  sx={{ width: '320px' }}
+                  renderInput={(params) => (
+                    <TextField {...params} label="Seleccione una marca" />
+                  )}
+                />
+                <Autocomplete
+                  value={selectedValueModelo}
+                  onChange={(_event: any, newValue: any | null) => {
+                    setSelectedValueModelo(newValue);
+                  }}
+                  options={modelo}
+                  sx={{ width: '320px' }}
+                  getOptionLabel={(option: any) => option.nombre}
+                  renderInput={(params) => (
+                    <TextField {...params} label="Seleccione un modelo" />
+                  )}
+                />
+              </Stack>
+            </Box>
+            <Box sx={{ mt: 3, display: 'flex', justifyContent: 'end' }}>
+              <Button
+                variant="contained"
+                onClick={() => onUpdateRendimiento()}
+                disabled={inputValue === ''}
+              >
+                Guardar cambios
+              </Button>
+            </Box>
+          </DialogContent>
+        </Box>
+      </Dialog>
     </>
   );
 };

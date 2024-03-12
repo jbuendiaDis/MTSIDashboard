@@ -12,6 +12,7 @@ export interface TableProps {
   valueState?: any;
   setValueState?: (value: any) => void;
   handleQuotez?: () => void;
+  handleExportDataQuoteHistorial?: () => void;
   optionsData?: any[];
 }
 

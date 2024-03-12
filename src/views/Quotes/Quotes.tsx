@@ -15,6 +15,9 @@ const Quotes = () => {
   const navigate = useNavigate();
   const [open, setOpen] = useState<boolean>(false);
   const [valueState, setValueState] = useState<any | null>(null);
+  // const [customerConditionalData, setCustomerConditionalData] = useState<any[]>(
+  //   []
+  // );
   const {
     formikConfig,
     dataQuotezTable,
@@ -30,6 +33,20 @@ const Quotes = () => {
     handleGetCustomers();
     setValueState(null);
   }, [pathname]);
+
+  // useEffect(() => {
+  //   if (customers.length > 0) {
+  //     if (pathname === '/quotes') setCustomerConditionalData(customers);
+  //     else {
+  //       console.log('---', customers);
+  //       const newArray = [];
+
+  //       // newArray.push({
+
+  //       // })
+  //     }
+  //   }
+  // }, [customers]);
 
   const columns: Column[] = [
     { id: 'folio', label: 'Folio', align: 'left' },
@@ -77,6 +94,10 @@ const Quotes = () => {
     }
   }, [valueState]);
 
+  const handleExportDataQuoteHistorial = (): void => {
+    console.log('RENDER_FUNCTION');
+  };
+
   return (
     <div>
       <Table
@@ -92,8 +113,10 @@ const Quotes = () => {
             ? handleGetConfigDataById(configureData._id)
             : setOpen(!open)
         }
+        handleExportDataQuoteHistorial={handleExportDataQuoteHistorial}
         setValueState={setValueState}
         valueState={valueState}
+        // optionsData={customerConditionalData}
         optionsData={customers}
       />
       <Drawer

@@ -36,7 +36,7 @@ export const useHelpers = ({ setOpen }: HelpersProps) => {
   });
 
   const _getHistorialQuotes = useApi({
-    endpoint: '/quotes-01/byclienteId',
+    endpoint: '/v2/cotizacionhistorial/byclienteId',
     method: 'get',
   });
 

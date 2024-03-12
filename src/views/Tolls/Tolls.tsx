@@ -3,14 +3,14 @@ import { useEffect, useState } from 'react';
 import { Table } from '../../components/Table';
 import {
   Autocomplete,
-  Button,
+  // Button,
   Grid,
   Stack,
   TextField,
   Typography,
 } from '@mui/material';
 import {
-  Add,
+  // Add,
   DeleteOutlineOutlined,
   ModeEditOutlineOutlined,
 } from '@mui/icons-material';
@@ -196,7 +196,7 @@ const Tolls = () => {
             Peajes
           </Typography>
         </Grid>
-        <Grid>
+        {/* <Grid>
           <Button
             variant="contained"
             color="inherit"
@@ -209,7 +209,7 @@ const Tolls = () => {
           >
             Agregar Peaje
           </Button>
-        </Grid>
+        </Grid> */}
       </Grid>
       <Grid sx={{ mt: 3 }}>
         <Typography
@@ -233,7 +233,7 @@ const Tolls = () => {
           options={unitTypes}
           sx={{ width: '320px' }}
           renderInput={(params) => (
-            <TextField {...params} label="Seleccione un estado" />
+            <TextField {...params} label="Seleccione un tipo de unidad" />
           )}
         />
         <Autocomplete

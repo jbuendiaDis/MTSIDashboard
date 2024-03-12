@@ -30,7 +30,7 @@ const navConfigAdmin: Menu[] = [
     icon: <GroupAddOutlined />,
   },
   {
-    title: 'Clientes usuario',
+    title: 'Contacto cliente',
     path: '/user-clients',
     icon: <Diversity3Outlined />,
   },
@@ -91,6 +91,11 @@ const navConfigOperation: Menu[] = [
     title: 'Peajes',
     path: '/tolls',
     icon: <WarehouseOutlined />,
+  },
+  {
+    title: 'Gastos',
+    path: '/bills',
+    icon: <AttachMoneyOutlined />,
   },
   {
     title: 'Rendimientos',

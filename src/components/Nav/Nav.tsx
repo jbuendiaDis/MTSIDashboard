@@ -29,7 +29,7 @@ const Nav = ({ openNav, onCloseNav }: NavProps) => {
 
   const renderAccount = (
     <Box sx={style.containerNav}>
-      <Avatar src={'JC'} alt="J" />
+      <Avatar src={'JC'} alt={user?.name.charAt(0).toUpperCase()} />
       <Box sx={{ ml: 2 }}>
         <Typography
           variant="subtitle2"

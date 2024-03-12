@@ -23,7 +23,11 @@ import {
   Autocomplete,
   TextField,
 } from '@mui/material';
-import { MoreVert, InsertChartOutlinedOutlined } from '@mui/icons-material';
+import {
+  MoreVert,
+  InsertChartOutlinedOutlined,
+  ExitToAppOutlined,
+} from '@mui/icons-material';
 import { Tabletoolbar } from './TableToolbar';
 import { TableNoData } from './TableNoData';
 import { Action, Row, SortData, TableProps } from '../../models/table';
@@ -38,6 +42,7 @@ const Table = ({
   customButton,
   renderCustomButton,
   handleQuotez,
+  handleExportDataQuoteHistorial,
   valueState,
   setValueState,
   optionsData,
@@ -226,7 +231,7 @@ const Table = ({
             </Grid>
           )}
 
-          {pathname === '/quotes' && (
+          {(pathname === '/quotes' || pathname === '/quote-history') && (
             <Grid
               item
               xs={12}
@@ -243,9 +248,15 @@ const Table = ({
                 variant="contained"
                 color="inherit"
                 sx={{ p: 1.5, letterSpacing: '1.2px' }}
-                onClick={handleQuotez}
+                onClick={() =>
+                  pathname === '/quotes' && handleQuotez
+                    ? handleQuotez()
+                    : handleExportDataQuoteHistorial &&
+                      handleExportDataQuoteHistorial()
+                }
+                endIcon={pathname === '/quote-history' && <ExitToAppOutlined />}
               >
-                Configurar Variables
+                {pathname === '/quotes' ? 'Configurar Variables' : 'Exportar'}
               </Button>
             </Grid>
           )}
