@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from 'react';
 import {
   Autocomplete,
@@ -44,7 +43,6 @@ const DetailQuote = () => {
   const { folio } = useParams();
   const { handleOpenModal, handleCloseModal }: ModalContextType = useModal();
   const { modalInformation, modalSuccess } = useModalConfirmation();
-  const [inputValue, setInputValue] = useState<any>('');
   const [openDialog, setOpenDialog] = useState<boolean>(false);
   const [dataTable, setDataTable] = useState<FormatDataDetailQuote[]>([]);
   const [updateData, setUpdateData] = useState<any | null>(null);
@@ -98,6 +96,10 @@ const DetailQuote = () => {
     if (selectedValueMarca !== null) {
       handleGetModelo(selectedValueMarca.label);
     }
+  }, [selectedValueMarca]);
+
+  useEffect(() => {
+    if (selectedValueMarca !== null) setSelectedValueModelo(null);
   }, [selectedValueMarca]);
 
   const handleGetModelo = async (marca: any): Promise<boolean> => {
@@ -254,7 +256,6 @@ const DetailQuote = () => {
 
   const handleToggleModal = (): void => {
     setOpenDialog(false);
-    setInputValue('');
     setUpdateData(null);
     setSelectedValueMarca(null);
     setSelectedValueModelo(null);
@@ -262,7 +263,6 @@ const DetailQuote = () => {
 
   const handleModal = (rowData: any): void => {
     setOpenDialog(!openDialog);
-    setInputValue(parseInt(rowData.rendimiento));
     setUpdateData(rowData);
     handleGetRendimientoMarca();
   };
@@ -470,9 +470,9 @@ const DetailQuote = () => {
     {
       name: 'Acciones',
       cell: (row: any) =>
-        row.rendimiento === '0 kms/Lt' && (
-          <Stack spacing={0} direction="row">
-            <Tooltip title="Descargar">
+        row.rendimiento !== '0 kms/Lt' && (
+          <Stack spacing={1} direction="row">
+            <Tooltip title="Descargar Manual">
               <IconButton
                 onClick={() =>
                   downloadPdf(row.manual, `${row.clienteNombre}_manual.pdf`)
@@ -524,9 +524,7 @@ const DetailQuote = () => {
           <Typography sx={{ fontSize: '18px' }}>{state.clientName}</Typography>
         </Stack>
       </Container>
-      {/* <Table showCheckboxes={false} data={dataTable} columns={columns} /> */}
       <CustomTable columns={columnsTwo} data={dataTable} />
-
       <Container
         maxWidth="xl"
         sx={{ mt: 5, display: 'flex', justifyContent: 'end' }}
@@ -588,7 +586,7 @@ const DetailQuote = () => {
               <Button
                 variant="contained"
                 onClick={() => onUpdateRendimiento()}
-                disabled={inputValue === ''}
+                disabled={selectedValueModelo === null}
               >
                 Guardar cambios
               </Button>
