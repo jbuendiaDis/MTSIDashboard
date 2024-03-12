@@ -470,7 +470,7 @@ const DetailQuote = () => {
     {
       name: 'Acciones',
       cell: (row: any) =>
-        row.rendimiento !== '0 kms/Lt' && (
+        row.rendimiento === '0 kms/Lt' && (
           <Stack spacing={1} direction="row">
             <Tooltip title="Descargar Manual">
               <IconButton
