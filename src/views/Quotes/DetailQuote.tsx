@@ -256,9 +256,11 @@ const DetailQuote = () => {
     setOpenDialog(false);
     setInputValue('');
     setUpdateData(null);
+    setSelectedValueMarca(null);
+    setSelectedValueModelo(null);
   };
 
-  const handleModal = (rowData: any) => {
+  const handleModal = (rowData: any): void => {
     setOpenDialog(!openDialog);
     setInputValue(parseInt(rowData.rendimiento));
     setUpdateData(rowData);

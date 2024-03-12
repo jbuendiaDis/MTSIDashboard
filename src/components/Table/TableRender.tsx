@@ -33,7 +33,7 @@ const CustomTable: React.FC<TableProps> = ({
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(rowsPerPageOptions[0]);
 
-  const handleChangePage = (event: unknown, newPage: number) => {
+  const handleChangePage = (_event: unknown, newPage: number) => {
     setPage(newPage);
   };
 
@@ -57,7 +57,17 @@ const CustomTable: React.FC<TableProps> = ({
             <TableHead>
               <TableRow>
                 {columns.map((column) => (
-                  <TableCell key={column.name}>{column.name}</TableCell>
+                  <TableCell
+                    key={column.name}
+                    sx={{
+                      width: 'auto',
+                      fontWeight: 700,
+                      whiteSpace: 'nowrap',
+                      overflow: 'hidden',
+                    }}
+                  >
+                    {column.name}
+                  </TableCell>
                 ))}
               </TableRow>
             </TableHead>
@@ -65,7 +75,13 @@ const CustomTable: React.FC<TableProps> = ({
               {paginatedData.map((row, rowIndex) => (
                 <TableRow key={rowIndex}>
                   {columns.map((column) => (
-                    <TableCell key={column.name}>
+                    <TableCell
+                      key={column.name}
+                      sx={{
+                        whiteSpace: 'nowrap',
+                        overflow: 'hidden',
+                      }}
+                    >
                       {column.cell
                         ? column.cell(row)
                         : column.selector
