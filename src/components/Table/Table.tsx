@@ -257,7 +257,9 @@ const Table = ({
                 endIcon={pathname === '/quote-history' && <ExitToAppOutlined />}
                 disabled={pathname === '/quote-history' && data?.length === 0}
               >
-                {pathname === '/quotes' ? 'Configurar Variables' : 'Exportar'}
+                {pathname === '/quotes'
+                  ? 'Configurar Variables'
+                  : 'Exportar Excel'}
               </Button>
             </Grid>
           )}
