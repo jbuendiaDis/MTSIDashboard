@@ -255,6 +255,7 @@ const Table = ({
                       handleExportDataQuoteHistorial()
                 }
                 endIcon={pathname === '/quote-history' && <ExitToAppOutlined />}
+                disabled={pathname === '/quote-history' && data?.length === 0}
               >
                 {pathname === '/quotes' ? 'Configurar Variables' : 'Exportar'}
               </Button>

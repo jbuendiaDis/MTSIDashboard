@@ -223,6 +223,7 @@ export const useHelpers = ({ setOpen }: HelpersProps) => {
     formikConfig,
     dataQuotezTable,
     configureData,
+    setDataQuotezTable,
     handleGetConfigDataById,
     handleGetQuotezByClient,
     handleGetHistorialQuotezByClient,

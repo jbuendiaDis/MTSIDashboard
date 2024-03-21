@@ -9,8 +9,9 @@ interface DataQuotez {
   origenId: number;
   tipoTraslado: number;
   tipoUnidad: number;
-  tipoViaje: number;
+  tipoViajeId: number;
   userId: string;
+  userName: string;
   _id: string;
 }
 
@@ -117,7 +118,7 @@ export interface FormatDataDetailQuote {
   ganancia: string;
   costo: string;
   extra: string;
-  dieselExtra: string,
+  dieselExtra: string;
   ferry: string;
   vuelo: string;
   talachas: string;

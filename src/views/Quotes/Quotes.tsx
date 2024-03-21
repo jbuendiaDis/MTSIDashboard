@@ -7,6 +7,7 @@ import { Grid, TextField, InputAdornment, Stack, Button } from '@mui/material';
 import { RequestQuoteOutlined } from '@mui/icons-material';
 import { FormValues } from './types';
 import { useLocation, useNavigate } from 'react-router-dom';
+import * as XLSX from 'xlsx';
 import { useRootProvider } from '../../components/RootProvider/hooks/useRootProvider';
 
 const Quotes = () => {
@@ -15,13 +16,12 @@ const Quotes = () => {
   const navigate = useNavigate();
   const [open, setOpen] = useState<boolean>(false);
   const [valueState, setValueState] = useState<any | null>(null);
-  // const [customerConditionalData, setCustomerConditionalData] = useState<any[]>(
-  //   []
-  // );
+  const [newCustomersData, setNewCustomersData] = useState<any[]>([]);
   const {
     formikConfig,
     dataQuotezTable,
     configureData,
+    setDataQuotezTable,
     handleGetConfigDataById,
     handleGetQuotezByClient,
     handleGetHistorialQuotezByClient,
@@ -33,20 +33,6 @@ const Quotes = () => {
     handleGetCustomers();
     setValueState(null);
   }, [pathname]);
-
-  // useEffect(() => {
-  //   if (customers.length > 0) {
-  //     if (pathname === '/quotes') setCustomerConditionalData(customers);
-  //     else {
-  //       console.log('---', customers);
-  //       const newArray = [];
-
-  //       // newArray.push({
-
-  //       // })
-  //     }
-  //   }
-  // }, [customers]);
 
   const columns: Column[] = [
     { id: 'folio', label: 'Folio', align: 'left' },
@@ -89,14 +75,52 @@ const Quotes = () => {
 
   useEffect(() => {
     if (valueState !== null) {
+      setDataQuotezTable([]);
       if (pathname === '/quotes') handleGetQuotezByClient(valueState._id);
       else handleGetHistorialQuotezByClient(valueState._id);
     }
   }, [valueState]);
 
   const handleExportDataQuoteHistorial = (): void => {
-    console.log('RENDER_FUNCTION');
+    const filteredData = dataQuotezTable.map((item) => ({
+      Folio: item.folio,
+      Estatus: item.estatus,
+      'Fecha Creación': item.createdAt,
+      'Nombre cliente': item.clientName,
+      'Nombre usuario': item.userName,
+    }));
+
+    const worksheet = XLSX.utils.json_to_sheet(filteredData);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Cotizaciones');
+    XLSX.writeFile(workbook, 'cotizaciones.xlsx');
   };
+
+  useEffect(() => {
+    if (pathname === '/quote-history') {
+      const newValueCustomer = [
+        {
+          _id: '0',
+          codigoCliente: '',
+          razonSocial: 'TODOS LOS CLIENTES',
+          rfc: '',
+          metodoPago: '',
+          formaPago: '',
+          regimenFiscal: '',
+          usoCFDI: '',
+          telefono: '',
+          calle: '',
+          numeroExterior: '',
+          numeroInterior: '',
+          colonia: '',
+          estado: '',
+        },
+      ];
+
+      const newData: any[] = [...newValueCustomer, ...customers];
+      setNewCustomersData(newData);
+    }
+  }, [pathname]);
 
   return (
     <div>
@@ -116,8 +140,9 @@ const Quotes = () => {
         handleExportDataQuoteHistorial={handleExportDataQuoteHistorial}
         setValueState={setValueState}
         valueState={valueState}
-        // optionsData={customerConditionalData}
-        optionsData={customers}
+        optionsData={
+          pathname === '/quote-history' ? newCustomersData : customers
+        }
       />
       <Drawer
         open={open}
