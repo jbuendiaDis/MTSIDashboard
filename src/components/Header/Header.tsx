@@ -10,6 +10,7 @@ import { Menu } from '@mui/icons-material';
 import { useResponsive } from '../../hooks/useResponsive';
 import { Account } from '../Account';
 import { HeaderStyles } from './HeaderStyles';
+import { Notifications } from '../Notifications';
 
 interface HeaderProps {
   onOpenNav: () => void;
@@ -67,7 +68,7 @@ const Header = ({ onOpenNav }: HeaderProps) => {
 
       <Stack direction="row" alignItems="center" spacing={1}>
         {/* <LanguagePopover /> */}
-        {/* <Notifications /> */}
+        <Notifications />
         <Account />
       </Stack>
     </>
