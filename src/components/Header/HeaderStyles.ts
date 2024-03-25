@@ -21,7 +21,7 @@ export const HeaderStyles = () => {
       }),
     ...(lgUp && {
       // width: `calc(100% - ${NAV.WIDTH + 1}px)`,
-      width: `calc(100% - ${259.9}px)`,
+      width: `calc(100% - ${278.9}px)`,
       height: HEADER.H_DESKTOP,
     }),
     backgroundImage:

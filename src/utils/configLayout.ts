@@ -15,5 +15,5 @@ export const HEADER: HeaderProps = {
 };
 
 export const NAV: NavProps = {
-  WIDTH: 260, //280
+  WIDTH: 280, //280
 };
