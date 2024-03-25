@@ -1,16 +1,13 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from 'react';
 import { Table } from '../../components/Table';
 import {
   Autocomplete,
-  // Button,
   Grid,
   Stack,
   TextField,
   Typography,
 } from '@mui/material';
 import {
-  // Add,
   DeleteOutlineOutlined,
   ModeEditOutlineOutlined,
 } from '@mui/icons-material';
@@ -184,19 +181,20 @@ const Tolls = () => {
 
   return (
     <>
-      <Grid
-        sx={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-        }}
-      >
-        <Grid>
-          <Typography variant="h4" sx={{ letterSpacing: '1px' }}>
-            Peajes
-          </Typography>
-        </Grid>
-        {/* <Grid>
+      <Grid sx={{ pr: 4, pl: 4 }}>
+        <Grid
+          sx={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+          }}
+        >
+          <Grid>
+            <Typography variant="h4" sx={{ letterSpacing: '1px' }}>
+              Peajes
+            </Typography>
+          </Grid>
+          {/* <Grid>
           <Button
             variant="contained"
             color="inherit"
@@ -208,46 +206,47 @@ const Tolls = () => {
             startIcon={<Add />}
           >
             Agregar Peaje
-          </Button>
+            </Button>
         </Grid> */}
+        </Grid>
+        <Grid sx={{ mt: 3 }}>
+          <Typography
+            sx={{
+              mb: 2,
+              fontWeight: 500,
+              fontSize: '15px',
+            }}
+          >
+            Elija un tipo de unidad y estado para visualizar la información de
+            las casetas en la tabla.
+          </Typography>
+        </Grid>
+        <Stack spacing={2} direction="row">
+          <Autocomplete
+            value={valueUnitType}
+            onChange={(_event: any, newValue: DataCatalogs | null) => {
+              setValueUnitType(newValue);
+            }}
+            getOptionLabel={(option: any) => option.descripcion}
+            options={unitTypes}
+            sx={{ width: '320px' }}
+            renderInput={(params) => (
+              <TextField {...params} label="Seleccione un tipo de unidad" />
+            )}
+          />
+          <Autocomplete
+            value={valueState}
+            onChange={(_event: any, newValue: FormatDataState | null) => {
+              setValueState(newValue);
+            }}
+            options={states}
+            sx={{ width: '320px' }}
+            renderInput={(params) => (
+              <TextField {...params} label="Seleccione un estado" />
+            )}
+          />
+        </Stack>
       </Grid>
-      <Grid sx={{ mt: 3 }}>
-        <Typography
-          sx={{
-            mb: 2,
-            fontWeight: 500,
-            fontSize: '15px',
-          }}
-        >
-          Elija un tipo de unidad y estado para visualizar la información de las
-          casetas en la tabla.
-        </Typography>
-      </Grid>
-      <Stack spacing={2} direction="row">
-        <Autocomplete
-          value={valueUnitType}
-          onChange={(_event: any, newValue: DataCatalogs | null) => {
-            setValueUnitType(newValue);
-          }}
-          getOptionLabel={(option: any) => option.descripcion}
-          options={unitTypes}
-          sx={{ width: '320px' }}
-          renderInput={(params) => (
-            <TextField {...params} label="Seleccione un tipo de unidad" />
-          )}
-        />
-        <Autocomplete
-          value={valueState}
-          onChange={(_event: any, newValue: FormatDataState | null) => {
-            setValueState(newValue);
-          }}
-          options={states}
-          sx={{ width: '320px' }}
-          renderInput={(params) => (
-            <TextField {...params} label="Seleccione un estado" />
-          )}
-        />
-      </Stack>
       <Table
         tableHead
         showCheckboxes={false}

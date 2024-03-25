@@ -13,7 +13,7 @@ export const MainStyles = () => {
     flexDirection: 'column',
     py: `${HEADER.H_MOBILE + SPACING}px`,
     ...(lgUp && {
-      px: 2,
+      px: 0,
       py: `${HEADER.H_DESKTOP + SPACING}px`,
       width: `calc(100% - ${NAV.WIDTH}px)`,
     }),

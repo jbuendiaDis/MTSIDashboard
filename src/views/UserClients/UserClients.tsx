@@ -47,7 +47,7 @@ const UserClients = () => {
   ];
 
   return (
-    <Grid>
+    <Grid sx={{ pr: 4, pl: 4 }}>
       <Grid
         container
         sx={{
