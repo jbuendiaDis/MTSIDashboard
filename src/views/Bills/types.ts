@@ -4,6 +4,8 @@ export interface FormValues {
   comidas: number | string;
   hoteles: number | string;
   pasajeOrigen: number | string;
+  pasajeLocalOrigen: number | string;
+  pasajeLocalDestino: number | string;
   pasajeDestino: number | string;
   ferry: number | string;
   flight: number | string;
@@ -66,6 +68,8 @@ export interface DataTollExpenses {
   hoteles: number;
   pasajeOrigen: number;
   pasajeDestino: number;
+  pasajeLocalOrigen: number;
+  pasajeLocalDestino: number;
   pagoEstadia: number;
   destino: string;
   estadoDestino: string;

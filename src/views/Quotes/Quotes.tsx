@@ -152,7 +152,7 @@ const Quotes = () => {
       >
         <form>
           <Grid container spacing={3} sx={{ mt: 2 }}>
-            <Grid item xs={12} sm={6}>
+            {/* <Grid item xs={12} sm={6}>
               <TextField
                 label="Rendimiento"
                 id="rendimiento"
@@ -166,7 +166,7 @@ const Quotes = () => {
                   ),
                 }}
               />
-            </Grid>
+            </Grid> */}
             <Grid item xs={12} sm={6}>
               <TextField
                 label="Combustible"
@@ -230,7 +230,7 @@ const Quotes = () => {
                 helperText={getHelperText('financiamiento')}
               />
             </Grid>
-            <Grid item xs={12} sm={6}>
+            {/* <Grid item xs={12} sm={6}>
               <TextField
                 label="Otros"
                 id="otros"
@@ -244,8 +244,8 @@ const Quotes = () => {
                   ),
                 }}
               />
-            </Grid>
-            <Grid item xs={12} sm={6}>
+            </Grid> */}
+            {/* <Grid item xs={12} sm={6}>
               <TextField
                 label="Subcontrato"
                 id="sucontrato"
@@ -259,7 +259,7 @@ const Quotes = () => {
                   ),
                 }}
               />
-            </Grid>
+            </Grid> */}
           </Grid>
           <Stack
             spacing={2}

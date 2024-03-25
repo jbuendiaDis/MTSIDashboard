@@ -91,11 +91,11 @@ export const useHelpers = ({ setOpen }: HelpersProps) => {
         (item: any) => item.codigo === dataTemp?.idEstadoDestino
       );
       const filterCountrieOrigin = countriesByStateUnitTypeOrigin.find(
-        (item: any) => item.codigo === parseInt(dataTemp.localidadOrigen)
+        (item: any) => item._id === dataTemp.localidadOrigen
       );
       const filterCountrieDestination =
         countriesByStateUnitTypeDestination.find(
-          (item: any) => item.codigo === parseInt(dataTemp.localidadDestino)
+          (item: any) => item._id === dataTemp.localidadDestino
         );
       const formatDots = get(dataTemp, 'puntos', []).map((item: any) => {
         return {
@@ -103,6 +103,7 @@ export const useHelpers = ({ setOpen }: HelpersProps) => {
           costo: formatToCurrency(item.costo),
         };
       });
+
       formik.setValues({
         stateOrigen: filterStateOrigin,
         stateDestino: filterStateDestination,
@@ -164,11 +165,9 @@ export const useHelpers = ({ setOpen }: HelpersProps) => {
       if (code === 200) {
         handleGetCountriesByStateUnitTypeOrigin(
           dataResponse.idEstadoOrigen,
-          dataResponse.tipoUnidad
         );
         handleGetCountriesByStateUnitTypeDestination(
           dataResponse.idEstadoDestino,
-          dataResponse.tipoUnidad
         );
         setDataTemp(dataResponse);
       }
@@ -281,8 +280,8 @@ export const useHelpers = ({ setOpen }: HelpersProps) => {
           estadoOrigen: values.stateOrigen!.codigo,
           estadoDestino: values.stateDestino!.codigo,
           tipoUnidad: values.tipoUnidad,
-          localidadOrigen: values.localidadOrigen?.codigo,
-          localidadDestino: values.localidadDestino?.codigo,
+          localidadOrigen: values.localidadOrigen?._id,
+          localidadDestino: values.localidadDestino?._id,
           kms: values.kms,
           puntos: arrayDots,
           totalPeajes: arrayDots.reduce((total, costTotal) => {

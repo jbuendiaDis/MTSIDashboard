@@ -24,6 +24,7 @@ interface ValuesForm {
   telMovil?: string;
   telOficina?: string;
   whatsapp?: string;
+  extension?: string;
   __v?: number;
   _id: string;
 }
@@ -67,6 +68,7 @@ export const useHelpers = ({ setOpenDrawer }: HelpersProps) => {
         telMovil: dataEdit ? dataEdit.telMovil : '',
         telOficina: dataEdit ? dataEdit.telOficina : '',
         whatsapp: dataEdit ? dataEdit.whatsapp : '',
+        extension: dataEdit ? dataEdit.extension : '',
         _id: dataEdit ? dataEdit._id : '',
         __v: dataEdit ? dataEdit.__v : 0,
       });
@@ -146,6 +148,7 @@ export const useHelpers = ({ setOpenDrawer }: HelpersProps) => {
     puesto: '',
     telMovil: '',
     telOficina: '',
+    extension: '',
     whatsapp: '',
     _id: '',
     __v: 0,
@@ -154,8 +157,8 @@ export const useHelpers = ({ setOpenDrawer }: HelpersProps) => {
   const validationSchema = Yup.object().shape({
     nombreCliente: Yup.object().nullable().required(requiredField),
     nombre: Yup.string().required(requiredField),
-    genero: Yup.string().required(requiredField),
-    puesto: Yup.string(),
+    genero: Yup.string(),
+    puesto: Yup.string().required(requiredField),
     password: Yup.string()
       .min(8, 'La contraseña debe tener al menos 8 caracteres')
       .max(15, 'La contraseña no puede tener más de 15 caracteres')
@@ -176,26 +179,27 @@ export const useHelpers = ({ setOpenDrawer }: HelpersProps) => {
     email: Yup.string()
       .email('Escriba un email válido')
       .required('Este campo es obligatorio'),
-    // state: Yup.object().nullable().required(requiredField),
-    telOficina: Yup.string().matches(/^[0-9]+$/, 'Ingrese un número válido'),
-    telMovil: Yup.string().matches(/^[0-9]+$/, 'Ingrese un número válido'),
-    whatsapp: Yup.string().matches(/^[0-9]+$/, 'Ingrese un número válido'),
-    direccion: Yup.string(),
+    telOficina: Yup.string().matches(/^\d+$/, 'Ingrese un número válido'),
+    telMovil: Yup.string().matches(/^\d+$/, 'Ingrese un número válido'),
+    whatsapp: Yup.string().matches(/^\d+$/, 'Ingrese un número válido'),
+    ext: Yup.string().matches(/^\d+$/, 'Ingrese un número válido'),
+    direccion: Yup.string().required(requiredField),
     notas: Yup.string(),
   });
 
   const validationSchemaDataEdit = Yup.object().shape({
     nombreCliente: Yup.object().nullable().required(requiredField),
     nombre: Yup.string().required(requiredField),
-    genero: Yup.string().required(requiredField),
-    puesto: Yup.string(),
+    genero: Yup.string(),
+    puesto: Yup.string().required(requiredField),
     email: Yup.string()
       .email('Escriba un email válido')
       .required('Este campo es obligatorio'),
-    telOficina: Yup.string().matches(/^[0-9]+$/, 'Ingrese un número válido'),
-    telMovil: Yup.string().matches(/^[0-9]+$/, 'Ingrese un número válido'),
-    whatsapp: Yup.string().matches(/^[0-9]+$/, 'Ingrese un número válido'),
-    direccion: Yup.string(),
+    telOficina: Yup.string().matches(/^\d+$/, 'Ingrese un número válido'),
+    telMovil: Yup.string().matches(/^\d+$/, 'Ingrese un número válido'),
+    whatsapp: Yup.string().matches(/^\d+$/, 'Ingrese un número válido'),
+    ext: Yup.string().matches(/^\d+$/, 'Ingrese un número válido'),
+    direccion: Yup.string().required(requiredField),
     notas: Yup.string(),
   });
 
@@ -215,6 +219,7 @@ export const useHelpers = ({ setOpenDrawer }: HelpersProps) => {
           telOficina: values.telOficina,
           telMovil: values.telMovil,
           whatsapp: values.whatsapp,
+          extension: values.extension,
           direccion: values.direccion,
           notas: values.notas,
         };
@@ -244,6 +249,7 @@ export const useHelpers = ({ setOpenDrawer }: HelpersProps) => {
           telOficina: values.telOficina,
           telMovil: values.telMovil,
           whatsapp: values.whatsapp,
+          extension: values.extension,
           direccion: values.direccion,
           notas: values.notas,
         };

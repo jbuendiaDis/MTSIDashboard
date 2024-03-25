@@ -8,7 +8,7 @@ import {
 import { get } from 'lodash';
 
 export const useCatalogs = ({ rootState, rootDispatch }: any) => {
-  const { catalogs, unitTypes } = rootState;
+  const { catalogs, unitTypes, vehicleCondition, bodyStyle } = rootState;
 
   const _getCatalogs = useApi({
     endpoint: '/catalogs/parents',
@@ -55,10 +55,50 @@ export const useCatalogs = ({ rootState, rootDispatch }: any) => {
     }
   };
 
+  const handleVehicleCondition = async (id: string): Promise<boolean> => {
+    try {
+      const response: ResponseCatalogsUnitTypes = await _getCatalogChildren({
+        urlParam: id,
+      });
+
+      const code: Response['code'] = get(response, 'response.code');
+      const payload = get(response, 'payload.data', []);
+
+      if (code === 200) {
+        rootDispatch({ type: 'vehicleCondition', payload });
+      }
+      return true;
+    } catch (error) {
+      return false;
+    }
+  };
+
+  const handleBodyStyle = async (id: string): Promise<boolean> => {
+    try {
+      const response: ResponseCatalogsUnitTypes = await _getCatalogChildren({
+        urlParam: id,
+      });
+
+      const code: Response['code'] = get(response, 'response.code');
+      const payload = get(response, 'payload.data', []);
+
+      if (code === 200) {
+        rootDispatch({ type: 'bodyStyle', payload });
+      }
+      return true;
+    } catch (error) {
+      return false;
+    }
+  };
+
   return {
     handleGetCatalogs,
     handleGetUnitType,
+    handleVehicleCondition,
+    handleBodyStyle,
     catalogs,
     unitTypes,
+    vehicleCondition,
+    bodyStyle,
   };
 };

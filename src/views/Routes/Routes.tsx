@@ -86,7 +86,7 @@ const Routes = () => {
       handleResetCountriesByStateUnitTypeOrigin();
       handleGetCountriesByStateUnitTypeOrigin(
         formik.values.stateOrigen?.codigo,
-        formik.values.tipoUnidad
+        // formik.values.tipoUnidad
       );
       formik.setValues({
         ...formik.values,
@@ -117,7 +117,7 @@ const Routes = () => {
       handleResetCountriesByStateUnitTypeDestination();
       handleGetCountriesByStateUnitTypeDestination(
         formik.values.stateDestino?.codigo,
-        formik.values.tipoUnidad
+        // formik.values.tipoUnidad
       );
       formik.setValues({
         ...formik.values,

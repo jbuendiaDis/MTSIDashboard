@@ -85,10 +85,13 @@ const CustomerForm = ({
           />
         </Grid>
         <Grid xs={12} sm={4} md={4} item>
+          <Input fullWidth label="Razón Social" name="razonSocial" />
+        </Grid>
+        <Grid xs={12} sm={4} md={4} item>
           <Input fullWidth label="RFC" name="rfc" />
         </Grid>
         <Grid xs={12} sm={4} md={4} item>
-          <Input fullWidth label="Razón Social" name="razonSocial" />
+          <Input fullWidth label="Código Cliente" name="codigoCliente" disabled={dataEdit !== null}/>
         </Grid>
         <Grid xs={12} sm={4} md={4} item>
           <Input fullWidth label="Método de Pago" name="metodoPago" />

@@ -1,5 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable @typescript-eslint/ban-types */
 import {
   Typography,
   Grid,
@@ -19,7 +17,6 @@ import { Stack } from '@mui/system';
 import { PopInformation } from '../../components/PopInformation';
 import { UserClientsStyles } from './USerClientsStyles';
 import { Options } from './types';
-// import { useRootProvider } from '../../components/RootProvider/hooks/useRootProvider';
 
 const UserClients = () => {
   const style = UserClientsStyles;
@@ -27,8 +24,6 @@ const UserClients = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [showConfirmPassword, setShowConfirmPassword] =
     useState<boolean>(false);
-  // const { actionsState }: any = useRootProvider();
-  // const { states, handleGetStates } = actionsState;
   const {
     formik,
     dataEdit,
@@ -39,10 +34,6 @@ const UserClients = () => {
   } = useHelpers({
     setOpenDrawer,
   });
-
-  // useEffect(() => {
-  //   handleGetStates();
-  // }, []);
 
   const options: Options[] = [
     {
@@ -185,27 +176,6 @@ const UserClients = () => {
                 helperText={formik.touched.email && formik.errors.email}
               />
             </Grid>
-            {/* <Grid item xs={12} sm={6} md={6}>
-              <Autocomplete
-                id="state"
-                options={states}
-                getOptionLabel={(option: any) => option.label}
-                value={formik.values.state}
-                onChange={(_event, selected) => {
-                  formik.setFieldValue('state', selected);
-                }}
-                onBlur={formik.handleBlur}
-                renderInput={(params) => (
-                  <TextField
-                    name="state"
-                    {...params}
-                    label="Estado"
-                    error={formik.touched.state && Boolean(formik.errors.state)}
-                    helperText={formik.touched.state && formik.errors.state}
-                  />
-                )}
-              />
-            </Grid> */}
             <Grid item xs={12} sx={{ mt: 1 }}>
               <Typography sx={style.infoText}>Medios de contacto:</Typography>
             </Grid>
@@ -218,6 +188,29 @@ const UserClients = () => {
                 name="telOficina"
                 value={formik.values.telOficina}
                 onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                error={
+                  formik.touched.telOficina && Boolean(formik.errors.telOficina)
+                }
+                helperText={
+                  formik.touched.telOficina && formik.errors.telOficina
+                }
+              />
+            </Grid>
+            <Grid item xs={12} sm={6} md={6}>
+              <TextField
+                fullWidth
+                label="Ext"
+                type="text"
+                id="extension"
+                name="extension"
+                value={formik.values.extension}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                error={
+                  formik.touched.extension && Boolean(formik.errors.extension)
+                }
+                helperText={formik.touched.extension && formik.errors.extension}
               />
             </Grid>
             <Grid item xs={12} sm={6} md={6}>
@@ -229,6 +222,11 @@ const UserClients = () => {
                 name="telMovil"
                 value={formik.values.telMovil}
                 onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                error={
+                  formik.touched.telMovil && Boolean(formik.errors.telMovil)
+                }
+                helperText={formik.touched.telMovil && formik.errors.telMovil}
               />
             </Grid>
             <Grid item xs={12} sm={6} md={6}>
@@ -240,6 +238,11 @@ const UserClients = () => {
                 name="whatsapp"
                 value={formik.values.whatsapp}
                 onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                error={
+                  formik.touched.whatsapp && Boolean(formik.errors.whatsapp)
+                }
+                helperText={formik.touched.whatsapp && formik.errors.whatsapp}
               />
             </Grid>
             <Grid item xs={12}>
@@ -383,7 +386,6 @@ const UserClients = () => {
                 setShowConfirmPassword(false);
                 setShowPassword(false);
                 setDataEdit(null);
-                // setIdUserEdit('');
               }}
             >
               Cancelar

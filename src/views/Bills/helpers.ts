@@ -69,6 +69,8 @@ export const useHelpers = () => {
         stayPayment: dataTemp.pagoEstadia,
         pasajeDestino: dataTemp.pasajeDestino,
         pasajeOrigen: dataTemp.pasajeOrigen,
+        pasajeLocalOrigen: dataTemp.pasajeLocalOrigen,
+        pasajeLocalDestino: dataTemp.pasajeLocalDestino,
         portRelease: dataTemp.liberacionPuerto,
         routes: filterRoute,
         transferInsurance: dataTemp.seguroTraslado,
@@ -137,6 +139,12 @@ export const useHelpers = () => {
           const originPassage = item.pasajeOrigen
             ? formatToCurrency(item.pasajeOrigen)
             : formatToCurrency(0);
+          const originLocalPassage = item.pasajeLocalOrigen
+            ? formatToCurrency(item.pasajeLocalOrigen)
+            : formatToCurrency(0);
+          const destinyLocalPassage = item.pasajeLocalDestino
+            ? formatToCurrency(item.pasajeLocalDestino)
+            : formatToCurrency(0);
           const destinyPassage = item.pasajeDestino
             ? formatToCurrency(item.pasajeDestino)
             : formatToCurrency(0);
@@ -166,6 +174,8 @@ export const useHelpers = () => {
             totalPeajes: totalPeajes,
             seguroTraslado: transferInsurance,
             pagoEstadia: stayPayment,
+            pasajeLocalOrigen: originLocalPassage,
+            pasajeLocalDestino: destinyLocalPassage,
           };
         });
 
@@ -257,6 +267,8 @@ export const useHelpers = () => {
     hoteles: dataEdit ? dataEdit?.hoteles : '',
     pasajeDestino: dataEdit ? dataEdit?.pasajeDestino : '',
     pasajeOrigen: dataEdit ? dataEdit?.pasajeOrigen : '',
+    pasajeLocalOrigen: dataEdit ? dataEdit?.pasajeLocalOrigen : '',
+    pasajeLocalDestino: dataEdit ? dataEdit?.pasajeLocalDestino : '',
     ferry: dataEdit ? dataEdit?.ferry : '',
     flight: dataEdit ? dataEdit?.flight : '',
     stayPayment: dataEdit ? dataEdit.stayPayment : '',
@@ -278,6 +290,12 @@ export const useHelpers = () => {
         rutaId: values.routes?._id,
         pasajeOrigen: values?.pasajeOrigen ? values?.pasajeOrigen : 0,
         pasajeDestino: values?.pasajeDestino ? values?.pasajeDestino : 0,
+        pasajeLocalOrigen: values?.pasajeLocalOrigen
+          ? values?.pasajeLocalOrigen
+          : 0,
+        pasajeLocalDestino: values?.pasajeLocalDestino
+          ? values?.pasajeLocalDestino
+          : 0,
         comidas: values?.comidas ? values?.comidas : 0,
         hoteles: values?.hoteles ? values?.hoteles : 0,
         ferry: values?.ferry ? values?.ferry : 0,

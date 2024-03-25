@@ -46,12 +46,12 @@ export interface ResponseConfigureData {
 }
 
 export interface FormValues {
-  rendimiento: string | number | undefined;
+  // rendimiento: string | number | undefined;
   combustible: string | number | undefined;
   inflacion: string | number | undefined;
   financiamiento: string | number | undefined;
-  otros: string | number | undefined;
-  sucontrato: string | number | undefined;
+  // otros: string | number | undefined;
+  // sucontrato: string | number | undefined;
   _id?: string;
 }
 

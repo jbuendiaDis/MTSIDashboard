@@ -132,12 +132,12 @@ export const useHelpers = ({ setOpen }: HelpersProps) => {
 
       if (code === 200) {
         formikConfig.setValues({
-          rendimiento: dataResponse ? dataResponse.rendimiento : '',
+          // rendimiento: dataResponse ? dataResponse.rendimiento : '',
           combustible: dataResponse ? dataResponse.combustible : '',
           inflacion: dataResponse ? dataResponse.inflacion : '',
           financiamiento: dataResponse ? dataResponse.financiamiento : '',
-          otros: dataResponse ? dataResponse.otros : '',
-          sucontrato: dataResponse ? dataResponse.sucontrato : '',
+          // otros: dataResponse ? dataResponse.otros : '',
+          // sucontrato: dataResponse ? dataResponse.sucontrato : '',
           _id: dataResponse ? dataResponse._id : '',
         });
         setOpen(true);
@@ -149,12 +149,12 @@ export const useHelpers = ({ setOpen }: HelpersProps) => {
   };
 
   const initialValues: FormValues = {
-    rendimiento: '',
+    // rendimiento: '',
     combustible: '',
     inflacion: '',
     financiamiento: '',
-    otros: '',
-    sucontrato: '',
+    // otros: '',
+    // sucontrato: '',
     _id: '',
   };
 
@@ -173,12 +173,12 @@ export const useHelpers = ({ setOpen }: HelpersProps) => {
     onSubmit: async (values: FormValues) => {
       try {
         const newValues = {
-          rendimiento: values.rendimiento === '' ? 0 : values.rendimiento,
+          // rendimiento: values.rendimiento === '' ? 0 : values.rendimiento,
           combustible: values.combustible,
           inflacion: values.inflacion,
           financiamiento: values.financiamiento,
-          otros: values.otros === '' ? 0 : values.otros,
-          sucontrato: values.sucontrato === '' ? 0 : values.sucontrato,
+          // otros: values.otros === '' ? 0 : values.otros,
+          // sucontrato: values.sucontrato === '' ? 0 : values.sucontrato,
         };
 
         if (configureData) {

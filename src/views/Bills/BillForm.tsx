@@ -29,6 +29,35 @@ const BillForm = ({ handleToggleModal, dataEdit }: BillFormProps) => {
             options={routesWithoutExpenses}
             name="routes"
             labelField="nombreOrigen-nombreDestino"
+            disabled={dataEdit !== null}
+          />
+        </Grid>
+        <Grid item xs={12} sm={6} md={4}>
+          <Input
+            fullWidth
+            label="Pasaje Local Origen"
+            placeholder="0.00"
+            name="pasajeLocalOrigen"
+            type="number"
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">$</InputAdornment>
+              ),
+            }}
+          />
+        </Grid>
+        <Grid item xs={12} sm={6} md={4}>
+          <Input
+            fullWidth
+            label="Pasaje Local Destino"
+            placeholder="0.00"
+            name="pasajeLocalDestino"
+            type="number"
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">$</InputAdornment>
+              ),
+            }}
           />
         </Grid>
         <Grid item xs={12} sm={6} md={4}>

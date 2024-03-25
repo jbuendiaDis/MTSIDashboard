@@ -29,12 +29,12 @@ export const useCountries = ({ rootState, rootDispatch }: any) => {
   });
 
   const _getCountriesByState = useApi({
-    endpoint: '/countries/by-estado',
+    endpoint: '/countries/estado',
     method: 'get',
   });
 
   const _getCountriesByStateUnitType = useApi({
-    endpoint: '/countries/estado',
+    endpoint: '/municipios/by-estado',
     method: 'get',
   });
 
@@ -111,11 +111,11 @@ export const useCountries = ({ rootState, rootDispatch }: any) => {
 
   const handleGetCountriesByStateUnitTypeOrigin = async (
     state: number,
-    unit: string
+    // unit?: string
   ): Promise<boolean> => {
     try {
       const response: ResponseCountries = await _getCountriesByStateUnitType({
-        urlParam: `${state}/tipoUnidad/${unit}`,
+        urlParam: `${state}`,
       });
       const code: Response['code'] = get(response, 'response.code');
       const payload: PayloadCountries['data'] = get(response, 'payload.data');
@@ -130,11 +130,11 @@ export const useCountries = ({ rootState, rootDispatch }: any) => {
 
   const handleGetCountriesByStateUnitTypeDestination = async (
     state: number,
-    unit: string
+    // unit: string
   ): Promise<boolean> => {
     try {
       const response: ResponseCountries = await _getCountriesByStateUnitType({
-        urlParam: `${state}/tipoUnidad/${unit}`,
+        urlParam: `${state}`,
       });
       const code: Response['code'] = get(response, 'response.code');
       const payload: PayloadCountries['data'] = get(response, 'payload.data');
@@ -152,7 +152,7 @@ export const useCountries = ({ rootState, rootDispatch }: any) => {
     unit: string
   ): Promise<boolean> => {
     try {
-      const response: ResponseCountries = await _getCountriesByStateUnitType({
+      const response: ResponseCountries = await _getCountriesByState({
         urlParam: `${state}/tipoUnidad/${unit}`,
       });
       const code: Response['code'] = get(response, 'response.code');

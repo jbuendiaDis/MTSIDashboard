@@ -1,6 +1,8 @@
 import { Response } from '../../models';
 
 export interface DataReturns {
+  vehicleCondition: string;
+  bodyStyle: string;
   marca: string;
   modelo: string;
   rendimiento: number;

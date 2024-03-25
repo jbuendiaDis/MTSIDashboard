@@ -13,6 +13,8 @@ export interface Values {
   localidadesSecond: [];
   catalogs: [];
   unitTypes: [];
+  vehicleCondition: [];
+  bodyStyle: [];
   routes: [];
   routesWithoutExpenses: [];
 }
@@ -30,6 +32,8 @@ export const initialState: Values = {
   localidadesSecond: [],
   catalogs: [],
   unitTypes: [],
+  vehicleCondition: [],
+  bodyStyle: [],
   routes: [],
   routesWithoutExpenses: [],
 };

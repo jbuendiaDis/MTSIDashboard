@@ -63,6 +63,16 @@ export const reducer = (state: Values, action: ActionValues) => {
         ...state,
         unitTypes: _.get(action, ['payload'], []),
       };
+    case 'vehicleCondition':
+      return {
+        ...state,
+        vehicleCondition: _.get(action, ['payload'], []),
+      };
+    case 'bodyStyle':
+      return {
+        ...state,
+        bodyStyle: _.get(action, ['payload'], []),
+      };
     case 'customers':
       return {
         ...state,

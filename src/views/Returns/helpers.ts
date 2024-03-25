@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from 'react';
 import { useApi } from '../../hooks/useApi';
 import { useLoader } from '../../components/Loader';
@@ -18,6 +17,7 @@ export const useHelpers = () => {
   const [returnsData, setReturnsData] = useState<PayloadDataReturns['data']>(
     []
   );
+  const requiredFile: string = 'Campo obligatorio.';
 
   const _getReturns = useApi({
     endpoint: '/rendimientos',
@@ -96,6 +96,8 @@ export const useHelpers = () => {
   };
 
   const initialValues: DataReturns = {
+    vehicleCondition: dataEdit ? dataEdit?.condicionVeiculoId : '',
+    bodyStyle: dataEdit ? dataEdit?.estiloCarroceriaId : '',
     marca: dataEdit ? dataEdit?.marca : '',
     modelo: dataEdit ? dataEdit?.modelo : '',
     rendimiento: dataEdit ? dataEdit?.rendimiento : '',
@@ -103,17 +105,21 @@ export const useHelpers = () => {
   };
 
   const validationSchema = Yup.object().shape({
-    marca: Yup.string().required('Este campo es obligatorios.'),
-    modelo: Yup.string().required('Este campo es obligatorios.'),
+    vehicleCondition: Yup.string().required(requiredFile),
+    bodyStyle: Yup.string().required(requiredFile),
+    marca: Yup.string().required(requiredFile),
+    modelo: Yup.string().required(requiredFile),
     rendimiento: Yup.number()
       .min(1, 'El rendimiento debe ser mayor a 0.')
-      .required('Este campo es obligatorios.'),
+      .required(requiredFile),
     _id: Yup.string(),
   });
 
   const handleSubmit = async (values: DataReturns): Promise<boolean> => {
     try {
-      const newValues: DataReturns = {
+      const newValues = {
+        condicionVeiculoId: values.vehicleCondition,
+        estiloCarroceriaId: values.bodyStyle,
         marca: values.marca,
         modelo: values.modelo,
         rendimiento: values.rendimiento,

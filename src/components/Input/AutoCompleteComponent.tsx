@@ -11,6 +11,7 @@ interface AutoCompleteFieldProps extends FieldAttributes<any> {
   options: Record<string, unknown>[];
   labelField: string;
   onSelected?: (value?: any) => void;
+  disabled?: boolean 
 }
 
 const AutoCompleteComponent: React.FC<AutoCompleteFieldProps> = ({
@@ -18,6 +19,7 @@ const AutoCompleteComponent: React.FC<AutoCompleteFieldProps> = ({
   options,
   labelField,
   onSelected,
+  disabled = false,
   ...props
 }) => {
   const { name, ...restProps } = props;
@@ -37,10 +39,8 @@ const AutoCompleteComponent: React.FC<AutoCompleteFieldProps> = ({
   return (
     <Autocomplete
       {...field}
+      disabled={disabled}
       options={options}
-      // getOptionLabel={(option) =>
-      //   option ? (option[labelField] as string) : ''
-      // }
       getOptionLabel={(option) =>
         option
           ? labelField

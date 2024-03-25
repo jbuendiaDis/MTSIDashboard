@@ -77,6 +77,8 @@ const Returns = () => {
       const code: Response['code'] = response.code;
       const dataEditResponse: PayloadDataReturns['data'] = payload.data;
 
+      console.log('>>>', dataEditResponse);
+
       if (code === 200) {
         setDataEdit(dataEditResponse);
       }

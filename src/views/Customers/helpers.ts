@@ -183,6 +183,7 @@ export const useHelpers = () => {
   };
 
   const validationSchema = Yup.object().shape({
+    codigoCliente: Yup.string().required(requiredField),
     state: Yup.object().nullable().required(requiredField),
     calle: Yup.string().required(requiredField),
     numeroExterior: Yup.string().required(requiredField),
@@ -197,6 +198,7 @@ export const useHelpers = () => {
   });
 
   const initialValuesForm: PaylaodCustomers['data'] = {
+    codigoCliente: dataEdit ? dataEdit.codigoCliente : '',
     state: dataEdit ? dataEdit.state : null,
     calle: dataEdit ? dataEdit.calle : '',
     colonia: dataEdit ? dataEdit.colonia : '',

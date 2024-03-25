@@ -54,7 +54,7 @@ export const Customers = () => {
   });
 
   const columns: Column[] = [
-    { id: 'codigoCliente', label: 'Código cliente', align: 'left' },
+    { id: 'codigoCliente', label: 'Número cliente', align: 'left' },
     { id: 'razonSocial', label: 'Razón social', align: 'left' },
     { id: 'rfc', label: 'RFC', align: 'left' },
     { id: 'calle', label: 'Calle', align: 'left' },

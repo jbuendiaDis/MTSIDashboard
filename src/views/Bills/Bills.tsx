@@ -49,6 +49,8 @@ const Bills = () => {
   const columns: Column[] = [
     { id: 'nombreOrigen', label: 'Origen', align: 'left' },
     { id: 'nombreDestino', label: 'Destino', align: 'left' },
+    { id: 'pasajeLocalOrigen', label: 'Pasaje Local Origen', align: 'left' },
+    { id: 'pasajeLocalDestino', label: 'Pasaje Local Destino', align: 'left' },
     { id: 'pasajeOrigen', label: 'Pasaje Origen', align: 'left' },
     { id: 'pasajeDestino', label: 'Pasaje Destino', align: 'left' },
     { id: 'comidas', label: 'Comidas', align: 'left' },
