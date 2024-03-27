@@ -155,7 +155,7 @@ const Table = ({
   });
 
   return (
-    <Container maxWidth="xl">
+    <Grid sx={{ pl: 2, pr: 2 }}>
       {tableHead && (
         <Grid
           container
@@ -422,7 +422,7 @@ const Table = ({
           </List>
         </Popover>
       </Card>
-    </Container>
+    </Grid>
   );
 };
 

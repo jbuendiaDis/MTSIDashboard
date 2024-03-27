@@ -495,7 +495,7 @@ const DetailQuote = () => {
 
   return (
     <>
-      <Container maxWidth="xl" sx={{ marginBottom: 2 }}>
+      <Grid sx={{ marginBottom: 2, pl: 2, pr: 2  }}>
         <Grid
           container
           sx={{ display: 'flex', justifyContent: 'space-between' }}
@@ -523,7 +523,7 @@ const DetailQuote = () => {
           </Typography>
           <Typography sx={{ fontSize: '18px' }}>{state.clientName}</Typography>
         </Stack>
-      </Container>
+      </Grid>
       <CustomTable columns={columnsTwo} data={dataTable} />
       <Container
         maxWidth="xl"

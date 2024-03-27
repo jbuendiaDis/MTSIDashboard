@@ -10,6 +10,7 @@ import {
   TablePagination,
   Container,
   Card,
+  Grid,
 } from '@mui/material';
 
 interface TableColumn {
@@ -50,7 +51,7 @@ const CustomTable: React.FC<TableProps> = ({
   );
 
   return (
-    <Container maxWidth="xl">
+    <Grid sx={{ pl: 2, pr: 2 }}>
       <Card>
         <TableContainer component={Paper}>
           <Table>
@@ -104,7 +105,7 @@ const CustomTable: React.FC<TableProps> = ({
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </Card>
-    </Container>
+    </Grid>
   );
 };
 
