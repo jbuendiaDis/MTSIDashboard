@@ -4,11 +4,12 @@ import { Table } from '../../components/Table';
 import { Column } from '../../models';
 import { useHelpers } from './helpers';
 import { Grid, TextField, InputAdornment, Stack, Button } from '@mui/material';
-import { RequestQuoteOutlined } from '@mui/icons-material';
+import { RequestQuoteOutlined, VisibilityOutlined } from '@mui/icons-material';
 import { FormValues } from './types';
 import { useLocation, useNavigate } from 'react-router-dom';
 import * as XLSX from 'xlsx';
 import { useRootProvider } from '../../components/RootProvider/hooks/useRootProvider';
+import { useApi } from '../../hooks/useApi';
 
 const Quotes = () => {
   const location = useLocation();
@@ -28,6 +29,11 @@ const Quotes = () => {
   } = useHelpers({ setOpen });
   const { actionsCustomers }: any = useRootProvider();
   const { customers, handleGetCustomers } = actionsCustomers;
+
+  const _getViewQuote = useApi({
+    endpoint: 'v2/solicitud/detallecompleto',
+    method: 'get',
+  });
 
   useEffect(() => {
     handleGetCustomers();
@@ -53,9 +59,27 @@ const Quotes = () => {
           onClick: (rowData: any) =>
             handleNavigate(rowData.folio, rowData.clientName),
         },
+        {
+          label: 'Ver',
+          icon: <VisibilityOutlined sx={{ width: 20, height: 20 }} />,
+          onClick: (rowData: any) => handleGetViewQuote(rowData.folio),
+        },
       ],
     });
   }
+
+  const handleGetViewQuote = async (folio: string): Promise<boolean> => {
+    try {
+      const response = await _getViewQuote({
+        urlParam: folio,
+      });
+
+      console.log('RES', response);
+      return true;
+    } catch (error) {
+      return false;
+    }
+  };
 
   const handleNavigate = (folio: number, client: string) => {
     navigate(`/detail-quote/${folio}`, { state: { clientName: client } });
@@ -152,21 +176,6 @@ const Quotes = () => {
       >
         <form>
           <Grid container spacing={3} sx={{ mt: 2 }}>
-            {/* <Grid item xs={12} sm={6}>
-              <TextField
-                label="Rendimiento"
-                id="rendimiento"
-                name="rendimiento"
-                type="number"
-                value={formikConfig.values.rendimiento}
-                onChange={formikConfig.handleChange}
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position="end">Lts</InputAdornment>
-                  ),
-                }}
-              />
-            </Grid> */}
             <Grid item xs={12} sm={6}>
               <TextField
                 label="Combustible"
@@ -230,36 +239,6 @@ const Quotes = () => {
                 helperText={getHelperText('financiamiento')}
               />
             </Grid>
-            {/* <Grid item xs={12} sm={6}>
-              <TextField
-                label="Otros"
-                id="otros"
-                name="otros"
-                type="number"
-                value={formikConfig.values.otros}
-                onChange={formikConfig.handleChange}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="end">$</InputAdornment>
-                  ),
-                }}
-              />
-            </Grid> */}
-            {/* <Grid item xs={12} sm={6}>
-              <TextField
-                label="Subcontrato"
-                id="sucontrato"
-                name="sucontrato"
-                type="number"
-                value={formikConfig.values.sucontrato}
-                onChange={formikConfig.handleChange}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="end">$</InputAdornment>
-                  ),
-                }}
-              />
-            </Grid> */}
           </Grid>
           <Stack
             spacing={2}
