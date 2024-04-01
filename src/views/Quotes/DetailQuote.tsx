@@ -441,6 +441,14 @@ const DetailQuote = () => {
     { name: 'Diesel extra', selector: (row: any) => row.dieselExtra },
     { name: 'Extra', selector: (row: any) => row.extra },
     { name: 'Comidas', selector: (row: any) => row.comidas },
+    {
+      name: 'Pasaje local origen',
+      selector: (row: any) => row.pasajeLocalOrigen,
+    },
+    {
+      name: 'Pasaje local destino',
+      selector: (row: any) => row.pasajeLocalDestino,
+    },
     { name: 'Pasaje origen', selector: (row: any) => row.pasajeOrigen },
     { name: 'Pasaje destino', selector: (row: any) => row.pasajeDestino },
     { name: 'Peajes viapass', selector: (row: any) => row.peajesViapass },
@@ -492,6 +500,8 @@ const DetailQuote = () => {
       wrap: true,
     },
   ];
+
+  console.log('>>>', dataTable);
 
   return (
     <>
