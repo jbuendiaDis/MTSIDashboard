@@ -33,6 +33,7 @@ const Notifications = () => {
   ).length;
 
   useEffect(() => {
+    handleGetNotifications();
     const interval = setInterval(() => {
       handleGetNotifications();
     }, 300000);
@@ -116,14 +117,14 @@ const Notifications = () => {
               {notification.estatus}
             </Typography>
           </Stack>
-          <Stack direction="row" spacing={1}>
+          {/* <Stack direction="row" spacing={1}>
             <Typography sx={{ fontSize: '12px', fontWeight: 'bold' }}>
               Tipo de Viaje:
             </Typography>
             <Typography sx={{ fontSize: '12px' }}>
               {notification.tipoViajeName}
             </Typography>
-          </Stack>
+          </Stack> */}
         </Grid>
       </ListItemButton>
     );

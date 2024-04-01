@@ -134,6 +134,8 @@ export interface FormatDataDetailQuote {
   otros: string;
   dimensiones: string;
   trasladoTipo: string;
+  manual?: string;
+  clienteNombre?: string;
 }
 
 export interface PayloadDetailQuote {

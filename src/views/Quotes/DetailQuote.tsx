@@ -182,6 +182,7 @@ const DetailQuote = () => {
           };
         });
 
+        console.log('---', formatData);
         setDataTable(formatData);
       } else
         modalInformation({
@@ -273,7 +274,7 @@ const DetailQuote = () => {
     setSelectedValueModelo(null);
   };
 
-  const handleModal = (rowData: any): void => {
+  const handleModal = (rowData: FormatDataDetailQuote): void => {
     setOpenDialog(!openDialog);
     setUpdateData(rowData);
     handleGetRendimientoMarca();
