@@ -8,7 +8,7 @@ import {
   Typography,
 } from '@mui/material';
 import {
-  DeleteOutlineOutlined,
+  // DeleteOutlineOutlined,
   ModeEditOutlineOutlined,
 } from '@mui/icons-material';
 import { useHelpers } from './helpers';
@@ -21,7 +21,7 @@ import {
 } from '../../models';
 import { useModal } from '../../components/Modal';
 import { Formik } from 'formik';
-import { DataToll } from './types';
+// import { DataToll } from './types';
 import { useRootProvider } from '../../components/RootProvider/hooks/useRootProvider';
 import { useLoader } from '../../components/Loader';
 import { HeaderTitleModal } from '../../components/Modal/HeaderTitleModal';
@@ -41,8 +41,11 @@ const Tolls = () => {
     useRootProvider();
   const { states, handleGetStates } = actionsState;
   const {
-    countriesByStateUnitTypeOrigin,
-    handleGetCountriesByStateUnitTypeOrigin,
+    // countriesByStateUnitTypeOrigin,
+    countriesByStateUnitType,
+    // handleGetCountriesByStateUnitTypeOrigin,
+
+    handleGetCountriesByStateUnitType,
     handleResetCountriesByStateUnitTypeOrigin,
   } = actionsCountries;
   const { catalogs, handleGetCatalogs, handleGetUnitType, unitTypes } =
@@ -52,7 +55,6 @@ const Tolls = () => {
     initialValues,
     validationSchema,
     handleSubmit,
-    handleOpenModalDelete,
     handleGetToll,
     setDataEdit,
     setDataTemp,
@@ -60,6 +62,8 @@ const Tolls = () => {
     unitTypes,
     setValueState,
     setValueUnitType,
+    valueUnitType,
+    valueState,
   });
 
   useEffect(() => {
@@ -85,7 +89,11 @@ const Tolls = () => {
   useEffect(() => {
     if (valueState && valueUnitType) {
       handleResetCountriesByStateUnitTypeOrigin();
-      handleGetCountriesByStateUnitTypeOrigin(
+      // handleGetCountriesByStateUnitTypeOrigin(
+      //   valueState.codigo,
+      //   valueUnitType.descripcion
+      // );
+      handleGetCountriesByStateUnitType(
         valueState.codigo,
         valueUnitType.descripcion
       );
@@ -93,37 +101,13 @@ const Tolls = () => {
   }, [valueState, valueUnitType]);
 
   useEffect(() => {
-    if (countriesByStateUnitTypeOrigin?.length > 0) {
-      const formatData: CountriesData[] = countriesByStateUnitTypeOrigin.map(
-        (item: any) => {
-          // const costoNumber =
-          //   typeof item.costo === 'number'
-          //     ? item.costo
-          //     : parseFloat(item.costo || '0');
-
-          return {
-            ...item,
-            // costo: item.costo
-            //   ? formatToCurrency(costoNumber)
-            //   : formatToCurrency(0),
-            // fechaCreacion:
-            //   typeof item.fechaCreacion === 'string'
-            //     ? format(parseISO(item.fechaCreacion), 'dd/MM/yyyy')
-            //     : format(item.fechaCreacion, 'dd/MM/yyyy'),
-          };
-        }
-      );
-      setCountriesByStateData(formatData);
-    } else {
-      setCountriesByStateData([]);
-    }
-  }, [countriesByStateUnitTypeOrigin]);
+    if (countriesByStateUnitType?.length > 0)
+      setCountriesByStateData(countriesByStateUnitType);
+    else setCountriesByStateData([]);
+  }, [countriesByStateUnitType]);
 
   const columns: Column[] = [
     { id: 'nombre', label: 'Nombre Caseta/Peaje', align: 'left' },
-    // { id: 'tipoUnidad', label: 'Tipo de Unidad', align: 'left' },
-    // { id: 'costo', label: 'Costo', align: 'left' },
-    // { id: 'fechaCreacion', label: 'Fecha de creación', align: 'left' },
     {
       id: 'actions',
       label: 'Acciones',
@@ -132,16 +116,7 @@ const Tolls = () => {
         {
           label: 'Editar',
           icon: <ModeEditOutlineOutlined sx={{ width: 20, height: 20 }} />,
-          onClick: (rowData: DataToll) => handleGetToll(rowData),
-        },
-        {
-          label: 'Eliminar',
-          icon: (
-            <DeleteOutlineOutlined
-              sx={{ width: 20, height: 20, color: 'red' }}
-            />
-          ),
-          onClick: (rowData: DataToll) => handleOpenModalDelete(rowData),
+          onClick: (rowData) => handleGetToll(rowData),
         },
       ],
     },

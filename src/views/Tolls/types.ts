@@ -16,7 +16,7 @@ export interface FormValues {
 
 export interface DataToll {
   codigo: number;
-  coordenadas: [number, number];
+  coordenadas?: [number, number];
   costo?: string | number;
   estado: number;
   fechaCreacion: string | Date;

@@ -8,6 +8,7 @@ import { useEffect } from 'react';
 import { useRootProvider } from '../../components/RootProvider/hooks/useRootProvider';
 import { DataCatalogs } from '../../models';
 import { FormValues } from './types';
+import { useApi } from '../../hooks/useApi';
 
 interface FormTollsProps {
   handleToggleModal: () => void;
@@ -29,6 +30,13 @@ const FormTolls = ({
     handleGetCountriesByStateUnitType,
     handleResetCountriesByStateUnitType,
   } = actionsCountries;
+
+  const _getCountrieById = useApi({
+    endpoint: 'countries/estado',
+    method: 'get',
+  });
+
+  console.log('dataEdit', dataEdit);
 
   useEffect(() => {
     if (values.state !== null && values.unitType !== '' && dataEdit === null) {
@@ -79,12 +87,13 @@ const FormTolls = ({
             getOptionValue={(option) => option.descripcion}
           />
         </Grid>
-        <Grid item xs={12}>
+        {/* <Grid item xs={12}>
           <AutoCompleteComponent
             label="Seleccione un estado"
             name="state"
             options={states}
             labelField="label"
+            disabled={dataEdit ? true : false}
           />
         </Grid>
         <Grid item xs={12}>
@@ -93,8 +102,9 @@ const FormTolls = ({
             name="nombre"
             options={countriesByStateUnitType}
             labelField="nombre"
+            disabled={dataEdit ? true : false}
           />
-        </Grid>
+        </Grid> */}
         <Grid item xs={12} sm={12}>
           <Input
             fullWidth

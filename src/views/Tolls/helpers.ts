@@ -12,13 +12,17 @@ interface PropsHelpers {
   setValueState: (value: null | FormatDataState) => void;
   setValueUnitType: (value: null | DataCatalogs) => void;
   unitTypes: DataCatalogs[];
+  valueUnitType: any;
+  valueState: any;
 }
 
 export const useHelpers = ({
   unitTypes,
   setValueState,
   setValueUnitType,
-}: PropsHelpers) => {
+}: // valueUnitType,
+// valueState,
+PropsHelpers) => {
   const [dataEdit, setDataEdit] = useState<FormValues | null>(null);
   const [dataTemp, setDataTemp] = useState<any | null>(null);
   const { actionsCountries, actionsState }: any = useRootProvider();
@@ -28,24 +32,18 @@ export const useHelpers = ({
     handleResetCountriesByStateUnitTypeOrigin,
   } = actionsCountries;
   const { states } = actionsState;
-  const { modalDelete, modalSuccess, modalInformation } =
-    useModalConfirmation();
+  const { modalSuccess, modalInformation } = useModalConfirmation();
 
   const requiredField: string = 'Este campo es obligatorio.';
 
   const _getCountrieById = useApi({
-    endpoint: '/countries/by-id',
+    endpoint: 'countries/by-id',
     method: 'get',
   });
 
   const _createCountrie = useApi({
     endpoint: '/countrie',
     method: 'post',
-  });
-
-  const _delteCountrie = useApi({
-    endpoint: '/countries',
-    method: 'delete',
   });
 
   const _updateCountrie = useApi({
@@ -77,50 +75,7 @@ export const useHelpers = ({
     }
   }, [dataTemp, countriesByStateUnitTypeOrigin]);
 
-  const handleOpenModalDelete = (data: DataToll): void => {
-    const message: string = '¿Seguro que desea eliminar este peaje:';
-    const dataValue = `${data.nombre}`;
-    modalDelete({
-      message,
-      dataValue,
-      callbackConfirm: () => handleDeleteToll(data._id),
-    });
-  };
-
-  const handleDeleteToll = async (id: string): Promise<boolean> => {
-    try {
-      const { payload, response }: ResponseTolls = await _delteCountrie({
-        urlParam: id,
-      });
-      const code: Response['code'] = response.code;
-      const message: Response['message'] = response.message;
-      const dataResponse: DataToll | DataToll[] = payload.data;
-
-      if (code === 200) {
-        modalSuccess({ message });
-        if (Array.isArray(dataResponse)) {
-          dataResponse.forEach((dataToll: DataToll) => {
-            handleGetCountriesByStateUnitTypeOrigin(
-              dataToll.estado,
-              dataToll.tipoUnidad
-            );
-          });
-        } else {
-          handleGetCountriesByStateUnitTypeOrigin(
-            dataResponse.estado,
-            dataResponse.tipoUnidad
-          );
-        }
-      } else {
-        modalInformation({ message });
-      }
-      return true;
-    } catch (error) {
-      return false;
-    }
-  };
-
-  const handleGetToll = async (data: DataToll): Promise<boolean> => {
+  const handleGetToll = async (data: any): Promise<boolean> => {
     try {
       const { payload, response }: ResponseTolls = await _getCountrieById({
         urlParam: data._id,
@@ -137,7 +92,6 @@ export const useHelpers = ({
         );
         setDataTemp(dataResponse);
       }
-
       return true;
     } catch (error) {
       return false;
@@ -145,9 +99,6 @@ export const useHelpers = ({
   };
 
   const validationSchema = Yup.object().shape({
-    state: Yup.object().nullable().required(requiredField),
-    unitType: Yup.string().required(requiredField),
-    nombre: Yup.object().nullable().required(requiredField),
     costo: Yup.number().required(requiredField),
     _id: Yup.string(),
   });
@@ -194,6 +145,8 @@ export const useHelpers = ({
             newValues.estado,
             newValues.tipoUnidad
           );
+          // setValueState(null);
+          // setValueUnitType( null);
         } else {
           modalInformation({ message });
         }
@@ -230,7 +183,6 @@ export const useHelpers = ({
     initialValues,
     validationSchema,
     handleSubmit,
-    handleOpenModalDelete,
     handleGetToll,
     setDataEdit,
     setDataTemp,
