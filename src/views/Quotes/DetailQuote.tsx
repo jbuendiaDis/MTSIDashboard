@@ -495,7 +495,7 @@ const DetailQuote = () => {
 
   return (
     <>
-      <Grid sx={{ marginBottom: 2, pl: 2, pr: 2  }}>
+      <Grid sx={{ marginBottom: 2, pl: 2, pr: 2 }}>
         <Grid
           container
           sx={{ display: 'flex', justifyContent: 'space-between' }}

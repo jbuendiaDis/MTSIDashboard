@@ -26,8 +26,8 @@ import { useRootProvider } from '../../components/RootProvider/hooks/useRootProv
 import { useLoader } from '../../components/Loader';
 import { HeaderTitleModal } from '../../components/Modal/HeaderTitleModal';
 import { FormTolls } from './FormTolls';
-import { formatToCurrency } from '../../utils/amountFormater';
-import { format, parseISO } from 'date-fns';
+// import { formatToCurrency } from '../../utils/amountFormater';
+// import { format, parseISO } from 'date-fns';
 
 const Tolls = () => {
   const [valueState, setValueState] = useState<FormatDataState | null>(null);
@@ -96,20 +96,20 @@ const Tolls = () => {
     if (countriesByStateUnitTypeOrigin?.length > 0) {
       const formatData: CountriesData[] = countriesByStateUnitTypeOrigin.map(
         (item: any) => {
-          const costoNumber =
-            typeof item.costo === 'number'
-              ? item.costo
-              : parseFloat(item.costo || '0');
+          // const costoNumber =
+          //   typeof item.costo === 'number'
+          //     ? item.costo
+          //     : parseFloat(item.costo || '0');
 
           return {
             ...item,
-            costo: item.costo
-              ? formatToCurrency(costoNumber)
-              : formatToCurrency(0),
-            fechaCreacion:
-              typeof item.fechaCreacion === 'string'
-                ? format(parseISO(item.fechaCreacion), 'dd/MM/yyyy')
-                : format(item.fechaCreacion, 'dd/MM/yyyy'),
+            // costo: item.costo
+            //   ? formatToCurrency(costoNumber)
+            //   : formatToCurrency(0),
+            // fechaCreacion:
+            //   typeof item.fechaCreacion === 'string'
+            //     ? format(parseISO(item.fechaCreacion), 'dd/MM/yyyy')
+            //     : format(item.fechaCreacion, 'dd/MM/yyyy'),
           };
         }
       );
@@ -121,9 +121,9 @@ const Tolls = () => {
 
   const columns: Column[] = [
     { id: 'nombre', label: 'Nombre Caseta/Peaje', align: 'left' },
-    { id: 'tipoUnidad', label: 'Tipo de Unidad', align: 'left' },
-    { id: 'costo', label: 'Costo', align: 'left' },
-    { id: 'fechaCreacion', label: 'Fecha de creación', align: 'left' },
+    // { id: 'tipoUnidad', label: 'Tipo de Unidad', align: 'left' },
+    // { id: 'costo', label: 'Costo', align: 'left' },
+    // { id: 'fechaCreacion', label: 'Fecha de creación', align: 'left' },
     {
       id: 'actions',
       label: 'Acciones',

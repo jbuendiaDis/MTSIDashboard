@@ -101,7 +101,7 @@ const Quotes = () => {
         const mimeType = parts[0].split(':')[1];
         return mimeType.split('/')[1];
       }
-      return 'jpg'; // Valor predeterminado si no se puede determinar el tipo de imagen
+      return 'jpg';
     };
 
     const byteString = atob(base64Image.split(',')[1]);
@@ -130,26 +130,6 @@ const Quotes = () => {
     {
       name: 'Localidad destino',
       selector: (row: QuoteDetailData) => row.localidadDestinoName,
-    },
-    {
-      name: 'Calle',
-      selector: (row: QuoteDetailData) => row.calle,
-    },
-    {
-      name: 'Colonia',
-      selector: (row: QuoteDetailData) => row.colonia,
-    },
-    {
-      name: 'C.P.',
-      selector: (row: QuoteDetailData) => row.cp,
-    },
-    {
-      name: 'Número exterior',
-      selector: (row: QuoteDetailData) => row.numeroExterior,
-    },
-    {
-      name: 'Número interior',
-      selector: (row: QuoteDetailData) => row.numeroInterior,
     },
     {
       name: 'Tipo viaje',
@@ -210,10 +190,7 @@ const Quotes = () => {
       const message: Response['message'] = response.message;
       const dataResponse: PayloadViewQuoteDetail['data'] = payload.data[0];
 
-      console.log('---', dataResponse.clienteName);
-
       if (code === 200) {
-        console.log('RES', dataResponse);
         const createDateString = dataResponse.createdAt;
         const createDateFormat = new Date(createDateString);
         const updateDateString = dataResponse.updatedAt;
