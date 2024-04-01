@@ -66,6 +66,8 @@ interface DataDetailQuote {
   litros: number;
   diesel: number;
   comidas: number;
+  pasajeLocalOrigen: number;
+  pasajeLocalDestino: number;
   pasajeOrigen: number;
   pasajeDestino: number;
   peajesViapass: number;
@@ -104,6 +106,8 @@ export interface FormatDataDetailQuote {
   litros: string;
   diesel: string;
   comidas: string;
+  pasajeLocalOrigen: string;
+  pasajeLocalDestino: string;
   pasajeOrigen: string;
   pasajeDestino: string;
   peajesViapass: string;

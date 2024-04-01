@@ -147,6 +147,12 @@ const DetailQuote = () => {
             ferry: formatToCurrency(item.ferry),
             vuelo: formatToCurrency(item.vuelo),
             pagoEstadia: formatToCurrency(item.pagoEstadia),
+            pasajeLocalDestino: formatToCurrency(
+              item.pasajeLocalDestino ? item.pasajeLocalDestino : 0
+            ),
+            pasajeLocalOrigen: formatToCurrency(
+              item.pasajeLocalOrigen ? item.pasajeLocalOrigen : 0
+            ),
             pasajeDestino: formatToCurrency(item.pasajeDestino),
             pasajeOrigen: formatToCurrency(item.pasajeOrigen),
             peajesViapass: formatToCurrency(item.peajesViapass),
@@ -411,70 +417,106 @@ const DetailQuote = () => {
   const columnsTwo = [
     {
       name: 'Origen',
-      selector: (row: any) => row.origen,
+      selector: (row: FormatDataDetailQuote) => row.origen,
     },
     {
       name: 'Destino',
-      selector: (row: any) => row.destino,
+      selector: (row: FormatDataDetailQuote) => row.destino,
     },
     {
       name: 'Dimensiones',
-      selector: (row: any) => row.dimensiones,
+      selector: (row: FormatDataDetailQuote) => row.dimensiones,
     },
     {
       name: 'Tipo de traslado',
-      selector: (row: any) => row.trasladoTipo,
+      selector: (row: FormatDataDetailQuote) => row.trasladoTipo,
     },
     {
       name: 'Kms',
-      selector: (row: any) => row.kms,
+      selector: (row: FormatDataDetailQuote) => row.kms,
     },
     {
       name: 'Rendimiento',
-      selector: (row: any) => row.rendimiento,
+      selector: (row: FormatDataDetailQuote) => row.rendimiento,
     },
     {
       name: 'Litros',
-      selector: (row: any) => row.litros,
+      selector: (row: FormatDataDetailQuote) => row.litros,
     },
-    { name: 'Diesel', selector: (row: any) => row.diesel },
-    { name: 'Diesel extra', selector: (row: any) => row.dieselExtra },
-    { name: 'Extra', selector: (row: any) => row.extra },
-    { name: 'Comidas', selector: (row: any) => row.comidas },
+    { name: 'Diesel', selector: (row: FormatDataDetailQuote) => row.diesel },
+    {
+      name: 'Diesel extra',
+      selector: (row: FormatDataDetailQuote) => row.dieselExtra,
+    },
+    { name: 'Extra', selector: (row: FormatDataDetailQuote) => row.extra },
+    { name: 'Comidas', selector: (row: FormatDataDetailQuote) => row.comidas },
     {
       name: 'Pasaje local origen',
-      selector: (row: any) => row.pasajeLocalOrigen,
+      selector: (row: FormatDataDetailQuote) => row.pasajeLocalOrigen,
     },
     {
       name: 'Pasaje local destino',
-      selector: (row: any) => row.pasajeLocalDestino,
+      selector: (row: FormatDataDetailQuote) => row.pasajeLocalDestino,
     },
-    { name: 'Pasaje origen', selector: (row: any) => row.pasajeOrigen },
-    { name: 'Pasaje destino', selector: (row: any) => row.pasajeDestino },
-    { name: 'Peajes viapass', selector: (row: any) => row.peajesViapass },
-    { name: 'Seguro traslado', selector: (row: any) => row.seguroTraslado },
-    { name: 'Sueldo', selector: (row: any) => row.sueldo },
-    { name: 'Pago de estadia', selector: (row: any) => row.pagoEstadia },
-    { name: 'Ferry', selector: (row: any) => row.ferry },
-    { name: 'Hotel', selector: (row: any) => row.hotel },
-    { name: 'Vuelo', selector: (row: any) => row.vuelo },
-    { name: 'Taxi', selector: (row: any) => row.taxi },
-    { name: 'UDS/USA', selector: (row: any) => row.udsUsa },
+    {
+      name: 'Pasaje origen',
+      selector: (row: FormatDataDetailQuote) => row.pasajeOrigen,
+    },
+    {
+      name: 'Pasaje destino',
+      selector: (row: FormatDataDetailQuote) => row.pasajeDestino,
+    },
+    {
+      name: 'Peajes viapass',
+      selector: (row: FormatDataDetailQuote) => row.peajesViapass,
+    },
+    {
+      name: 'Seguro traslado',
+      selector: (row: FormatDataDetailQuote) => row.seguroTraslado,
+    },
+    { name: 'Sueldo', selector: (row: FormatDataDetailQuote) => row.sueldo },
+    {
+      name: 'Pago de estadia',
+      selector: (row: FormatDataDetailQuote) => row.pagoEstadia,
+    },
+    { name: 'Ferry', selector: (row: FormatDataDetailQuote) => row.ferry },
+    { name: 'Hotel', selector: (row: FormatDataDetailQuote) => row.hotel },
+    { name: 'Vuelo', selector: (row: FormatDataDetailQuote) => row.vuelo },
+    { name: 'Taxi', selector: (row: FormatDataDetailQuote) => row.taxi },
+    { name: 'UDS/USA', selector: (row: FormatDataDetailQuote) => row.udsUsa },
     {
       name: 'Liberacion de puerto',
-      selector: (row: any) => row.liberacionPuerto,
+      selector: (row: FormatDataDetailQuote) => row.liberacionPuerto,
     },
-    { name: 'Talachas', selector: (row: any) => row.talachas },
-    { name: 'Fitosanitarias', selector: (row: any) => row.fitosanitarias },
-    { name: 'Urea', selector: (row: any) => row.urea },
-    { name: 'Otros', selector: (row: any) => row.otros },
-    { name: 'Subtotal', selector: (row: any) => row.subTotal },
-    { name: 'Admon', selector: (row: any) => row.admon },
-    { name: 'Total', selector: (row: any) => row.total },
-    { name: 'Inflación', selector: (row: any) => row.inflacion },
-    { name: 'Financiamiento', selector: (row: any) => row.financiamiento },
-    { name: 'Ganancia', selector: (row: any) => row.ganancia },
-    { name: 'Costo', selector: (row: any) => row.costo },
+    {
+      name: 'Talachas',
+      selector: (row: FormatDataDetailQuote) => row.talachas,
+    },
+    {
+      name: 'Fitosanitarias',
+      selector: (row: FormatDataDetailQuote) => row.fitosanitarias,
+    },
+    { name: 'Urea', selector: (row: FormatDataDetailQuote) => row.urea },
+    { name: 'Otros', selector: (row: FormatDataDetailQuote) => row.otros },
+    {
+      name: 'Subtotal',
+      selector: (row: FormatDataDetailQuote) => row.subTotal,
+    },
+    { name: 'Admon', selector: (row: FormatDataDetailQuote) => row.admon },
+    { name: 'Total', selector: (row: FormatDataDetailQuote) => row.total },
+    {
+      name: 'Inflación',
+      selector: (row: FormatDataDetailQuote) => row.inflacion,
+    },
+    {
+      name: 'Financiamiento',
+      selector: (row: FormatDataDetailQuote) => row.financiamiento,
+    },
+    {
+      name: 'Ganancia',
+      selector: (row: FormatDataDetailQuote) => row.ganancia,
+    },
+    { name: 'Costo', selector: (row: FormatDataDetailQuote) => row.costo },
     {
       name: 'Acciones',
       cell: (row: any) =>
