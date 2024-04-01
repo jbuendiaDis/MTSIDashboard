@@ -14,7 +14,12 @@ import {
   DialogContent,
   TextField,
 } from '@mui/material';
-import { DownloadOutlined, EditOutlined, Close } from '@mui/icons-material';
+import {
+  DownloadOutlined,
+  EditOutlined,
+  Close,
+  ExitToAppOutlined,
+} from '@mui/icons-material';
 import {
   FormatDataDetailQuote,
   PayloadDetailQuote,
@@ -36,6 +41,7 @@ import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import '@ckeditor/ckeditor5-build-classic/build/translations/es';
 import CustomTable from '../../components/Table/TableRender';
+import * as XLSX from 'xlsx';
 
 const DetailQuote = () => {
   const location = useLocation();
@@ -543,7 +549,51 @@ const DetailQuote = () => {
     },
   ];
 
-  console.log('>>>', dataTable);
+  const handleExportDataQuoteHistorial = (): void => {
+    const filteredData = dataTable.map((item) => ({
+      Origen: item.origen,
+      Destino: item.destino,
+      Dimensiones: item.dimensiones,
+      'Tipo de traslado': item.trasladoTipo,
+      Kms: item.kms,
+      Rendimiento: item.rendimiento,
+      Litros: item.litros,
+      Diesel: item.diesel,
+      'Diesel extra': item.dieselExtra,
+      Extra: item.extra,
+      Comidas: item.comidas,
+      'Pasaje local origen': item.pasajeLocalOrigen,
+      'Pasaje local destino': item.pasajeLocalDestino,
+      'Pasaje origen': item.pasajeOrigen,
+      'Pasaje destino': item.pasajeDestino,
+      'Peajes viapass': item.peajesViapass,
+      'Seguro traslado': item.seguroTraslado,
+      Sueldo: item.sueldo,
+      'Pago de estadia': item.pagoEstadia,
+      Ferry: item.ferry,
+      Hotel: item.hotel,
+      Vuelo: item.vuelo,
+      Taxi: item.taxi,
+      'UDS/USA': item.udsUsa,
+      'Liberacion de puerto': item.liberacionPuerto,
+      Talachas: item.talachas,
+      Fitosanitarias: item.fitosanitarias,
+      Urea: item.urea,
+      Otros: item.otros,
+      Subtotal: item.subTotal,
+      Admon: item.admon,
+      Total: item.total,
+      Inflación: item.inflacion,
+      Financiamiento: item.financiamiento,
+      Ganancia: item.ganancia,
+      Costo: item.costo,
+    }));
+
+    const worksheet = XLSX.utils.json_to_sheet(filteredData);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Cotizaciones');
+    XLSX.writeFile(workbook, 'cotizaciones.xlsx');
+  };
 
   return (
     <>
@@ -565,16 +615,43 @@ const DetailQuote = () => {
             </Tooltip>
           </Grid>
         </Grid>
-        <Stack
-          direction="row"
-          spacing={1}
-          sx={{ mt: 3, display: 'flex', alignItems: 'center' }}
+        <Grid
+          container
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            mt: 5,
+            mb: 5,
+          }}
         >
-          <Typography sx={{ fontSize: '18px', fontWeight: 'bold' }}>
-            Cliente:
-          </Typography>
-          <Typography sx={{ fontSize: '18px' }}>{state.clientName}</Typography>
-        </Stack>
+          <Grid item xs={12} md={6}>
+            <Stack direction="row" spacing={1}>
+              <Typography sx={{ fontSize: '18px', fontWeight: 'bold' }}>
+                Cliente:
+              </Typography>
+              <Typography sx={{ fontSize: '18px' }}>
+                {state.clientName}
+              </Typography>
+            </Stack>
+          </Grid>
+          <Grid
+            item
+            xs={12}
+            md={6}
+            sx={{ display: 'flex', justifyContent: 'end' }}
+          >
+            <Button
+              variant="contained"
+              color="inherit"
+              sx={{ p: 1.5, letterSpacing: '1.2px' }}
+              onClick={handleExportDataQuoteHistorial}
+              endIcon={<ExitToAppOutlined />}
+              // disabled={pathname === '/quote-history' && data?.length === 0}
+            >
+              Exportar Excel
+            </Button>
+          </Grid>
+        </Grid>
       </Grid>
       <CustomTable columns={columnsTwo} data={dataTable} />
       <Container
