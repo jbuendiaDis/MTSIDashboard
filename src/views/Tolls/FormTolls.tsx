@@ -2,41 +2,30 @@
 import { Form, FormikValues, useFormikContext } from 'formik';
 import { Grid, InputAdornment, Button, Stack } from '@mui/material';
 import Select from '../../components/Input/Select';
-import { AutoCompleteComponent } from '../../components/Input/AutoCompleteComponent';
 import Input from '../../components/Input/Input';
 import { useEffect } from 'react';
 import { useRootProvider } from '../../components/RootProvider/hooks/useRootProvider';
 import { DataCatalogs } from '../../models';
 import { FormValues } from './types';
-import { useApi } from '../../hooks/useApi';
 
 interface FormTollsProps {
   handleToggleModal: () => void;
   unitTypes: DataCatalogs[];
-  states: any[];
+  // states: any[];
   dataEdit: FormValues | null;
 }
 
 const FormTolls = ({
   handleToggleModal,
   unitTypes,
-  states,
   dataEdit,
 }: FormTollsProps) => {
   const { values, setValues } = useFormikContext<FormikValues>();
   const { actionsCountries }: any = useRootProvider();
   const {
-    countriesByStateUnitType,
     handleGetCountriesByStateUnitType,
     handleResetCountriesByStateUnitType,
   } = actionsCountries;
-
-  const _getCountrieById = useApi({
-    endpoint: 'countries/estado',
-    method: 'get',
-  });
-
-  console.log('dataEdit', dataEdit);
 
   useEffect(() => {
     if (values.state !== null && values.unitType !== '' && dataEdit === null) {
@@ -87,24 +76,6 @@ const FormTolls = ({
             getOptionValue={(option) => option.descripcion}
           />
         </Grid>
-        {/* <Grid item xs={12}>
-          <AutoCompleteComponent
-            label="Seleccione un estado"
-            name="state"
-            options={states}
-            labelField="label"
-            disabled={dataEdit ? true : false}
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <AutoCompleteComponent
-            label="Seleccione una caseta"
-            name="nombre"
-            options={countriesByStateUnitType}
-            labelField="nombre"
-            disabled={dataEdit ? true : false}
-          />
-        </Grid> */}
         <Grid item xs={12} sm={12}>
           <Input
             fullWidth

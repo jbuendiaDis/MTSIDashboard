@@ -7,10 +7,7 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import {
-  // DeleteOutlineOutlined,
-  ModeEditOutlineOutlined,
-} from '@mui/icons-material';
+import { ModeEditOutlineOutlined } from '@mui/icons-material';
 import { useHelpers } from './helpers';
 import {
   Column,
@@ -26,8 +23,6 @@ import { useRootProvider } from '../../components/RootProvider/hooks/useRootProv
 import { useLoader } from '../../components/Loader';
 import { HeaderTitleModal } from '../../components/Modal/HeaderTitleModal';
 import { FormTolls } from './FormTolls';
-// import { formatToCurrency } from '../../utils/amountFormater';
-// import { format, parseISO } from 'date-fns';
 
 const Tolls = () => {
   const [valueState, setValueState] = useState<FormatDataState | null>(null);
@@ -41,12 +36,9 @@ const Tolls = () => {
     useRootProvider();
   const { states, handleGetStates } = actionsState;
   const {
-    // countriesByStateUnitTypeOrigin,
     countriesByStateUnitType,
-    // handleGetCountriesByStateUnitTypeOrigin,
-
     handleGetCountriesByStateUnitType,
-    handleResetCountriesByStateUnitTypeOrigin,
+    handleResetCountriesByStateUnitType,
   } = actionsCountries;
   const { catalogs, handleGetCatalogs, handleGetUnitType, unitTypes } =
     actionsCatalogs;
@@ -75,7 +67,7 @@ const Tolls = () => {
     setValueState(null);
     setValueUnitType(null);
     setCountriesByStateData([]);
-    handleResetCountriesByStateUnitTypeOrigin();
+    handleResetCountriesByStateUnitType();
   }, []);
 
   useEffect(() => {
@@ -88,11 +80,7 @@ const Tolls = () => {
 
   useEffect(() => {
     if (valueState && valueUnitType) {
-      handleResetCountriesByStateUnitTypeOrigin();
-      // handleGetCountriesByStateUnitTypeOrigin(
-      //   valueState.codigo,
-      //   valueUnitType.descripcion
-      // );
+      handleResetCountriesByStateUnitType();
       handleGetCountriesByStateUnitType(
         valueState.codigo,
         valueUnitType.descripcion
@@ -146,7 +134,7 @@ const Tolls = () => {
           <FormTolls
             handleToggleModal={handleToggleModal}
             unitTypes={unitTypes}
-            states={states}
+            // states={states}
             dataEdit={dataEdit}
           />
         </Formik>
@@ -169,20 +157,6 @@ const Tolls = () => {
               Peajes
             </Typography>
           </Grid>
-          {/* <Grid>
-          <Button
-            variant="contained"
-            color="inherit"
-            sx={{ p: '10px 20px', letterSpacing: '1px' }}
-            onClick={() => {
-              handleModal();
-              setDataEdit(null);
-            }}
-            startIcon={<Add />}
-          >
-            Agregar Peaje
-            </Button>
-        </Grid> */}
         </Grid>
         <Grid sx={{ mt: 3 }}>
           <Typography

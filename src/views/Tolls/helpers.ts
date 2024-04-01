@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from 'react';
 import { useApi } from '../../hooks/useApi';
 import { DataCatalogs, FormatDataState, Response } from '../../models';
@@ -20,9 +19,7 @@ export const useHelpers = ({
   unitTypes,
   setValueState,
   setValueUnitType,
-}: // valueUnitType,
-// valueState,
-PropsHelpers) => {
+}: PropsHelpers) => {
   const [dataEdit, setDataEdit] = useState<FormValues | null>(null);
   const [dataTemp, setDataTemp] = useState<any | null>(null);
   const { actionsCountries, actionsState }: any = useRootProvider();
@@ -145,8 +142,6 @@ PropsHelpers) => {
             newValues.estado,
             newValues.tipoUnidad
           );
-          // setValueState(null);
-          // setValueUnitType( null);
         } else {
           modalInformation({ message });
         }
