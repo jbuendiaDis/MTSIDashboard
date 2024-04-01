@@ -1,15 +1,39 @@
 import { useEffect, useState } from 'react';
 import { Drawer } from '../../components/Drawer';
 import { Table } from '../../components/Table';
-import { Column } from '../../models';
+import { Column, ModalContextType, Response } from '../../models';
 import { useHelpers } from './helpers';
-import { Grid, TextField, InputAdornment, Stack, Button } from '@mui/material';
-import { RequestQuoteOutlined, VisibilityOutlined } from '@mui/icons-material';
-import { FormValues } from './types';
+import {
+  Grid,
+  TextField,
+  InputAdornment,
+  Stack,
+  Button,
+  Typography,
+  Tooltip,
+  IconButton,
+} from '@mui/material';
+import {
+  RequestQuoteOutlined,
+  VisibilityOutlined,
+  InsertPhotoOutlined,
+  LocationOnOutlined,
+} from '@mui/icons-material';
+import {
+  FormValues,
+  PayloadViewQuoteDetail,
+  QuoteDetailData,
+  ResponseViewQuoteDetail,
+} from './types';
 import { useLocation, useNavigate } from 'react-router-dom';
 import * as XLSX from 'xlsx';
 import { useRootProvider } from '../../components/RootProvider/hooks/useRootProvider';
 import { useApi } from '../../hooks/useApi';
+import { useModalConfirmation } from '../../hooks/useModalConfirmation';
+import { useModal } from '../../components/Modal';
+import { HeaderTitleModal } from '../../components/Modal/HeaderTitleModal';
+import { format } from 'date-fns';
+import CustomTable from '../../components/Table/TableRender';
 
 const Quotes = () => {
   const location = useLocation();
@@ -29,6 +53,8 @@ const Quotes = () => {
   } = useHelpers({ setOpen });
   const { actionsCustomers }: any = useRootProvider();
   const { customers, handleGetCustomers } = actionsCustomers;
+  const { modalInformation } = useModalConfirmation();
+  const { handleOpenModal, handleCloseModal }: ModalContextType = useModal();
 
   const _getViewQuote = useApi({
     endpoint: 'v2/solicitud/detallecompleto',
@@ -68,13 +94,202 @@ const Quotes = () => {
     });
   }
 
+  const downloadImage = (base64Image: string) => {
+    const getImageType = (base64Image: string): string => {
+      const parts = base64Image.split(';base64,');
+      if (parts.length === 2) {
+        const mimeType = parts[0].split(':')[1];
+        return mimeType.split('/')[1];
+      }
+      return 'jpg'; // Valor predeterminado si no se puede determinar el tipo de imagen
+    };
+
+    const byteString = atob(base64Image.split(',')[1]);
+    const ab = new ArrayBuffer(byteString.length);
+    const ia = new Uint8Array(ab);
+    for (let i = 0; i < byteString.length; i++) {
+      ia[i] = byteString.charCodeAt(i);
+    }
+    const imageType = getImageType(base64Image);
+    const blob = new Blob([ab], { type: `image/${imageType}` });
+    const url = window.URL.createObjectURL(blob);
+
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `imagen.${imageType}`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  const columnsViewDetailQuote = [
+    {
+      name: 'Localidad origen',
+      selector: (row: QuoteDetailData) => row.localidadOrigenName,
+    },
+    {
+      name: 'Localidad destino',
+      selector: (row: QuoteDetailData) => row.localidadDestinoName,
+    },
+    {
+      name: 'Calle',
+      selector: (row: QuoteDetailData) => row.calle,
+    },
+    {
+      name: 'Colonia',
+      selector: (row: QuoteDetailData) => row.colonia,
+    },
+    {
+      name: 'C.P.',
+      selector: (row: QuoteDetailData) => row.cp,
+    },
+    {
+      name: 'Número exterior',
+      selector: (row: QuoteDetailData) => row.numeroExterior,
+    },
+    {
+      name: 'Número interior',
+      selector: (row: QuoteDetailData) => row.numeroInterior,
+    },
+    {
+      name: 'Tipo viaje',
+      selector: (row: QuoteDetailData) => row.tipoViajeName,
+    },
+    {
+      name: 'Tipo traslado',
+      selector: (row: QuoteDetailData) => row.trasladoTipo,
+    },
+    {
+      name: 'Concepto traslado',
+      selector: (row: QuoteDetailData) => row.trasladoConcepto,
+    },
+    {
+      name: 'Unidad marca',
+      selector: (row: QuoteDetailData) => row.unidadMarca,
+    },
+    {
+      name: 'Unidad modelo',
+      selector: (row: QuoteDetailData) => row.unidadModelo,
+    },
+    {
+      name: 'Unidad año',
+      selector: (row: QuoteDetailData) => row.modelo,
+    },
+    {
+      name: 'Peso',
+      selector: (row: QuoteDetailData) => row.peso,
+    },
+    {
+      name: 'Acciones',
+      cell: (row: QuoteDetailData) => (
+        <Stack spacing={1} direction="row">
+          <Tooltip title="Descargar Foto">
+            <IconButton onClick={() => downloadImage(row.fotoUnidad)}>
+              <InsertPhotoOutlined />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Ruta Mapa">
+            <IconButton onClick={() => window.open(row.urlMapa, '_blank')}>
+              <LocationOnOutlined />
+            </IconButton>
+          </Tooltip>
+        </Stack>
+      ),
+      grow: 1,
+      wrap: true,
+    },
+  ];
+
   const handleGetViewQuote = async (folio: string): Promise<boolean> => {
     try {
-      const response = await _getViewQuote({
-        urlParam: folio,
-      });
+      const { payload, response }: ResponseViewQuoteDetail =
+        await _getViewQuote({
+          urlParam: folio,
+        });
+      const code: Response['code'] = response.code;
+      const message: Response['message'] = response.message;
+      const dataResponse: PayloadViewQuoteDetail['data'] = payload.data[0];
 
-      console.log('RES', response);
+      console.log('---', dataResponse.clienteName);
+
+      if (code === 200) {
+        console.log('RES', dataResponse);
+        const createDateString = dataResponse.createdAt;
+        const createDateFormat = new Date(createDateString);
+        const updateDateString = dataResponse.updatedAt;
+        const updateDateFormat = new Date(updateDateString);
+
+        handleOpenModal({
+          fullWidth: true,
+          maxWidth: 'xl',
+          title: (
+            <HeaderTitleModal
+              handleToggleModal={handleCloseModal}
+              title={'DETALLES COTIZACIÓN'}
+            />
+          ),
+          body: (
+            <Grid container spacing={2} sx={{ mt: 2, mb: 2 }}>
+              <Grid item xs={12} md={6}>
+                <Stack direction="row" spacing={1}>
+                  <Typography sx={{ fontSize: '14px', fontWeight: 'bold' }}>
+                    Cliente:
+                  </Typography>
+                  <Typography sx={{ fontSize: '14px' }}>
+                    {dataResponse.clienteName}
+                  </Typography>
+                </Stack>
+              </Grid>
+              <Grid item xs={12} md={3}>
+                <Stack direction="row" spacing={1}>
+                  <Typography sx={{ fontSize: '14px', fontWeight: 'bold' }}>
+                    Tipo de viaje:
+                  </Typography>
+                  <Typography sx={{ fontSize: '14px' }}>
+                    {dataResponse.tipoViajeName}
+                  </Typography>
+                </Stack>
+              </Grid>
+              <Grid item xs={12} md={3}>
+                <Stack direction="row" spacing={1}>
+                  <Typography sx={{ fontSize: '14px', fontWeight: 'bold' }}>
+                    Estatus:
+                  </Typography>
+                  <Typography sx={{ fontSize: '14px' }}>
+                    {dataResponse.estatus}
+                  </Typography>
+                </Stack>
+              </Grid>
+              <Grid item xs={12} md={3}>
+                <Stack direction="row" spacing={1}>
+                  <Typography sx={{ fontSize: '14px', fontWeight: 'bold' }}>
+                    Creado:
+                  </Typography>
+                  <Typography sx={{ fontSize: '14px' }}>
+                    {format(createDateFormat, 'dd/MM/yyyy HH:mm')}
+                  </Typography>
+                </Stack>
+              </Grid>
+              <Grid item xs={12} md={3}>
+                <Stack direction="row" spacing={1}>
+                  <Typography sx={{ fontSize: '14px', fontWeight: 'bold' }}>
+                    Actualizado:
+                  </Typography>
+                  <Typography sx={{ fontSize: '14px' }}>
+                    {format(updateDateFormat, 'dd/MM/yyyy HH:mm')}
+                  </Typography>
+                </Stack>
+              </Grid>
+              <Grid item xs={12} sx={{ mt: 2 }}>
+                <CustomTable
+                  columns={columnsViewDetailQuote}
+                  data={dataResponse.detalles}
+                />
+              </Grid>
+            </Grid>
+          ),
+        });
+      } else modalInformation({ message });
       return true;
     } catch (error) {
       return false;

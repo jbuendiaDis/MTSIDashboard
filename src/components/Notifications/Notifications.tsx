@@ -4,14 +4,14 @@ import {
   Popover,
   Box,
   Typography,
-  Tooltip,
+  // Tooltip,
   Divider,
   List,
   ListSubheader,
   ListItemButton,
   Grid,
 } from '@mui/material';
-import { NotificationsOutlined, DoneAll } from '@mui/icons-material';
+import { NotificationsOutlined } from '@mui/icons-material';
 import { useEffect, useState } from 'react';
 import { useApi } from '../../hooks/useApi';
 import {
@@ -72,14 +72,14 @@ const Notifications = () => {
 
   // const totalUnRead: number = 1;
 
-  const handleMarkAllAsRead = () => {
-    setNotificationsData(
-      notificationsData.map((notification) => ({
-        ...notification,
-        isUnRead: false,
-      }))
-    );
-  };
+  // const handleMarkAllAsRead = () => {
+  //   setNotificationsData(
+  //     notificationsData.map((notification) => ({
+  //       ...notification,
+  //       isUnRead: false,
+  //     }))
+  //   );
+  // };
 
   const NotificationItem = ({ key, notification }: RenderNotificationItem) => {
     return (
@@ -164,13 +164,13 @@ const Notifications = () => {
             </Typography>
           </Box>
 
-          {totalUnRead > 0 && (
+          {/* {totalUnRead > 0 && (
             <Tooltip title="Marcar todo como leído">
               <IconButton color="primary" onClick={handleMarkAllAsRead}>
                 <DoneAll />
               </IconButton>
             </Tooltip>
-          )}
+          )} */}
         </Box>
 
         <Divider sx={{ borderStyle: 'dashed' }} />

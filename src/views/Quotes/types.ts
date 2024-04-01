@@ -145,3 +145,98 @@ export interface ResponseSendEmail {
   payload: any;
   response: Response;
 }
+
+export interface ResponseViewQuoteDetail {
+  payload: any;
+  response: Response;
+}
+
+export interface PayloadViewQuoteDetail {
+  data: ViewQuoteDetailData;
+}
+
+export interface ViewQuoteDetailData {
+  _id: string;
+  folio: number;
+  estatus: string;
+  userId: string;
+  clienteId: string;
+  clienteName: string;
+  tipoViajeId: string;
+  tipoViajeName: string;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+  detalles: QuoteDetailData[];
+}
+
+export interface QuoteDetailData {
+  _id: string;
+  solicitudId: string;
+  folio: number;
+  localidadOrigenId: string;
+  localidadOrigenName: string;
+  localidadDestinoId: string;
+  localidadDestinoName: string;
+  unidadId: string;
+  unidadMarca: string;
+  unidadModelo: string;
+  trasladoId: string;
+  trasladoTipo: string;
+  trasladoConcepto: string;
+  tipoViajeId: string;
+  tipoViajeName: string;
+  calle: string;
+  numeroInterior: string;
+  numeroExterior: string;
+  colonia: string;
+  cp: string;
+  tipoSeguro: string;
+  compania: string;
+  numeroPoliza: string;
+  modelo: string;
+  peso: string;
+  fotoUnidad: string;
+  urlMapa: string;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+  ultimoHistorial: {
+    _id: string;
+    quoteId: string;
+    folio: number;
+    clienteNombre: string;
+    origen: string;
+    destino: string;
+    kms: number;
+    rendimiento: number;
+    litros: number;
+    diesel: number;
+    comidas: number;
+    pasajeOrigen: number;
+    pasajeDestino: number;
+    peajesViapass: number;
+    seguroTraslado: number;
+    sueldo: number;
+    pagoEstadia: number;
+    hotel: number;
+    vuelo: number;
+    taxi: number;
+    ferry: number;
+    udsUsa: number;
+    liberacionPuerto: number;
+    talachas: number;
+    fitosanitarias: number;
+    urea: number;
+    extra: number;
+    subTotal: number;
+    admon: number;
+    total: number;
+    inflacion: number;
+    financiamiento: number;
+    ganancia: number;
+    costo: number;
+    fechaCreacion: string;
+    __v: number;
+  };
+}
