@@ -112,8 +112,6 @@ const Returns = () => {
     });
   };
 
-  console.log('>>>', returnsData);
-
   return (
     <div>
       <Table
