@@ -280,7 +280,6 @@ const DetailQuote = () => {
   };
 
   const handleModal = (rowData: FormatDataDetailQuote): void => {
-    console.log('???', rowData);
     setOpenDialog(!openDialog);
     setUpdateData(rowData);
     handleGetRendimientoMarca();
@@ -407,8 +406,6 @@ const DetailQuote = () => {
               otros: other,
               solicitudDetalleId: updateData.id,
             };
-
-      console.log('newDataUpdate', newDataUpdate);
 
       const response = await _updateDetailQuote({
         body: newDataUpdate,
