@@ -13,6 +13,7 @@ import {
   DialogTitle,
   DialogContent,
   TextField,
+  InputAdornment,
 } from '@mui/material';
 import {
   DownloadOutlined,
@@ -61,6 +62,9 @@ const DetailQuote = () => {
   const [selectedValueModelo, setSelectedValueModelo] = useState<any | null>(
     null
   );
+  const [performance, setPerformance] = useState<number | string>('');
+  const [other, setOther] = useState<number | string>('');
+  const [subcontract, setSubcontract] = useState<number | string>('');
   const isFolio: string | undefined = folio ? folio : '';
   const navigation = useNavigate();
 
@@ -182,7 +186,6 @@ const DetailQuote = () => {
           };
         });
 
-        console.log('---', formatData);
         setDataTable(formatData);
       } else
         modalInformation({
@@ -393,6 +396,9 @@ const DetailQuote = () => {
       const newDataUpdate = {
         unidadId: selectedValueModelo.id,
         solicitudDetalleId: updateData.id,
+        rendimiento: performance,
+        subcontrato: subcontract,
+        otros: other,
       };
 
       const response = await _updateDetailQuote({
@@ -411,6 +417,9 @@ const DetailQuote = () => {
           message,
           callbackConfirm: () => handleGetQuoteFolio(isFolio),
         });
+        setPerformance('');
+        setOther('');
+        setSubcontract('');
       } else {
         modalInformation({ message });
       }
@@ -596,6 +605,21 @@ const DetailQuote = () => {
     XLSX.writeFile(workbook, 'cotizaciones.xlsx');
   };
 
+  const handlePerformanceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    if (/^\d*$/.test(value)) setPerformance(value);
+  };
+
+  const handleSubcontractChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    if (/^\d*$/.test(value)) setSubcontract(value);
+  };
+
+  const handleOtherChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    if (/^\d*$/.test(value)) setOther(value);
+  };
+
   return (
     <>
       <Grid sx={{ marginBottom: 2, pl: 2, pr: 2 }}>
@@ -709,6 +733,36 @@ const DetailQuote = () => {
                   renderInput={(params) => (
                     <TextField {...params} label="Seleccione un modelo" />
                   )}
+                />
+                <TextField
+                  label="Rendimiento"
+                  value={performance}
+                  onChange={handlePerformanceChange}
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">Lts</InputAdornment>
+                    ),
+                  }}
+                />
+                <TextField
+                  label="Subcontrato"
+                  value={subcontract}
+                  onChange={handleSubcontractChange}
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="end">$</InputAdornment>
+                    ),
+                  }}
+                />
+                <TextField
+                  label="Otros"
+                  value={other}
+                  onChange={handleOtherChange}
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="end">$</InputAdornment>
+                    ),
+                  }}
                 />
               </Stack>
             </Box>
