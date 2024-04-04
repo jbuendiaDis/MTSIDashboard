@@ -157,7 +157,7 @@ const Quotes = () => {
     },
     {
       name: 'Peso',
-      selector: (row: QuoteDetailData) => row.peso,
+      selector: (row: QuoteDetailData) => `${row.peso} kg`,
     },
     {
       name: 'Acciones',

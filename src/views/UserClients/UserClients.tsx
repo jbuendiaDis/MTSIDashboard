@@ -187,7 +187,15 @@ const UserClients = () => {
                 id="telOficina"
                 name="telOficina"
                 value={formik.values.telOficina}
-                onChange={formik.handleChange}
+                onChange={(e) => {
+                  const inputValue = e.target.value;
+                  const regex = /^\d*$/;
+                  if (regex.test(inputValue)) {
+                    formik.handleChange(e);
+                  } else if (inputValue === '') {
+                    formik.handleChange(e);
+                  }
+                }}
                 onBlur={formik.handleBlur}
                 error={
                   formik.touched.telOficina && Boolean(formik.errors.telOficina)
@@ -205,7 +213,15 @@ const UserClients = () => {
                 id="extension"
                 name="extension"
                 value={formik.values.extension}
-                onChange={formik.handleChange}
+                onChange={(e) => {
+                  const inputValue = e.target.value;
+                  const regex = /^\d*$/;
+                  if (regex.test(inputValue)) {
+                    formik.handleChange(e);
+                  } else if (inputValue === '') {
+                    formik.handleChange(e);
+                  }
+                }}
                 onBlur={formik.handleBlur}
                 error={
                   formik.touched.extension && Boolean(formik.errors.extension)
@@ -221,7 +237,15 @@ const UserClients = () => {
                 id="telMovil"
                 name="telMovil"
                 value={formik.values.telMovil}
-                onChange={formik.handleChange}
+                onChange={(e) => {
+                  const inputValue = e.target.value;
+                  const regex = /^\d*$/;
+                  if (regex.test(inputValue)) {
+                    formik.handleChange(e);
+                  } else if (inputValue === '') {
+                    formik.handleChange(e);
+                  }
+                }}
                 onBlur={formik.handleBlur}
                 error={
                   formik.touched.telMovil && Boolean(formik.errors.telMovil)
@@ -237,7 +261,15 @@ const UserClients = () => {
                 id="whatsapp"
                 name="whatsapp"
                 value={formik.values.whatsapp}
-                onChange={formik.handleChange}
+                onChange={(e) => {
+                  const inputValue = e.target.value;
+                  const regex = /^\d*$/;
+                  if (regex.test(inputValue)) {
+                    formik.handleChange(e);
+                  } else if (inputValue === '') {
+                    formik.handleChange(e);
+                  }
+                }}
                 onBlur={formik.handleBlur}
                 error={
                   formik.touched.whatsapp && Boolean(formik.errors.whatsapp)

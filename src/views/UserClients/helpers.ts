@@ -179,10 +179,10 @@ export const useHelpers = ({ setOpenDrawer }: HelpersProps) => {
     email: Yup.string()
       .email('Escriba un email válido')
       .required('Este campo es obligatorio'),
-    telOficina: Yup.string().matches(/^\d+$/, 'Ingrese un número válido'),
-    telMovil: Yup.string().matches(/^\d+$/, 'Ingrese un número válido'),
-    whatsapp: Yup.string().matches(/^\d+$/, 'Ingrese un número válido'),
-    ext: Yup.string().matches(/^\d+$/, 'Ingrese un número válido'),
+    telOficina: Yup.string(),
+    telMovil: Yup.string(),
+    whatsapp: Yup.string(),
+    ext: Yup.string(),
     direccion: Yup.string().required(requiredField),
     notas: Yup.string(),
   });
@@ -195,10 +195,10 @@ export const useHelpers = ({ setOpenDrawer }: HelpersProps) => {
     email: Yup.string()
       .email('Escriba un email válido')
       .required('Este campo es obligatorio'),
-    telOficina: Yup.string().matches(/^\d+$/, 'Ingrese un número válido'),
-    telMovil: Yup.string().matches(/^\d+$/, 'Ingrese un número válido'),
-    whatsapp: Yup.string().matches(/^\d+$/, 'Ingrese un número válido'),
-    ext: Yup.string().matches(/^\d+$/, 'Ingrese un número válido'),
+    telOficina: Yup.string(),
+    telMovil: Yup.string(),
+    whatsapp: Yup.string(),
+    ext: Yup.string(),
     direccion: Yup.string().required(requiredField),
     notas: Yup.string(),
   });
