@@ -196,7 +196,8 @@ const Notifications = () => {
     },
     {
       name: 'Peso',
-      selector: (row: QuoteDetailData) => `${row.peso} kg`,
+      selector: (row: QuoteDetailData) =>
+        `${row.peso === '' ? 0 : row.peso} kg`,
     },
     {
       name: 'Acciones',
