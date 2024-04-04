@@ -91,7 +91,12 @@ const CustomerForm = ({
           <Input fullWidth label="RFC" name="rfc" />
         </Grid>
         <Grid xs={12} sm={4} md={4} item>
-          <Input fullWidth label="Código Cliente" name="codigoCliente" disabled={dataEdit !== null}/>
+          <Input
+            fullWidth
+            label="Número Cliente"
+            name="codigoCliente"
+            disabled={dataEdit !== null}
+          />
         </Grid>
         <Grid xs={12} sm={4} md={4} item>
           <Input fullWidth label="Método de Pago" name="metodoPago" />
