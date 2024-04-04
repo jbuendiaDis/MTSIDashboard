@@ -15,6 +15,8 @@ import {
 import {
   InsertPhotoOutlined,
   LocationOnOutlined,
+  // InsertPhotoOutlined,
+  // LocationOnOutlined,
   NotificationsOutlined,
 } from '@mui/icons-material';
 import { useEffect, useState } from 'react';
@@ -138,14 +140,22 @@ const Notifications = () => {
               {notification.estatus}
             </Typography>
           </Stack>
-          {/* <Stack direction="row" spacing={1}>
+          <Stack direction="row" spacing={1}>
             <Typography sx={{ fontSize: '12px', fontWeight: 'bold' }}>
-              Tipo de Viaje:
+              Creado:
             </Typography>
             <Typography sx={{ fontSize: '12px' }}>
-              {notification.tipoViajeName}
+              {format(new Date(notification.createdAt), 'dd/MM/yyyy HH:mm')}
             </Typography>
-          </Stack> */}
+          </Stack>
+          <Stack direction="row" spacing={1}>
+            <Typography sx={{ fontSize: '12px', fontWeight: 'bold' }}>
+              Folio:
+            </Typography>
+            <Typography sx={{ fontSize: '12px' }}>
+              {notification.folio}
+            </Typography>
+          </Stack>
         </Grid>
       </ListItemButton>
     );
@@ -188,26 +198,54 @@ const Notifications = () => {
       name: 'Peso',
       selector: (row: QuoteDetailData) => `${row.peso} kg`,
     },
-    // {
-    //   name: 'Acciones',
-    //   cell: (row: QuoteDetailData) => (
-    //     <Stack spacing={1} direction="row">
-    //       <Tooltip title="Descargar Foto">
-    //         <IconButton onClick={() => downloadImage(row.fotoUnidad)}>
-    //           <InsertPhotoOutlined />
-    //         </IconButton>
-    //       </Tooltip>
-    //       <Tooltip title="Ruta Mapa">
-    //         <IconButton onClick={() => window.open(row.urlMapa, '_blank')}>
-    //           <LocationOnOutlined />
-    //         </IconButton>
-    //       </Tooltip>
-    //     </Stack>
-    //   ),
-    //   grow: 1,
-    //   wrap: true,
-    // },
+    {
+      name: 'Acciones',
+      cell: (row: QuoteDetailData) => (
+        <Stack spacing={1} direction="row">
+          <Tooltip title="Descargar Foto">
+            <IconButton onClick={() => downloadImage(row.fotoUnidad)}>
+              <InsertPhotoOutlined />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Ruta Mapa">
+            <IconButton onClick={() => window.open(row.urlMapa, '_blank')}>
+              <LocationOnOutlined />
+            </IconButton>
+          </Tooltip>
+        </Stack>
+      ),
+      grow: 1,
+      wrap: true,
+    },
   ];
+
+  const downloadImage = (base64Image: string) => {
+    const getImageType = (base64Image: string): string => {
+      const parts = base64Image.split(';base64,');
+      if (parts.length === 2) {
+        const mimeType = parts[0].split(':')[1];
+        return mimeType.split('/')[1];
+      }
+      return 'jpg';
+    };
+
+    const byteString = atob(base64Image.split(',')[1]);
+    const ab = new ArrayBuffer(byteString.length);
+    const ia = new Uint8Array(ab);
+    for (let i = 0; i < byteString.length; i++) {
+      ia[i] = byteString.charCodeAt(i);
+    }
+    const imageType = getImageType(base64Image);
+    const blob = new Blob([ab], { type: `image/${imageType}` });
+    const url = window.URL.createObjectURL(blob);
+
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `imagen.${imageType}`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
 
   const handleGetViewQuote = async (folio: number): Promise<boolean> => {
     try {
