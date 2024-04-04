@@ -62,7 +62,6 @@ const DetailQuote = () => {
   const [selectedValueModelo, setSelectedValueModelo] = useState<any | null>(
     null
   );
-  // const [performance, setPerformance] = useState<number | string>('');
   const [other, setOther] = useState<number | string>('');
   const [subcontract, setSubcontract] = useState<number | string>('');
   const isFolio: string | undefined = folio ? folio : '';
@@ -400,6 +399,8 @@ const DetailQuote = () => {
           ? {
               unidadId: selectedValueModelo.id,
               solicitudDetalleId: updateData.id,
+              subcontrato: subcontract,
+              otros: other,
             }
           : {
               subcontrato: subcontract,
@@ -423,7 +424,6 @@ const DetailQuote = () => {
           message,
           callbackConfirm: () => handleGetQuoteFolio(isFolio),
         });
-        // setPerformance('');
         setOther('');
         setSubcontract('');
       } else {
@@ -539,30 +539,6 @@ const DetailQuote = () => {
       selector: (row: FormatDataDetailQuote) => row.ganancia,
     },
     { name: 'Costo', selector: (row: FormatDataDetailQuote) => row.costo },
-    // {
-    //   name: 'Acciones',
-    //   cell: (row: any) =>
-    //     row.rendimiento === '0 kms/Lt' && (
-    //       <Stack spacing={1} direction="row">
-    //         <Tooltip title="Descargar Manual">
-    //           <IconButton
-    //             onClick={() =>
-    //               downloadPdf(row.manual, `${row.clienteNombre}_manual.pdf`)
-    //             }
-    //           >
-    //             <DownloadOutlined />
-    //           </IconButton>
-    //         </Tooltip>
-    //         <Tooltip title="Editar Rendimiento">
-    //           <IconButton onClick={() => handleModal(row)}>
-    //             <EditOutlined />
-    //           </IconButton>
-    //         </Tooltip>
-    //       </Stack>
-    //     ),
-    //   grow: 1,
-    //   wrap: true,
-    // },
     {
       name: 'Acciones',
       cell: (row: any) => (
@@ -635,11 +611,6 @@ const DetailQuote = () => {
     XLSX.utils.book_append_sheet(workbook, worksheet, 'Cotizaciones');
     XLSX.writeFile(workbook, 'cotizaciones.xlsx');
   };
-
-  // const handlePerformanceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   const value = e.target.value;
-  //   if (/^\d*$/.test(value)) setPerformance(value);
-  // };
 
   const handleSubcontractChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -770,6 +741,26 @@ const DetailQuote = () => {
                       <TextField {...params} label="Seleccione un modelo" />
                     )}
                   />
+                  <TextField
+                    label="Subcontrato"
+                    value={subcontract}
+                    onChange={handleSubcontractChange}
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="end">$</InputAdornment>
+                      ),
+                    }}
+                  />
+                  <TextField
+                    label="Otros"
+                    value={other}
+                    onChange={handleOtherChange}
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="end">$</InputAdornment>
+                      ),
+                    }}
+                  />
                 </Stack>
               ) : (
                 <Stack spacing={2}>
@@ -800,7 +791,11 @@ const DetailQuote = () => {
               <Button
                 variant="contained"
                 onClick={() => onUpdateRendimiento()}
-                // disabled={selectedValueModelo === null}
+                disabled={
+                  updateData?.rendimiento !== '0 kms/Lt'
+                    ? false
+                    : selectedValueModelo === null
+                }
               >
                 Guardar cambios
               </Button>
