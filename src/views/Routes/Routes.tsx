@@ -58,7 +58,7 @@ const Routes = () => {
     pagoCasetas,
     stateCaseta,
     nombreCaseta,
-    handleOpenModalDelete,
+    // handleOpenModalDelete,
     handleGetToll,
     handleAddDot,
     handleRemoveDot,
@@ -85,7 +85,7 @@ const Routes = () => {
     if (formik.values.stateOrigen !== null && formik.values.tipoUnidad !== '') {
       handleResetCountriesByStateUnitTypeOrigin();
       handleGetCountriesByStateUnitTypeOrigin(
-        formik.values.stateOrigen?.codigo,
+        formik.values.stateOrigen?.codigo
         // formik.values.tipoUnidad
       );
       formik.setValues({
@@ -116,8 +116,7 @@ const Routes = () => {
     ) {
       handleResetCountriesByStateUnitTypeDestination();
       handleGetCountriesByStateUnitTypeDestination(
-        formik.values.stateDestino?.codigo,
-        // formik.values.tipoUnidad
+        formik.values.stateDestino?.codigo
       );
       formik.setValues({
         ...formik.values,
@@ -156,15 +155,15 @@ const Routes = () => {
           icon: <VisibilityOutlined sx={{ width: 20, height: 20 }} />,
           onClick: (rowData: DataTolls) => hanldeDetailBills(rowData),
         },
-        {
-          label: 'Eliminar',
-          icon: (
-            <DeleteOutlineOutlined
-              sx={{ width: 20, height: 20, color: 'red' }}
-            />
-          ),
-          onClick: (rowData: DataTolls) => handleOpenModalDelete(rowData),
-        },
+        // {
+        //   label: 'Eliminar',
+        //   icon: (
+        //     <DeleteOutlineOutlined
+        //       sx={{ width: 20, height: 20, color: 'red' }}
+        //     />
+        //   ),
+        //   onClick: (rowData: DataTolls) => handleOpenModalDelete(rowData),
+        // },
       ],
     },
   ];

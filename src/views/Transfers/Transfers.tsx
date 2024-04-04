@@ -45,7 +45,6 @@ const Transfers = () => {
   const columns: Column[] = [
     { id: 'concepto', label: 'Concepto', align: 'left' },
     { id: 'sueldo', label: 'Sueldo', align: 'left' },
-    { id: 'tipoTraslado', label: 'Tipo de Traslado', align: 'left' },
     {
       id: 'actions',
       label: 'Acciones',

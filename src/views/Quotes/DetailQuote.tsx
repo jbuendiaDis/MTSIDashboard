@@ -62,7 +62,7 @@ const DetailQuote = () => {
   const [selectedValueModelo, setSelectedValueModelo] = useState<any | null>(
     null
   );
-  const [performance, setPerformance] = useState<number | string>('');
+  // const [performance, setPerformance] = useState<number | string>('');
   const [other, setOther] = useState<number | string>('');
   const [subcontract, setSubcontract] = useState<number | string>('');
   const isFolio: string | undefined = folio ? folio : '';
@@ -396,7 +396,7 @@ const DetailQuote = () => {
       const newDataUpdate = {
         unidadId: selectedValueModelo.id,
         solicitudDetalleId: updateData.id,
-        rendimiento: performance,
+        // rendimiento: performance,
         subcontrato: subcontract,
         otros: other,
       };
@@ -417,7 +417,7 @@ const DetailQuote = () => {
           message,
           callbackConfirm: () => handleGetQuoteFolio(isFolio),
         });
-        setPerformance('');
+        // setPerformance('');
         setOther('');
         setSubcontract('');
       } else {
@@ -605,10 +605,10 @@ const DetailQuote = () => {
     XLSX.writeFile(workbook, 'cotizaciones.xlsx');
   };
 
-  const handlePerformanceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    if (/^\d*$/.test(value)) setPerformance(value);
-  };
+  // const handlePerformanceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   const value = e.target.value;
+  //   if (/^\d*$/.test(value)) setPerformance(value);
+  // };
 
   const handleSubcontractChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -734,7 +734,7 @@ const DetailQuote = () => {
                     <TextField {...params} label="Seleccione un modelo" />
                   )}
                 />
-                <TextField
+                {/* <TextField
                   label="Rendimiento"
                   value={performance}
                   onChange={handlePerformanceChange}
@@ -743,7 +743,7 @@ const DetailQuote = () => {
                       <InputAdornment position="end">Lts</InputAdornment>
                     ),
                   }}
-                />
+                /> */}
                 <TextField
                   label="Subcontrato"
                   value={subcontract}

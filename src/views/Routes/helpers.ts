@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from 'react';
 import { useApi } from '../../hooks/useApi';
 import { useLoader } from '../../components/Loader';
@@ -34,8 +33,7 @@ export const useHelpers = ({ setOpen }: HelpersProps) => {
   const [dataTemp, setDataTemp] = useState<any | null>(null);
   const [dataDotsTable, setDataDotsTable] = useState<any[]>([]);
   const { handleShowLoader }: LoaderContextType = useLoader();
-  const { modalDelete, modalSuccess, modalInformation } =
-    useModalConfirmation();
+  const { modalSuccess, modalInformation } = useModalConfirmation();
   const { actionsCountries, actionsState }: any = useRootProvider();
   const {
     countriesByStateUnitTypeOrigin,
@@ -68,10 +66,10 @@ export const useHelpers = ({ setOpen }: HelpersProps) => {
     method: 'put',
   });
 
-  const _deleteToll = useApi({
-    endpoint: '/peajes',
-    method: 'delete',
-  });
+  // const _deleteToll = useApi({
+  //   endpoint: '/peajes',
+  //   method: 'delete',
+  // });
 
   useEffect(() => {
     handleShowLoader(true);
@@ -163,11 +161,9 @@ export const useHelpers = ({ setOpen }: HelpersProps) => {
         : payload.data;
 
       if (code === 200) {
-        handleGetCountriesByStateUnitTypeOrigin(
-          dataResponse.idEstadoOrigen,
-        );
+        handleGetCountriesByStateUnitTypeOrigin(dataResponse.idEstadoOrigen);
         handleGetCountriesByStateUnitTypeDestination(
-          dataResponse.idEstadoDestino,
+          dataResponse.idEstadoDestino
         );
         setDataTemp(dataResponse);
       }
@@ -178,36 +174,36 @@ export const useHelpers = ({ setOpen }: HelpersProps) => {
     }
   };
 
-  const handleOpenModalDelete = (data: DataTolls) => {
-    const message: string = '¿Seguro que desea eliminar este dato';
-    const dataValue = '';
-    modalDelete({
-      message,
-      dataValue,
-      callbackConfirm: () => handleDeleteToll(data._id),
-    });
-  };
+  // const handleOpenModalDelete = (data: DataTolls) => {
+  //   const message: string = '¿Seguro que desea eliminar este dato';
+  //   const dataValue = '';
+  //   modalDelete({
+  //     message,
+  //     dataValue,
+  //     callbackConfirm: () => handleDeleteToll(data._id),
+  //   });
+  // };
 
-  const handleDeleteToll = async (id: string): Promise<boolean> => {
-    try {
-      const response: ResponseTolls = await _deleteToll({
-        urlParam: id,
-      });
-      const code: Response['code'] = response.response.code;
-      const message: Response['message'] = response.response.message;
+  // const handleDeleteToll = async (id: string): Promise<boolean> => {
+  //   try {
+  //     const response: ResponseTolls = await _deleteToll({
+  //       urlParam: id,
+  //     });
+  //     const code: Response['code'] = response.response.code;
+  //     const message: Response['message'] = response.response.message;
 
-      if (code === 200) {
-        modalSuccess({ message });
-        handleGetTolls();
-      } else {
-        modalInformation({ message });
-      }
+  //     if (code === 200) {
+  //       modalSuccess({ message });
+  //       handleGetTolls();
+  //     } else {
+  //       modalInformation({ message });
+  //     }
 
-      return true;
-    } catch (error) {
-      return false;
-    }
-  };
+  //     return true;
+  //   } catch (error) {
+  //     return false;
+  //   }
+  // };
 
   const handleAddDot = () => {
     const newDot: TableDots = {
@@ -357,7 +353,7 @@ export const useHelpers = ({ setOpen }: HelpersProps) => {
     pagoCasetas,
     stateCaseta,
     nombreCaseta,
-    handleOpenModalDelete,
+    // handleOpenModalDelete,
     handleGetToll,
     handleAddDot,
     handleRemoveDot,

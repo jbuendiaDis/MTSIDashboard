@@ -38,7 +38,7 @@ const ReturnsForm = ({ toggleModal, dataEdit }: ReturnsFormProps) => {
       </Grid>
       <Grid item>
         <Select
-          label="Condicion de Vehiculo"
+          label="Carrocería"
           name="bodyStyle"
           options={bodyStyle}
           getOptionLabel={(option) => option.descripcion}

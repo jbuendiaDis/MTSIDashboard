@@ -45,6 +45,8 @@ const Returns = () => {
   const columns: Column[] = [
     { id: 'marca', label: 'Marca', align: 'left' },
     { id: 'modelo', label: 'Modelo', align: 'left' },
+    { id: 'condicionVeiculoName', label: 'Condición vehiculo', align: 'left' },
+    { id: 'estiloCarroceriaName', label: 'Carrocería', align: 'left' },
     { id: 'rendimiento', label: 'Rendimiento', align: 'left' },
     {
       id: 'actions',
@@ -76,8 +78,6 @@ const Returns = () => {
       });
       const code: Response['code'] = response.code;
       const dataEditResponse: PayloadDataReturns['data'] = payload.data;
-
-      console.log('>>>', dataEditResponse);
 
       if (code === 200) {
         setDataEdit(dataEditResponse);
@@ -111,6 +111,8 @@ const Returns = () => {
       ),
     });
   };
+
+  console.log('>>>', returnsData);
 
   return (
     <div>
