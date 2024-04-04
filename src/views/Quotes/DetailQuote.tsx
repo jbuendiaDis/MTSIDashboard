@@ -275,9 +275,12 @@ const DetailQuote = () => {
     setUpdateData(null);
     setSelectedValueMarca(null);
     setSelectedValueModelo(null);
+    setOther('');
+    setSubcontract('');
   };
 
   const handleModal = (rowData: FormatDataDetailQuote): void => {
+    console.log('???', rowData);
     setOpenDialog(!openDialog);
     setUpdateData(rowData);
     handleGetRendimientoMarca();
@@ -393,13 +396,19 @@ const DetailQuote = () => {
 
   const onUpdateRendimiento = async (): Promise<boolean> => {
     try {
-      const newDataUpdate = {
-        unidadId: selectedValueModelo.id,
-        solicitudDetalleId: updateData.id,
-        // rendimiento: performance,
-        subcontrato: subcontract,
-        otros: other,
-      };
+      const newDataUpdate: any =
+        updateData.rendimiento === '0 kms/Lt'
+          ? {
+              unidadId: selectedValueModelo.id,
+              solicitudDetalleId: updateData.id,
+            }
+          : {
+              subcontrato: subcontract,
+              otros: other,
+              solicitudDetalleId: updateData.id,
+            };
+
+      console.log('newDataUpdate', newDataUpdate);
 
       const response = await _updateDetailQuote({
         body: newDataUpdate,
@@ -533,11 +542,35 @@ const DetailQuote = () => {
       selector: (row: FormatDataDetailQuote) => row.ganancia,
     },
     { name: 'Costo', selector: (row: FormatDataDetailQuote) => row.costo },
+    // {
+    //   name: 'Acciones',
+    //   cell: (row: any) =>
+    //     row.rendimiento === '0 kms/Lt' && (
+    //       <Stack spacing={1} direction="row">
+    //         <Tooltip title="Descargar Manual">
+    //           <IconButton
+    //             onClick={() =>
+    //               downloadPdf(row.manual, `${row.clienteNombre}_manual.pdf`)
+    //             }
+    //           >
+    //             <DownloadOutlined />
+    //           </IconButton>
+    //         </Tooltip>
+    //         <Tooltip title="Editar Rendimiento">
+    //           <IconButton onClick={() => handleModal(row)}>
+    //             <EditOutlined />
+    //           </IconButton>
+    //         </Tooltip>
+    //       </Stack>
+    //     ),
+    //   grow: 1,
+    //   wrap: true,
+    // },
     {
       name: 'Acciones',
-      cell: (row: any) =>
-        row.rendimiento === '0 kms/Lt' && (
-          <Stack spacing={1} direction="row">
+      cell: (row: any) => (
+        <Stack spacing={1} direction="row">
+          {row.rendimiento === '0 kms/Lt' && (
             <Tooltip title="Descargar Manual">
               <IconButton
                 onClick={() =>
@@ -547,13 +580,14 @@ const DetailQuote = () => {
                 <DownloadOutlined />
               </IconButton>
             </Tooltip>
-            <Tooltip title="Editar Rendimiento">
-              <IconButton onClick={() => handleModal(row)}>
-                <EditOutlined />
-              </IconButton>
-            </Tooltip>
-          </Stack>
-        ),
+          )}
+          <Tooltip title="Editar Rendimiento">
+            <IconButton onClick={() => handleModal(row)}>
+              <EditOutlined />
+            </IconButton>
+          </Tooltip>
+        </Stack>
+      ),
       grow: 1,
       wrap: true,
     },
@@ -700,77 +734,76 @@ const DetailQuote = () => {
         <Box sx={{ padding: 1 }}>
           <Box sx={{ width: 1, display: 'flex', justifyContent: 'end' }}>
             <IconButton onClick={() => handleToggleModal()}>
-              <Close />
+              <Tooltip title="Cerrar">
+                <Close />
+              </Tooltip>
             </IconButton>
           </Box>
           <DialogTitle
             sx={{ width: 1, display: 'flex', justifyContent: 'center' }}
           >
-            EDITAR RENDIEMIENTO
+            {`EDITAR ${
+              updateData?.rendimiento === '0 kms/Lt' ? 'RENDIMIENTO' : ' EXTRAS'
+            }`}
           </DialogTitle>
           <DialogContent sx={{ mb: 2 }}>
             <Box sx={{ mt: 2 }}>
-              <Stack spacing={2}>
-                <Autocomplete
-                  value={selectedValueMarca}
-                  onChange={(_event: any, newValue: any | null) => {
-                    setSelectedValueMarca(newValue);
-                  }}
-                  options={marca}
-                  sx={{ width: '320px' }}
-                  renderInput={(params) => (
-                    <TextField {...params} label="Seleccione una marca" />
-                  )}
-                />
-                <Autocomplete
-                  value={selectedValueModelo}
-                  onChange={(_event: any, newValue: any | null) => {
-                    setSelectedValueModelo(newValue);
-                  }}
-                  options={modelo}
-                  sx={{ width: '320px' }}
-                  getOptionLabel={(option: any) => option.nombre}
-                  renderInput={(params) => (
-                    <TextField {...params} label="Seleccione un modelo" />
-                  )}
-                />
-                {/* <TextField
-                  label="Rendimiento"
-                  value={performance}
-                  onChange={handlePerformanceChange}
-                  InputProps={{
-                    endAdornment: (
-                      <InputAdornment position="end">Lts</InputAdornment>
-                    ),
-                  }}
-                /> */}
-                <TextField
-                  label="Subcontrato"
-                  value={subcontract}
-                  onChange={handleSubcontractChange}
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="end">$</InputAdornment>
-                    ),
-                  }}
-                />
-                <TextField
-                  label="Otros"
-                  value={other}
-                  onChange={handleOtherChange}
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="end">$</InputAdornment>
-                    ),
-                  }}
-                />
-              </Stack>
+              {updateData?.rendimiento === '0 kms/Lt' ? (
+                <Stack spacing={2}>
+                  <Autocomplete
+                    value={selectedValueMarca}
+                    onChange={(_event: any, newValue: any | null) => {
+                      setSelectedValueMarca(newValue);
+                    }}
+                    options={marca}
+                    sx={{ width: '320px' }}
+                    renderInput={(params) => (
+                      <TextField {...params} label="Seleccione una marca" />
+                    )}
+                  />
+                  <Autocomplete
+                    value={selectedValueModelo}
+                    onChange={(_event: any, newValue: any | null) => {
+                      setSelectedValueModelo(newValue);
+                    }}
+                    options={modelo}
+                    sx={{ width: '320px' }}
+                    getOptionLabel={(option: any) => option.nombre}
+                    renderInput={(params) => (
+                      <TextField {...params} label="Seleccione un modelo" />
+                    )}
+                  />
+                </Stack>
+              ) : (
+                <Stack spacing={2}>
+                  <TextField
+                    label="Subcontrato"
+                    value={subcontract}
+                    onChange={handleSubcontractChange}
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="end">$</InputAdornment>
+                      ),
+                    }}
+                  />
+                  <TextField
+                    label="Otros"
+                    value={other}
+                    onChange={handleOtherChange}
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="end">$</InputAdornment>
+                      ),
+                    }}
+                  />
+                </Stack>
+              )}
             </Box>
             <Box sx={{ mt: 3, display: 'flex', justifyContent: 'end' }}>
               <Button
                 variant="contained"
                 onClick={() => onUpdateRendimiento()}
-                disabled={selectedValueModelo === null}
+                // disabled={selectedValueModelo === null}
               >
                 Guardar cambios
               </Button>
