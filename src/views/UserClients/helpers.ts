@@ -163,16 +163,16 @@ export const useHelpers = ({ setOpenDrawer }: HelpersProps) => {
       .min(8, 'La contraseña debe tener al menos 8 caracteres')
       .max(15, 'La contraseña no puede tener más de 15 caracteres')
       .matches(
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]+$/,
-        'La contraseña debe cumplir con los criterios'
+        /^(?=.*[a-zA-Z])(?=.*[`!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?~]).+$/,
+        'La contraseña debe contener al menos una letra y al menos un carácter especial'
       )
       .required(requiredValue),
     confirmPassword: Yup.string()
       .min(8, 'La contraseña debe tener al menos 8 caracteres')
       .max(15, 'La contraseña no puede tener más de 15 caracteres')
       .matches(
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]+$/,
-        'La contraseña debe cumplir con los criterios'
+        /^(?=.*[a-zA-Z])(?=.*[`!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?~]).+$/,
+        'La contraseña debe contener al menos una letra y al menos un carácter especial'
       )
       .required(requiredValue)
       .oneOf([Yup.ref('password')], noMatchPassword),
