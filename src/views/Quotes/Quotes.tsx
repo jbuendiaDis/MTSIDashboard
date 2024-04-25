@@ -132,6 +132,18 @@ const Quotes = () => {
       selector: (row: QuoteDetailData) => row.localidadDestinoName,
     },
     {
+      name: 'Razón social Origen',
+      selector: (row: QuoteDetailData) => row.socialReasonOrigin,
+    },
+    {
+      name: 'Razón social Destino',
+      selector: (row: QuoteDetailData) => row.socialReasonDestinity,
+    },
+    {
+      name: 'Localidad destino',
+      selector: (row: QuoteDetailData) => row.localidadDestinoName,
+    },
+    {
       name: 'Tipo viaje',
       selector: (row: QuoteDetailData) => row.tipoViajeName,
     },
@@ -159,6 +171,10 @@ const Quotes = () => {
       name: 'Peso',
       selector: (row: QuoteDetailData) =>
         `${row.peso === '' ? 0 : row.peso} kg`,
+    },
+    {
+      name: 'Notas/Referencias',
+      selector: (row: QuoteDetailData) => row.notes,
     },
     {
       name: 'Acciones',
@@ -248,7 +264,7 @@ const Quotes = () => {
                   </Typography>
                 </Stack>
               </Grid>
-              <Grid item xs={12} md={3}>
+              {/* <Grid item xs={12} md={3}>
                 <Stack direction="row" spacing={1}>
                   <Typography sx={{ fontSize: '14px', fontWeight: 'bold' }}>
                     Razón social origen:
@@ -283,7 +299,7 @@ const Quotes = () => {
                       : '--'}
                   </Typography>
                 </Stack>
-              </Grid>
+              </Grid> */}
               <Grid item xs={12} sx={{ mt: 2 }}>
                 <CustomTable
                   columns={columnsViewDetailQuote}

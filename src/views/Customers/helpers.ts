@@ -142,6 +142,7 @@ export const useHelpers = () => {
         rfc: values.rfc,
         telefono: values.telefono,
         usoCFDI: values.usoCFDI.descripcion,
+        codigoCliente: values.codigoCliente,
       };
 
       if (dataEdit) {

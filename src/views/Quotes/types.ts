@@ -181,6 +181,9 @@ export interface ViewQuoteDetailData {
 
 export interface QuoteDetailData {
   _id: string;
+  socialReasonOrigin: string;
+  socialReasonDestinity: string;
+  notes: string;
   solicitudId: string;
   folio: number;
   localidadOrigenId: string;
