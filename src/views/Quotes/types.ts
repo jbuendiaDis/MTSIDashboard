@@ -181,6 +181,7 @@ export interface ViewQuoteDetailData {
 
 export interface QuoteDetailData {
   _id: string;
+  valuesMoney: string;
   socialReasonOrigin: string;
   socialReasonDestinity: string;
   notes: string;
