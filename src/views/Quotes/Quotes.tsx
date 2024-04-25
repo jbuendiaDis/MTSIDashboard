@@ -221,16 +221,6 @@ const Quotes = () => {
               <Grid item xs={12} md={3}>
                 <Stack direction="row" spacing={1}>
                   <Typography sx={{ fontSize: '14px', fontWeight: 'bold' }}>
-                    Tipo de viaje:
-                  </Typography>
-                  <Typography sx={{ fontSize: '14px' }}>
-                    {dataResponse.tipoViajeName}
-                  </Typography>
-                </Stack>
-              </Grid>
-              <Grid item xs={12} md={3}>
-                <Stack direction="row" spacing={1}>
-                  <Typography sx={{ fontSize: '14px', fontWeight: 'bold' }}>
                     Estatus:
                   </Typography>
                   <Typography sx={{ fontSize: '14px' }}>
@@ -255,6 +245,42 @@ const Quotes = () => {
                   </Typography>
                   <Typography sx={{ fontSize: '14px' }}>
                     {format(updateDateFormat, 'dd/MM/yyyy HH:mm')}
+                  </Typography>
+                </Stack>
+              </Grid>
+              <Grid item xs={12} md={3}>
+                <Stack direction="row" spacing={1}>
+                  <Typography sx={{ fontSize: '14px', fontWeight: 'bold' }}>
+                    Razón social origen:
+                  </Typography>
+                  <Typography sx={{ fontSize: '14px' }}>
+                    {dataResponse.socialReasonOrigin
+                      ? dataResponse.socialReasonOrigin
+                      : '--'}
+                  </Typography>
+                </Stack>
+              </Grid>
+              <Grid item xs={12} md={3}>
+                <Stack direction="row" spacing={1}>
+                  <Typography sx={{ fontSize: '14px', fontWeight: 'bold' }}>
+                    Razón social destino:
+                  </Typography>
+                  <Typography sx={{ fontSize: '14px' }}>
+                    {dataResponse.socialReasonDestinity
+                      ? dataResponse.socialReasonDestinity
+                      : '--'}
+                  </Typography>
+                </Stack>
+              </Grid>
+              <Grid item xs={12}>
+                <Stack direction="row" spacing={1}>
+                  <Typography sx={{ fontSize: '14px', fontWeight: 'bold' }}>
+                    Notas y/o referencias:
+                  </Typography>
+                  <Typography sx={{ fontSize: '14px' }}>
+                    {dataResponse.socialReasonDestinity
+                      ? dataResponse.socialReasonDestinity
+                      : '--'}
                   </Typography>
                 </Stack>
               </Grid>

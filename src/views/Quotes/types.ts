@@ -174,6 +174,9 @@ export interface ViewQuoteDetailData {
   updatedAt: string;
   __v: number;
   detalles: QuoteDetailData[];
+  socialReasonOrigin?: string;
+  socialReasonDestinity?: string;
+  notes?: string;
 }
 
 export interface QuoteDetailData {
