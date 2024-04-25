@@ -132,11 +132,11 @@ const Quotes = () => {
       selector: (row: QuoteDetailData) => row.localidadDestinoName,
     },
     {
-      name: 'Razón social Origen',
+      name: 'Razón social origen',
       selector: (row: QuoteDetailData) => row.socialReasonOrigin,
     },
     {
-      name: 'Razón social Destino',
+      name: 'Razón social destino',
       selector: (row: QuoteDetailData) => row.socialReasonDestinity,
     },
     {
