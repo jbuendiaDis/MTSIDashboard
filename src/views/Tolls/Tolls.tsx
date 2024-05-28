@@ -23,6 +23,8 @@ import { useRootProvider } from '../../components/RootProvider/hooks/useRootProv
 import { useLoader } from '../../components/Loader';
 import { HeaderTitleModal } from '../../components/Modal/HeaderTitleModal';
 import { FormTolls } from './FormTolls';
+import { formatToCurrency } from '../../utils/amountFormater';
+import { DataToll } from './types';
 
 const Tolls = () => {
   const [valueState, setValueState] = useState<FormatDataState | null>(null);
@@ -89,13 +91,20 @@ const Tolls = () => {
   }, [valueState, valueUnitType]);
 
   useEffect(() => {
-    if (countriesByStateUnitType?.length > 0)
-      setCountriesByStateData(countriesByStateUnitType);
-    else setCountriesByStateData([]);
+    if (countriesByStateUnitType?.length > 0) {
+      const formatData = countriesByStateUnitType.map((item: any) => {
+        return {
+          ...item,
+          costo: formatToCurrency(item.costo),
+        };
+      });
+      setCountriesByStateData(formatData);
+    } else setCountriesByStateData([]);
   }, [countriesByStateUnitType]);
 
   const columns: Column[] = [
     { id: 'nombre', label: 'Nombre Caseta/Peaje', align: 'left' },
+    { id: 'costo', label: 'Precio', align: 'left' },
     {
       id: 'actions',
       label: 'Acciones',
@@ -104,7 +113,7 @@ const Tolls = () => {
         {
           label: 'Editar',
           icon: <ModeEditOutlineOutlined sx={{ width: 20, height: 20 }} />,
-          onClick: (rowData) => handleGetToll(rowData),
+          onClick: (rowData: DataToll) => handleGetToll(rowData),
         },
       ],
     },

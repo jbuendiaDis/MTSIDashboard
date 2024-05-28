@@ -27,6 +27,7 @@ export const useHelpers = ({
     countriesByStateUnitTypeOrigin,
     handleGetCountriesByStateUnitTypeOrigin,
     handleResetCountriesByStateUnitTypeOrigin,
+    handleGetCountriesByStateUnitType,
   } = actionsCountries;
   const { states } = actionsState;
   const { modalSuccess, modalInformation } = useModalConfirmation();
@@ -72,7 +73,7 @@ export const useHelpers = ({
     }
   }, [dataTemp, countriesByStateUnitTypeOrigin]);
 
-  const handleGetToll = async (data: any): Promise<boolean> => {
+  const handleGetToll = async (data: DataToll): Promise<boolean> => {
     try {
       const { payload, response }: ResponseTolls = await _getCountrieById({
         urlParam: data._id,
@@ -138,7 +139,7 @@ export const useHelpers = ({
         );
         if (code === 200) {
           modalSuccess({ message });
-          handleGetCountriesByStateUnitTypeOrigin(
+          handleGetCountriesByStateUnitType(
             newValues.estado,
             newValues.tipoUnidad
           );
